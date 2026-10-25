@@ -1,0 +1,104 @@
+{#
+/**
+ * @file
+ * seedsui theme implementation for the main menu.
+ *
+ * Available variables:
+ * - menu_name: The machine name of the menu.
+ * - items: A nested list of menu items. Each menu item contains:
+ *   - attributes: HTML attributes for the menu item.
+ *   - below: The menu item child items.
+ *   - title: The menu link title.
+ *   - url: The menu link URL, instance of \Drupal\Core\Url
+ *   - localized_options: Menu link localized options.
+ *   - is_expanded: TRUE if the link has visible children within the current
+ *     menu tree.
+ *   - is_collapsed: TRUE if the link has children within the current menu tree
+ *     that are not currently visible.
+ *   - in_active_trail: TRUE if the link is in the active trail.
+ *
+ * @ingroup themeable
+ */
+#}
+{#
+  Seeds site theme: a parent item with its own page (for example Media center)
+  stays a link and opens its dropdown on hover. Seeds UI turns every parent
+  into a toggle with no link. Items set to <nolink> still work as toggles.
+#}
+{% import _self as menus %}
+
+{#
+  We call a macro which calls itself to render the full tree.
+  @see https://twig.symfony.com/doc/3.x/tags/macro.html
+#}
+{% set attributes = attributes.addClass('menu') %}
+{{ menus.menu_links(items, attributes, 0) }}
+
+{% macro menu_links(items, attributes, menu_level) %}
+	{% set primary_nav_level = 'menu--level-' ~ (menu_level + 1) %}
+	{% import _self as menus %}
+	{% if items %}
+		<ul {{ attributes.addClass('menu', primary_nav_level) }}>
+			{% set attributes = attributes.removeClass(primary_nav_level) %}
+			{% for item in items %}
+
+				{% if item.url.isRouted and item.url.routeName == '<nolink>' %}
+					{% set menu_item_type = 'nolink' %}
+				{% elseif item.url.isRouted and item.url.routeName == '<button>' %}
+					{% set menu_item_type = 'button' %}
+				{% else %}
+					{% set menu_item_type = 'link' %}
+				{% endif %}
+
+				{% set item_classes = [
+            'menu__item',
+            'menu__item--' ~ menu_item_type,
+            'menu__item--level-' ~ (menu_level + 1),
+            item.in_active_trail ? 'menu__item--active-trail',
+            item.below ? 'menu__item--has-children',
+            item.below ? 'dropdown',
+          ]
+        %}
+
+				{% set link_classes = [
+					'menu__link',
+					'menu__link--' ~ menu_item_type,
+					'menu__link--level-' ~ (menu_level + 1),
+					item.in_active_trail ? 'menu__link--active-trail',
+					item.below ? 'menu__link--has-children',
+				]
+				%}
+
+				<li {% if item.below %} x-data="{ open: false }" :class="{'open': open}" @click.outside="open = false" @mouseenter="open = true" @mouseleave="open = false" @keydown.escape.stop="open = false" {% endif %} {{ item.attributes.addClass(item_classes) }}>
+					{#
+					A unique HTML ID should be used, but that isn't available through
+					Twig yet, so the |clean_id filter is used for now.
+					@see https://www.drupal.org/project/drupal/issues/3115445
+					#}
+					{% set aria_id = (item.title ~ '-submenu-' ~ loop.index)|clean_id %}
+
+					{% if item.below and menu_item_type == 'link' %}
+						{# A parent with its own page stays a link; the dropdown opens on hover and with the arrow keys. #}
+						<a href="{{ item.url }}" class="{{ link_classes|join(' ') }}" @mouseenter="open = true" @mouseleave="open = false" @focus="open = true" @keydown.arrow-down.prevent="open = true" @keydown.arrow-up.prevent="open = true" @keydown.escape.stop="open = false" :aria-expanded="open.toString()" aria-haspopup="menu" aria-controls="{{ aria_id }}">
+							{{ item.title }}
+						</a>
+					{% elseif item.below %}
+						<a class="{{ link_classes|join(' ') }}" @click.prevent="open = !open" @mouseenter="open = true" @mouseleave="open = false" @focus="open = true" @keydown.enter.prevent="open = !open" @keydown.space.prevent="open = !open" @keydown.arrow-down.prevent="open = true" @keydown.arrow-up.prevent="open = true" @keydown.escape.stop="open = false" role="button" :aria-expanded="open.toString()" aria-haspopup="menu" aria-controls="{{ aria_id }}">
+							{{ item.title }}
+						</a>
+					{% else %}
+						{{ link(item.title, item.url, {'class': link_classes}) }}
+					{% endif %}
+
+					{% if item.below %}
+						{% set sub_attributes = attributes.addClass('dropdown-menu', 'hidden') %}
+						<div id="{{ aria_id }}" x-show="open" x-transition class="dropdown-menu" @mouseenter="open = true" @mouseleave="open = false" :aria-hidden="(!open).toString()">
+							{{ menus.menu_links(item.below, sub_attributes, menu_level + 1) }}
+						</div>
+					{% endif %}
+
+				</li>
+			{% endfor %}
+		</ul>
+	{% endif %}
+{% endmacro %}

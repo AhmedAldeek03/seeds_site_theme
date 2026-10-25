@@ -1,0 +1,3 @@
+seeds_site_theme.settings:
+  type: theme_settings
+  label: 'Seeds site theme settings'

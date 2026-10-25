@@ -1,0 +1,12 @@
+# Seeds UI reads these settings from the active theme, so its subthemes need them too.
+favicon:
+  use_default: true
+logo:
+  use_default: true
+navbar:
+  navbar_container: true
+blazy:
+  override: false
+# Without this, the login page shows a PHP warning from Seeds UI.
+login_form:
+  override: false

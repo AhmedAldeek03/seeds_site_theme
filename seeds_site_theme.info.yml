@@ -1,0 +1,24 @@
+name: 'Seeds site theme'
+type: theme
+description: 'The look of the Seeds site template: a light Seeds UI subtheme with a styled header, menu, cards, forms and footer.'
+core_version_requirement: ^11
+base theme: seeds_ui
+# The same regions as Seeds UI. A subtheme does not inherit them: without this
+# list it gets Drupal's default regions and the header blocks are disabled.
+regions:
+  header: "Header | Header top region - always visible on desktop and mobile."
+  logo: "Logo | Logo region - always visible in main header on desktop and mobile."
+  navigation: "Navigation | Main navigation region - main header on desktop + mobile collapse."
+  header_actions: "Header Actions | Header actions region - always visible in main header on desktop and mobile."
+  collapse_only: "Collapse Only | Collapse only region - mobile collapse only."
+  highlighted: "Highlighted | Important messages and announcements."
+  featured_top: "Featured Top | Hero section or page header content."
+  breadcrumb: "Breadcrumb | Navigation breadcrumb trail."
+  content: "Content | Main page content."
+  sidebar_first: "Sidebar | Primary sidebar for additional content."
+  featured_bottom: "Featured Bottom | Website accessories, ratings, and additional content."
+  footer_top: "Footer Top | Upper footer content."
+  footer: "Footer | Main footer content."
+  footer_bottom: "Footer Bottom | Lower footer content."
+libraries:
+  - seeds_site_theme/global
