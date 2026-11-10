@@ -656,6 +656,12 @@
     .menu__toggle--label {
       justify-content: space-between;
       width: 100%;
+
+      // Line the chevron up with the chevrons of linked parents, which sit
+      // centred in a 2.75rem button.
+      .menu__chevron {
+        margin-inline-end: calc((2.75rem - 1rem) / 2);
+      }
     }
 
     .menu__submenu {
