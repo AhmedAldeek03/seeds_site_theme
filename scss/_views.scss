@@ -228,13 +228,14 @@
     display: block;
   }
 
-  .views-field,
-  .field-content {
+  .views-field {
     height: 100%;
   }
 
-  a,
-  .field-content > img {
+  // Every logo sits in the same tile, with or without a website link, so
+  // all tiles look and react alike.
+  .field-content {
+    position: relative;
     display: grid;
     place-items: center;
     height: 100%;
@@ -243,12 +244,27 @@
     border: 1px solid var(--seeds-site-tone-border, var(--seeds-site-line));
     border-radius: var(--seeds-site-radius-lg);
     background: #fff;
-    transition: border-color 0.2s, box-shadow 0.2s;
+    transition: border-color 0.2s, box-shadow 0.2s, transform 0.25s var(--seeds-site-ease);
   }
 
-  a:hover {
+  // A linked logo makes the whole tile clickable.
+  a {
+    display: grid;
+    place-items: center;
+
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+    }
+  }
+
+  .views-row:hover .field-content,
+  .field-content:focus-within {
     border-color: var(--seeds-site-accent-line);
     box-shadow: var(--seeds-site-shadow);
+    transform: translateY(-2px);
   }
 
   // A fixed box, so lazy-loaded logos have a size before they load.
@@ -262,7 +278,7 @@
     transition: filter 0.25s, opacity 0.25s;
   }
 
-  a:hover img,
+  .views-row:hover img,
   a:focus-visible img {
     filter: none;
     opacity: 1;

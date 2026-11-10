@@ -4594,12 +4594,11 @@ time {
 .view-partners:not(.view-display-id-block_cards) > .view-content.row .views-row {
   display: block;
 }
-.view-partners:not(.view-display-id-block_cards) > .view-content.row .views-field,
-.view-partners:not(.view-display-id-block_cards) > .view-content.row .field-content {
+.view-partners:not(.view-display-id-block_cards) > .view-content.row .views-field {
   height: 100%;
 }
-.view-partners:not(.view-display-id-block_cards) > .view-content.row a,
-.view-partners:not(.view-display-id-block_cards) > .view-content.row .field-content > img {
+.view-partners:not(.view-display-id-block_cards) > .view-content.row .field-content {
+  position: relative;
   display: grid;
   place-items: center;
   height: 100%;
@@ -4608,11 +4607,23 @@ time {
   border: 1px solid var(--seeds-site-tone-border, var(--seeds-site-line));
   border-radius: var(--seeds-site-radius-lg);
   background: #fff;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.25s var(--seeds-site-ease);
 }
-.view-partners:not(.view-display-id-block_cards) > .view-content.row a:hover {
+.view-partners:not(.view-display-id-block_cards) > .view-content.row a {
+  display: grid;
+  place-items: center;
+}
+.view-partners:not(.view-display-id-block_cards) > .view-content.row a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+.view-partners:not(.view-display-id-block_cards) > .view-content.row .views-row:hover .field-content,
+.view-partners:not(.view-display-id-block_cards) > .view-content.row .field-content:focus-within {
   border-color: var(--seeds-site-accent-line);
   box-shadow: var(--seeds-site-shadow);
+  transform: translateY(-2px);
 }
 .view-partners:not(.view-display-id-block_cards) > .view-content.row img {
   width: 100%;
@@ -4623,7 +4634,7 @@ time {
   opacity: 0.75;
   transition: filter 0.25s, opacity 0.25s;
 }
-.view-partners:not(.view-display-id-block_cards) > .view-content.row a:hover img,
+.view-partners:not(.view-display-id-block_cards) > .view-content.row .views-row:hover img,
 .view-partners:not(.view-display-id-block_cards) > .view-content.row a:focus-visible img {
   filter: none;
   opacity: 1;
