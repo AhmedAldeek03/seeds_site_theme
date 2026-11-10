@@ -2413,6 +2413,9 @@ time {
     color: var(--seeds-site-primary-text);
     background: var(--seeds-site-accent-light);
   }
+  .site-header__nav .contextual-region {
+    position: static;
+  }
   .site-header__nav .menu--main > .menu__item:has(> .menu__mega) {
     position: static;
   }

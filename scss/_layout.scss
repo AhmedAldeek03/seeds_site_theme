@@ -400,6 +400,13 @@
     }
   }
 
+  // Logged in, Drupal makes each block a positioned "contextual region" (for
+  // its edit pencil); in the header that would trap the mega panels inside
+  // the menu block, so the panels position against the header instead.
+  .site-header__nav .contextual-region {
+    position: static;
+  }
+
   // Main menu mega panels: full width under the header. The item is static so
   // the panel spans the header, and its accent line moves onto the link.
   .site-header__nav .menu--main > .menu__item:has(> .menu__mega) {
