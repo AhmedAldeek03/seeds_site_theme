@@ -78,7 +78,10 @@ $secondary-text: readable-on($secondary, $light-backgrounds);
 $heading: $primary-text;
 $on-primary: text-on($primary);
 $on-secondary: text-on($secondary);
-$on-accent: text-on($accent);
+// On the accent colour, the brand's dark shade when it reads well (on the
+// accent and its hover), so text on a gold button is deep wine or navy
+// rather than near-black; otherwise white or ink.
+$on-accent: if(contrast($dark, $accent) >= 4.5 and contrast($dark, $accent-hover) >= 4.5, $dark, text-on($accent));
 
 // Neutrals.
 $body: #3b4655;

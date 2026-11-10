@@ -238,6 +238,37 @@
   font-weight: 600;
 }
 
+// When the share links span the whole width (under a gallery's photos, or
+// under the content on small screens), they are a light row instead of a
+// card: a thin line above, the title beside the buttons.
+@mixin share-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.25rem;
+  align-items: center;
+  padding: 1.5rem 0 0;
+  border: 0;
+  border-block-start: 1px solid var(--seeds-site-line);
+  border-radius: 0;
+
+  .node-share__title {
+    color: var(--seeds-site-muted);
+    font-size: 0.95rem;
+    font-weight: 500;
+  }
+}
+
+.node--type-gallery .node-share {
+  @include share-row;
+  margin-block-start: 1rem;
+}
+
+@include down(lg) {
+  .node-share {
+    @include share-row;
+  }
+}
+
 // Gallery page: photo grid; photos open in the lightbox (js/main.js).
 .field--name-field-media-unlimited {
   display: grid;
@@ -429,7 +460,11 @@
 .card-default {
   @include card-shell;
 
-  &:hover {
+  // The card lifts on hover. In a list the hover comes from the row, which
+  // does not move: hovering the card itself, a pointer near its bottom edge
+  // would leave the lifted card, drop it back and loop (a twitching card).
+  &:hover,
+  .views-row:hover > & {
     @include card-hover;
 
     img {

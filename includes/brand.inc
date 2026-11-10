@@ -217,7 +217,12 @@ function seeds_site_theme_palette(array $brand): array {
   // Text on brand colours: white or dark.
   $palette['on-primary'] = seeds_site_theme_text_on($primary);
   $palette['on-secondary'] = seeds_site_theme_text_on($secondary);
-  $palette['on-accent'] = seeds_site_theme_text_on($accent);
+  // On the accent colour, the brand's dark shade when it reads well on the
+  // accent and its hover (text on a gold button is deep wine or navy rather
+  // than near-black); otherwise white or ink. Same rule in _variables.scss.
+  $palette['on-accent'] = seeds_site_theme_contrast($palette['dark'], $accent) >= 4.5 && seeds_site_theme_contrast($palette['dark'], $palette['accent-hover']) >= 4.5
+    ? $palette['dark']
+    : seeds_site_theme_text_on($accent);
   return $palette;
 }
 

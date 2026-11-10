@@ -7,7 +7,7 @@
 // theme's components: --secondary (outline), --accent, --ghost (text with
 // arrow), --light and --light-outline (on photos), --small, --large.
 // Colours come from the tone around the button (_tones.scss): primary that
-// turns secondary on hover on light backgrounds, white on coloured ones.
+// turns into an outline on hover on light backgrounds, white on coloured ones.
 .button,
 input[type="submit"],
 input[type="button"],
@@ -19,7 +19,7 @@ button.form-submit,
   --seeds-site-button-bg-hover: var(--seeds-site-tone-btn-bg-hover, var(--seeds-site-secondary));
   --seeds-site-button-color-hover: var(--seeds-site-tone-btn-color-hover, var(--seeds-site-on-secondary));
   --seeds-site-button-border: var(--seeds-site-button-bg);
-  --seeds-site-button-border-hover: var(--seeds-site-button-bg-hover);
+  --seeds-site-button-border-hover: var(--seeds-site-tone-btn-border-hover, var(--seeds-site-button-bg-hover));
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -41,13 +41,24 @@ button.form-submit,
   -webkit-appearance: none;
   appearance: none;
 
-  // A small lift and a soft shadow on hover; pressed, it settles back.
+  // A small lift and a soft shadow on hover; pressed, it settles back. An
+  // invisible strip under the lifted button keeps a pointer near its bottom
+  // edge on it, so the hover does not flicker on and off.
   &:hover {
+    position: relative;
     border-color: var(--seeds-site-button-border-hover);
     color: var(--seeds-site-button-color-hover);
     background: var(--seeds-site-button-bg-hover);
     box-shadow: 0 10px 20px -10px rgb(7 12 20 / 45%);
     transform: translateY(-2px);
+
+    &::after {
+      content: "";
+      position: absolute;
+      inset-inline: -1.5px;
+      inset-block-end: -4px;
+      height: 4px;
+    }
   }
 
   &:active {
@@ -82,6 +93,7 @@ button.form-submit,
   --seeds-site-button-color: var(--seeds-site-on-accent);
   --seeds-site-button-bg-hover: var(--seeds-site-accent-hover);
   --seeds-site-button-color-hover: var(--seeds-site-on-accent);
+  --seeds-site-button-border-hover: var(--seeds-site-accent-hover);
 }
 
 // On photos (hero with the image behind the text).

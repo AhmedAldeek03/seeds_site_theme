@@ -23,10 +23,12 @@
   --seeds-site-tone-icon: var(--seeds-site-primary-text);
   --seeds-site-tone-icon-bg: #fff;
   --seeds-site-tone-icon-ring: var(--seeds-site-accent-line);
+  // Primary buttons turn into an outline on hover: no fill, primary text.
   --seeds-site-tone-btn-bg: var(--seeds-site-primary);
   --seeds-site-tone-btn-color: var(--seeds-site-on-primary);
-  --seeds-site-tone-btn-bg-hover: var(--seeds-site-secondary);
-  --seeds-site-tone-btn-color-hover: var(--seeds-site-on-secondary);
+  --seeds-site-tone-btn-bg-hover: transparent;
+  --seeds-site-tone-btn-color-hover: var(--seeds-site-primary-text);
+  --seeds-site-tone-btn-border-hover: var(--seeds-site-primary);
   --seeds-site-tone-outline: var(--seeds-site-primary-text);
   --seeds-site-tone-outline-hover-bg: var(--seeds-site-primary);
   --seeds-site-tone-outline-hover-color: var(--seeds-site-on-primary);
@@ -53,6 +55,7 @@
   --seeds-site-tone-btn-color: var(--seeds-site-primary-text);
   --seeds-site-tone-btn-bg-hover: var(--seeds-site-surface);
   --seeds-site-tone-btn-color-hover: var(--seeds-site-primary-text);
+  --seeds-site-tone-btn-border-hover: var(--seeds-site-surface);
   --seeds-site-tone-outline: #{$on};
   --seeds-site-tone-outline-hover-bg: color-mix(in srgb, #{$on} 12%, transparent);
   --seeds-site-tone-outline-hover-color: #{$on};

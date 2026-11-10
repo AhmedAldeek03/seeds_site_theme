@@ -229,7 +229,7 @@
   --seeds-site-accent-hover: rgb(171, 136, 65);
   --seeds-site-accent-light: rgb(246, 241, 230);
   --seeds-site-accent-line: rgb(235, 223, 197);
-  --seeds-site-on-accent: #18222f;
+  --seeds-site-on-accent: rgb(12, 34, 57);
   --seeds-site-surface: #f8f5ef;
   --seeds-site-surface-2: rgb(244, 238, 226);
   --seeds-site-dark: rgb(12, 34, 57);
@@ -480,8 +480,9 @@ samp {
   --seeds-site-tone-icon-ring: var(--seeds-site-accent-line);
   --seeds-site-tone-btn-bg: var(--seeds-site-primary);
   --seeds-site-tone-btn-color: var(--seeds-site-on-primary);
-  --seeds-site-tone-btn-bg-hover: var(--seeds-site-secondary);
-  --seeds-site-tone-btn-color-hover: var(--seeds-site-on-secondary);
+  --seeds-site-tone-btn-bg-hover: transparent;
+  --seeds-site-tone-btn-color-hover: var(--seeds-site-primary-text);
+  --seeds-site-tone-btn-border-hover: var(--seeds-site-primary);
   --seeds-site-tone-outline: var(--seeds-site-primary-text);
   --seeds-site-tone-outline-hover-bg: var(--seeds-site-primary);
   --seeds-site-tone-outline-hover-color: var(--seeds-site-on-primary);
@@ -507,8 +508,9 @@ samp {
   --seeds-site-tone-icon-ring: var(--seeds-site-accent-line);
   --seeds-site-tone-btn-bg: var(--seeds-site-primary);
   --seeds-site-tone-btn-color: var(--seeds-site-on-primary);
-  --seeds-site-tone-btn-bg-hover: var(--seeds-site-secondary);
-  --seeds-site-tone-btn-color-hover: var(--seeds-site-on-secondary);
+  --seeds-site-tone-btn-bg-hover: transparent;
+  --seeds-site-tone-btn-color-hover: var(--seeds-site-primary-text);
+  --seeds-site-tone-btn-border-hover: var(--seeds-site-primary);
   --seeds-site-tone-outline: var(--seeds-site-primary-text);
   --seeds-site-tone-outline-hover-bg: var(--seeds-site-primary);
   --seeds-site-tone-outline-hover-color: var(--seeds-site-on-primary);
@@ -533,8 +535,9 @@ samp {
   --seeds-site-tone-icon-ring: var(--seeds-site-accent-line);
   --seeds-site-tone-btn-bg: var(--seeds-site-primary);
   --seeds-site-tone-btn-color: var(--seeds-site-on-primary);
-  --seeds-site-tone-btn-bg-hover: var(--seeds-site-secondary);
-  --seeds-site-tone-btn-color-hover: var(--seeds-site-on-secondary);
+  --seeds-site-tone-btn-bg-hover: transparent;
+  --seeds-site-tone-btn-color-hover: var(--seeds-site-primary-text);
+  --seeds-site-tone-btn-border-hover: var(--seeds-site-primary);
   --seeds-site-tone-outline: var(--seeds-site-primary-text);
   --seeds-site-tone-outline-hover-bg: var(--seeds-site-primary);
   --seeds-site-tone-outline-hover-color: var(--seeds-site-on-primary);
@@ -559,8 +562,9 @@ samp {
   --seeds-site-tone-icon-ring: var(--seeds-site-accent-line);
   --seeds-site-tone-btn-bg: var(--seeds-site-primary);
   --seeds-site-tone-btn-color: var(--seeds-site-on-primary);
-  --seeds-site-tone-btn-bg-hover: var(--seeds-site-secondary);
-  --seeds-site-tone-btn-color-hover: var(--seeds-site-on-secondary);
+  --seeds-site-tone-btn-bg-hover: transparent;
+  --seeds-site-tone-btn-color-hover: var(--seeds-site-primary-text);
+  --seeds-site-tone-btn-border-hover: var(--seeds-site-primary);
   --seeds-site-tone-outline: var(--seeds-site-primary-text);
   --seeds-site-tone-outline-hover-bg: var(--seeds-site-primary);
   --seeds-site-tone-outline-hover-color: var(--seeds-site-on-primary);
@@ -585,8 +589,9 @@ samp {
   --seeds-site-tone-icon-ring: var(--seeds-site-accent-line);
   --seeds-site-tone-btn-bg: var(--seeds-site-primary);
   --seeds-site-tone-btn-color: var(--seeds-site-on-primary);
-  --seeds-site-tone-btn-bg-hover: var(--seeds-site-secondary);
-  --seeds-site-tone-btn-color-hover: var(--seeds-site-on-secondary);
+  --seeds-site-tone-btn-bg-hover: transparent;
+  --seeds-site-tone-btn-color-hover: var(--seeds-site-primary-text);
+  --seeds-site-tone-btn-border-hover: var(--seeds-site-primary);
   --seeds-site-tone-outline: var(--seeds-site-primary-text);
   --seeds-site-tone-outline-hover-bg: var(--seeds-site-primary);
   --seeds-site-tone-outline-hover-color: var(--seeds-site-on-primary);
@@ -613,6 +618,7 @@ samp {
   --seeds-site-tone-btn-color: var(--seeds-site-primary-text);
   --seeds-site-tone-btn-bg-hover: var(--seeds-site-surface);
   --seeds-site-tone-btn-color-hover: var(--seeds-site-primary-text);
+  --seeds-site-tone-btn-border-hover: var(--seeds-site-surface);
   --seeds-site-tone-outline: var(--seeds-site-on-primary);
   --seeds-site-tone-outline-hover-bg: color-mix(in srgb, var(--seeds-site-on-primary) 12%, transparent);
   --seeds-site-tone-outline-hover-color: var(--seeds-site-on-primary);
@@ -639,6 +645,7 @@ samp {
   --seeds-site-tone-btn-color: var(--seeds-site-primary-text);
   --seeds-site-tone-btn-bg-hover: var(--seeds-site-surface);
   --seeds-site-tone-btn-color-hover: var(--seeds-site-primary-text);
+  --seeds-site-tone-btn-border-hover: var(--seeds-site-surface);
   --seeds-site-tone-outline: var(--seeds-site-on-secondary);
   --seeds-site-tone-outline-hover-bg: color-mix(in srgb, var(--seeds-site-on-secondary) 12%, transparent);
   --seeds-site-tone-outline-hover-color: var(--seeds-site-on-secondary);
@@ -665,6 +672,7 @@ samp {
   --seeds-site-tone-btn-color: var(--seeds-site-primary-text);
   --seeds-site-tone-btn-bg-hover: var(--seeds-site-surface);
   --seeds-site-tone-btn-color-hover: var(--seeds-site-primary-text);
+  --seeds-site-tone-btn-border-hover: var(--seeds-site-surface);
   --seeds-site-tone-outline: #fff;
   --seeds-site-tone-outline-hover-bg: color-mix(in srgb, #fff 12%, transparent);
   --seeds-site-tone-outline-hover-color: #fff;
@@ -691,6 +699,7 @@ samp {
   --seeds-site-tone-btn-color: var(--seeds-site-primary-text);
   --seeds-site-tone-btn-bg-hover: var(--seeds-site-surface);
   --seeds-site-tone-btn-color-hover: var(--seeds-site-primary-text);
+  --seeds-site-tone-btn-border-hover: var(--seeds-site-surface);
   --seeds-site-tone-outline: var(--seeds-site-on-accent);
   --seeds-site-tone-outline-hover-bg: color-mix(in srgb, var(--seeds-site-on-accent) 12%, transparent);
   --seeds-site-tone-outline-hover-color: var(--seeds-site-on-accent);
@@ -1389,7 +1398,7 @@ button.form-submit,
   --seeds-site-button-bg-hover: var(--seeds-site-tone-btn-bg-hover, var(--seeds-site-secondary));
   --seeds-site-button-color-hover: var(--seeds-site-tone-btn-color-hover, var(--seeds-site-on-secondary));
   --seeds-site-button-border: var(--seeds-site-button-bg);
-  --seeds-site-button-border-hover: var(--seeds-site-button-bg-hover);
+  --seeds-site-button-border-hover: var(--seeds-site-tone-btn-border-hover, var(--seeds-site-button-bg-hover));
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1416,11 +1425,24 @@ input[type=button]:hover,
 input[type=reset]:hover,
 button.form-submit:hover,
 .form-submit:hover {
+  position: relative;
   border-color: var(--seeds-site-button-border-hover);
   color: var(--seeds-site-button-color-hover);
   background: var(--seeds-site-button-bg-hover);
   box-shadow: 0 10px 20px -10px rgba(7, 12, 20, 0.45);
   transform: translateY(-2px);
+}
+.button:hover::after,
+input[type=submit]:hover::after,
+input[type=button]:hover::after,
+input[type=reset]:hover::after,
+button.form-submit:hover::after,
+.form-submit:hover::after {
+  content: "";
+  position: absolute;
+  inset-inline: -1.5px;
+  inset-block-end: -4px;
+  height: 4px;
 }
 .button:active,
 input[type=submit]:active,
@@ -1465,6 +1487,7 @@ button.form-submit.is-disabled,
   --seeds-site-button-color: var(--seeds-site-on-accent);
   --seeds-site-button-bg-hover: var(--seeds-site-accent-hover);
   --seeds-site-button-color-hover: var(--seeds-site-on-accent);
+  --seeds-site-button-border-hover: var(--seeds-site-accent-hover);
 }
 
 .button--light {
@@ -3591,6 +3614,40 @@ time {
   font-weight: 600;
 }
 
+.node--type-gallery .node-share {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.25rem;
+  align-items: center;
+  padding: 1.5rem 0 0;
+  border: 0;
+  border-block-start: 1px solid var(--seeds-site-line);
+  border-radius: 0;
+  margin-block-start: 1rem;
+}
+.node--type-gallery .node-share .node-share__title {
+  color: var(--seeds-site-muted);
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+@media (max-width: 991.98px) {
+  .node-share {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.25rem;
+    align-items: center;
+    padding: 1.5rem 0 0;
+    border: 0;
+    border-block-start: 1px solid var(--seeds-site-line);
+    border-radius: 0;
+  }
+  .node-share .node-share__title {
+    color: var(--seeds-site-muted);
+    font-size: 0.95rem;
+    font-weight: 500;
+  }
+}
 .field--name-field-media-unlimited {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr));
@@ -3747,21 +3804,26 @@ time {
   box-shadow: var(--seeds-site-shadow-sm);
   transition: box-shadow 0.3s var(--seeds-site-ease), transform 0.3s var(--seeds-site-ease), border-color 0.3s;
 }
-.node--view-mode-card:hover,
-.card-default:hover {
+.node--view-mode-card:hover, .views-row:hover > .node--view-mode-card,
+.card-default:hover,
+.views-row:hover > .card-default {
   border-color: var(--seeds-site-accent-line);
   box-shadow: var(--seeds-site-shadow-lg);
   transform: translateY(-4px);
 }
-.node--view-mode-card:hover img,
-.card-default:hover img {
+.node--view-mode-card:hover img, .views-row:hover > .node--view-mode-card img,
+.card-default:hover img,
+.views-row:hover > .card-default img {
   filter: saturate(1.08) brightness(1.03);
   transform: scale(1.05);
 }
 .node--view-mode-card:hover .card-default-image::after,
-.node--view-mode-card:hover .field--name-field-media::after,
+.node--view-mode-card:hover .field--name-field-media::after, .views-row:hover > .node--view-mode-card .card-default-image::after,
+.views-row:hover > .node--view-mode-card .field--name-field-media::after,
 .card-default:hover .card-default-image::after,
-.card-default:hover .field--name-field-media::after {
+.card-default:hover .field--name-field-media::after,
+.views-row:hover > .card-default .card-default-image::after,
+.views-row:hover > .card-default .field--name-field-media::after {
   transform: scaleX(1);
 }
 .node--view-mode-card:focus-within,
@@ -5176,7 +5238,7 @@ time {
   position: absolute;
   inset: 0;
   z-index: 1;
-  background: linear-gradient(to top, rgba(7, 12, 20, 0.7), transparent 60%), linear-gradient(calc(90deg * var(--seeds-site-flip)), color-mix(in srgb, var(--seeds-site-dark) 92%, transparent) 0%, color-mix(in srgb, var(--seeds-site-dark) 55%, transparent) 50%, transparent 85%);
+  background: linear-gradient(to top, rgba(7, 12, 20, 0.6), transparent 55%), linear-gradient(calc(90deg * var(--seeds-site-flip)), rgba(7, 12, 20, 0.72) 0%, rgba(7, 12, 20, 0.4) 50%, transparent 85%), color-mix(in srgb, var(--seeds-site-primary) 14%, transparent);
 }
 .seeds-site-hero--layout-background.seeds-site-hero--has-image .seeds-site-hero__inner {
   width: 100%;
@@ -5210,6 +5272,13 @@ time {
   box-shadow: var(--seeds-site-shadow-lg);
   transform: translateY(-4px);
 }
+.seeds-site-feature--card:has(.seeds-site-feature__link):hover::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: -6px;
+  height: 6px;
+}
 
 .seeds-site-feature--line {
   padding-block-start: 1.75rem;
@@ -5242,10 +5311,9 @@ time {
   transition: background-color 0.3s var(--seeds-site-ease), color 0.3s var(--seeds-site-ease), box-shadow 0.3s var(--seeds-site-ease), transform 0.4s var(--seeds-site-ease);
 }
 .seeds-site-feature:hover .seeds-site-feature__icon {
-  color: var(--seeds-site-on-accent);
-  background: var(--seeds-site-accent);
-  box-shadow: inset 0 0 0 1.5px var(--seeds-site-accent), 0 0 0 8px color-mix(in srgb, var(--seeds-site-accent) 25%, transparent);
-  transform: translateY(-2px) rotate(-4deg);
+  background: color-mix(in srgb, var(--seeds-site-accent) 16%, var(--seeds-site-tone-icon-bg));
+  box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--seeds-site-accent) 70%, transparent), 0 0 0 7px color-mix(in srgb, var(--seeds-site-accent) 14%, transparent);
+  transform: translateY(-2px);
 }
 .seeds-site-feature__icon .icon {
   width: 1.6rem;
