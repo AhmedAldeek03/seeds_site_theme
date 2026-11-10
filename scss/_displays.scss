@@ -464,7 +464,8 @@
   // does not move: hovering the card itself, a pointer near its bottom edge
   // would leave the lifted card, drop it back and loop (a twitching card).
   &:hover,
-  .views-row:hover > & {
+  .views-row:hover > &,
+  .swiper-slide:hover > & {
     @include card-hover;
 
     img {
@@ -1023,6 +1024,13 @@
   background: #fff;
   box-shadow: 0 6px 16px -6px rgb(7 12 20 / 35%);
   line-height: 1;
+}
+
+// An event without a photo: no image corner for the badge, and the date
+// line under it already gives the date, so the badge is left out (it would
+// otherwise cover the date line).
+:is(.card-default, .node--view-mode-card):not(:has(img)) .seeds-site-date-badge {
+  display: none;
 }
 
 .seeds-site-date-badge__day {

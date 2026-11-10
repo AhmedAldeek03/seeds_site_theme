@@ -290,14 +290,16 @@
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr));
 }
 
-// Slider (slider_recipe). Slick builds a carousel when its library is
+// Slider (slider_recipe). Current versions use Swiper (Swiper Formatter,
+// below). Older ones use Slick: it builds a carousel when its library is
 // installed; without it, the slides scroll sideways (CSS scroll snap).
 .view-slider > .view-content.row {
   display: block;
 }
 
 .slick__slide,
-.view-slider .slick__slider > .slick__slide {
+.view-slider .slick__slider > .slick__slide,
+.view-slider .swiper-slide {
   // Image fills the slide; the text rows sit on top of it at the bottom.
   position: relative;
   display: grid;
@@ -458,6 +460,125 @@
     width: 2rem;
     background: var(--seeds-site-accent);
   }
+}
+
+// Slider block (Swiper). By convention the slider is full width: it breaks
+// out of the page container wherever it is placed (the page clips the
+// overflow), and the slide text lines up with the content of the page. The
+// shared carousel basics are in _carousel; the arrows and dots here are this
+// block's own: white dots at the bottom centre and both arrows in the bottom
+// end corner, over the photo, so they never cover the slide's text.
+.view-slider:has(:is(.swiper, .swiper-container)) {
+  --seeds-slider-inset: max(var(--seeds-site-gutter), calc((100vw - var(--seeds-site-width)) / 2 + var(--seeds-site-gutter)));
+  width: 100vw;
+  max-width: 100vw;
+  margin-inline: calc(50% - 50vw);
+}
+
+.view-slider :is(.swiper, .swiper-container) {
+  --swiper-pagination-bottom: 1.75rem;
+  margin: 0;
+  border-radius: 0;
+
+  // Every slide has the same height, whatever the shape of its photo: the
+  // photo fills the slide and is cropped.
+  .swiper-slide {
+    height: clamp(26rem, 48vw, 42rem);
+    min-height: 0;
+    border-radius: 0;
+
+    // Pinned to the whole slide (padding included), not its grid area.
+    > .views-field-field-media {
+      position: absolute;
+      inset: 0;
+      grid-area: auto;
+    }
+
+    > .views-field:not(.views-field-field-media) {
+      max-width: calc(46rem + 2 * var(--seeds-slider-inset));
+      padding-inline: var(--seeds-slider-inset);
+    }
+  }
+
+  .swiper-pagination-bullet {
+    width: 0.65rem;
+    height: 0.65rem;
+    margin: 0 0.3rem !important;
+    border-radius: 999px;
+    background: #fff;
+    opacity: 0.55;
+    transition: width 0.3s var(--seeds-site-ease), opacity 0.2s, background-color 0.2s;
+  }
+
+  .swiper-pagination-bullet-active {
+    width: 2rem;
+    background: var(--seeds-site-accent);
+    opacity: 1;
+  }
+
+  :is(.swiper-button-prev, .swiper-button-next) {
+    inset-block: auto clamp(1.25rem, 3vw, 2rem);
+    width: 3rem;
+    height: 3rem;
+    margin: 0;
+    border: 1px solid rgb(255 255 255 / 45%);
+    border-radius: 999px;
+    color: #fff;
+    background: rgb(7 12 20 / 35%);
+    backdrop-filter: blur(6px);
+    transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+
+    &::after {
+      font-size: 1rem;
+      font-weight: 700;
+    }
+
+    svg {
+      width: 1rem;
+      height: 1rem;
+    }
+
+    &:hover {
+      border-color: #fff;
+      color: var(--seeds-site-primary-text);
+      background: #fff;
+    }
+  }
+
+  .swiper-button-next {
+    inset-inline: auto var(--seeds-slider-inset);
+  }
+
+  .swiper-button-prev {
+    inset-inline: auto calc(var(--seeds-slider-inset) + 3.6rem);
+  }
+}
+
+// On small screens the arrows would crowd the slide's text: swiping is
+// enough. The button keeps clear of the dots below it.
+@include down(md) {
+  .view-slider :is(.swiper, .swiper-container) {
+    :is(.swiper-button-prev, .swiper-button-next) {
+      display: none;
+    }
+
+    // The text is long for a phone: the slide grows to fit it (the tallest
+    // slide sets the carousel's height), with room for the dots.
+    .swiper-slide {
+      height: auto;
+      min-height: 30rem;
+      padding-block-start: 2.5rem;
+    }
+
+    .swiper-slide > .views-field-field-link {
+      padding-block-end: 4rem;
+    }
+  }
+}
+
+// At the top level of a Canvas page, no space above the slider.
+.main--canvas .block-system-main-block > .block__content > :has(.view-slider) {
+  margin-block-start: 0;
 }
 
 // Canvas pages in listings (search results).

@@ -15,6 +15,12 @@
   padding-block-start: 0;
 }
 
+// A section with no heading that holds the full-width Slider block has no
+// padding: the slider sits right against what is above and below it.
+.seeds-site-section:not(:has(.seeds-site-section__header)):has(.view-slider) {
+  padding-block: 0;
+}
+
 .seeds-site-section__inner {
   @include container;
   position: relative;

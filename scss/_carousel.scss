@@ -1,0 +1,138 @@
+// Carousels (Swiper, from Swiper Formatter or any other Swiper): only the
+// basics every carousel shares. The brand colours (through Swiper's own
+// custom properties), keyboard focus and full-width rows. Each carousel
+// styles its own arrows and dots: the Slider block in _views, and future
+// partner or news carousels where they are styled.
+@use "variables" as *;
+@use "mixin" as *;
+
+:is(.swiper, .swiper-container) {
+  --swiper-theme-color: var(--seeds-site-primary);
+  --swiper-navigation-color: var(--seeds-site-primary-text);
+  --swiper-pagination-color: var(--seeds-site-accent);
+  --swiper-pagination-bullet-inactive-color: var(--seeds-site-line-strong);
+  --swiper-pagination-bullet-inactive-opacity: 1;
+}
+
+:is(.swiper, .swiper-container) :is(.swiper-button-prev, .swiper-button-next, .swiper-pagination-bullet):focus-visible {
+  @include focus-ring;
+}
+
+// Inside a row (a view's results, often laid out as a card grid by the
+// theme), the carousel would land in one grid cell, and the row's gutter
+// would inset the slides: a row holding a carousel is a plain block.
+.row:has(> :is(.swiper, .swiper-container)),
+.view > .view-content.row:has(> :is(.swiper, .swiper-container)) {
+  display: block;
+  margin-inline: 0;
+}
+
+.row > :is(.swiper, .swiper-container) {
+  padding-inline: 0;
+}
+
+// Card carousels (opt-in: views with the CSS class "seeds-card-carousel",
+// such as the News and Events blocks on the home page). Cards of equal
+// height, room around them for their shadow and hover lift, and one row of
+// controls under them: dots at the start, round arrows at the end.
+.seeds-card-carousel :is(.swiper, .swiper-container) {
+  --swiper-pagination-bottom: 1.4rem;
+  margin: 0 -0.5rem;
+  padding: 0.75rem 0.5rem 4.75rem;
+
+  .swiper-wrapper {
+    align-items: stretch;
+  }
+
+  .swiper-slide {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+
+    > :empty {
+      display: none;
+    }
+
+    > :is(.card-default, .node--view-mode-card, article) {
+      flex: 1;
+    }
+  }
+
+  .swiper-pagination {
+    inset-inline: 0.5rem auto;
+    width: auto;
+    text-align: start;
+  }
+
+  // Round dots; the active one keeps the same circle, in the accent colour.
+  .swiper-pagination-bullet {
+    width: 0.6rem;
+    height: 0.6rem;
+    margin: 0 0.25rem !important;
+    border-radius: 50%;
+    transition: background-color 0.2s, transform 0.2s;
+  }
+
+  .swiper-pagination-bullet-active {
+    transform: scale(1.2);
+  }
+
+  :is(.swiper-button-prev, .swiper-button-next) {
+    inset-block: auto 0.5rem;
+    width: 2.75rem;
+    height: 2.75rem;
+    margin: 0;
+    border: 1px solid var(--seeds-site-line);
+    border-radius: 999px;
+    color: var(--seeds-site-primary-text);
+    background: #fff;
+    box-shadow: var(--seeds-site-shadow-sm);
+    transition: background-color 0.2s, border-color 0.2s, color 0.2s, opacity 0.2s;
+
+    &::after {
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+
+    svg {
+      width: 0.95rem;
+      height: 0.95rem;
+    }
+
+    &:hover {
+      border-color: var(--seeds-site-primary);
+      color: var(--seeds-site-on-primary);
+      background: var(--seeds-site-primary);
+    }
+  }
+
+  .swiper-button-next {
+    inset-inline: auto 0.5rem;
+  }
+
+  .swiper-button-prev {
+    inset-inline: auto 3.75rem;
+  }
+
+  :is(.swiper-button-disabled, .swiper-button-lock) {
+    opacity: 0.35;
+    pointer-events: none;
+  }
+}
+
+// On small screens: swipe; dots centred, no arrows.
+@include down(md) {
+  .seeds-card-carousel :is(.swiper, .swiper-container) {
+    padding-block-end: 3.5rem;
+
+    :is(.swiper-button-prev, .swiper-button-next) {
+      display: none;
+    }
+
+    .swiper-pagination {
+      inset-inline: 0;
+      width: 100%;
+      text-align: center;
+    }
+  }
+}
