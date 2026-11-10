@@ -104,8 +104,9 @@ Menus, the menu drawer and header search use Alpine.js, which Seeds UI loads.
 
 ## Known issues
 
-- **Slider:** the Slider recipe's carousel needs the Slick library, which it doesn't install.
-  Without it, slides scroll sideways (CSS scroll snap) instead of rotating.
+- **Slider (older Slider recipe only):** versions before the switch to Swiper Formatter need the
+  Slick library, which they don't install; without it, slides scroll sideways (CSS scroll snap).
+  The current Slider recipe uses Swiper Formatter, which ships its own Swiper.
 
 ## Credits
 
