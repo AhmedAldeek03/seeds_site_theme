@@ -18,6 +18,15 @@
   }
 }
 
+// Without an image: one readable column of text (long "about" sections).
+.seeds-site-media-text--text-only .seeds-site-media-text__inner {
+  max-width: calc(var(--seeds-site-width-narrow) + 2 * var(--seeds-site-gutter));
+
+  @include up(lg) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 .seeds-site-media-text--image-end .seeds-site-media-text__media {
   @include up(lg) {
     order: 2;

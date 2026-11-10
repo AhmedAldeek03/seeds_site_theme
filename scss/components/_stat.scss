@@ -41,9 +41,11 @@
   }
 }
 
-// In a grid, a thin divider between figures on large screens.
+// In a grid, a thin divider between figures on large screens: before every
+// figure except the first of each row, so a second row lines up too.
 @include up(lg) {
-  :is(.seeds-site-section--layout-grid-3, .seeds-site-section--layout-grid-4) .seeds-site-stat + .seeds-site-stat {
+  .seeds-site-section--layout-grid-3 .seeds-site-stat:not(:nth-child(3n + 1)),
+  .seeds-site-section--layout-grid-4 .seeds-site-stat:not(:nth-child(4n + 1)) {
     padding-inline-start: 2rem;
     border-inline-start: 1px solid var(--seeds-site-tone-border);
   }

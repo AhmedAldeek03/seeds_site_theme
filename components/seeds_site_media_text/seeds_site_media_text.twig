@@ -11,6 +11,7 @@
     'seeds-site-media-text--image-' ~ (image_position ?: 'start'),
     'seeds-site-media-text--tone-' ~ (tone ?: 'white'),
     'seeds-site-tone--' ~ (tone ?: 'white'),
+    not (image.src is defined and image.src) ? 'seeds-site-media-text--text-only',
   )
 %}
 <section{{ attributes }}>

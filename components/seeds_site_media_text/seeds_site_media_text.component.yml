@@ -1,6 +1,6 @@
 '$schema': 'https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json'
 name: 'Image and text'
-description: 'An image beside a heading, formatted text and a button. Good for "About us" and programme pages.'
+description: 'An image beside a heading, formatted text and a button. Leave the image out for a single column of text. Good for "About us" and programme pages.'
 group: 'Seeds site'
 status: stable
 props:

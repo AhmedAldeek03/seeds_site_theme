@@ -971,8 +971,8 @@
 
 .menu-columns {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr));
-  gap: 2.5rem 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
+  gap: 2.5rem 1.5rem;
 }
 
 .site-footer__contact-list {
