@@ -1,0 +1,234 @@
+// Blocks: breadcrumb, tabs, local actions, messages, language switcher and
+// block titles.
+@use "variables" as *;
+@use "mixin" as *;
+@use "icons" as *;
+
+.block__title {
+  color: var(--seeds-site-ink);
+}
+
+// Breadcrumb (Seeds UI markup; Easy Breadcrumb or core).
+.breadcrumb {
+  margin-block-end: 1.75rem;
+  font-size: var(--seeds-site-step--1);
+}
+
+.breadcrumb__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  color: var(--seeds-site-muted);
+  list-style: none;
+}
+
+.breadcrumb__item {
+  display: inline-flex;
+  gap: 0.35rem;
+  align-items: center;
+
+  & + &::before {
+    @include icon(icon(chevron), 0.85rem);
+    color: var(--seeds-site-accent);
+    transform: rotate(calc(-90deg * var(--seeds-site-flip)));
+  }
+}
+
+.breadcrumb__link {
+  color: var(--seeds-site-muted);
+  text-decoration: none;
+
+  &:hover {
+    color: var(--seeds-site-primary-text);
+    text-decoration: underline;
+  }
+}
+
+// Tabs (View / Edit / Delete...), shown to editors in the page header.
+.tabs-wrapper {
+  margin-block-start: 1.5rem;
+}
+
+.tabs,
+.tabs-wrapper > ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin: 0;
+  padding: 0.25rem;
+  border: 1px solid var(--seeds-site-line);
+  border-radius: calc(var(--seeds-site-radius-sm) + 0.25rem);
+  list-style: none;
+  background: #fff;
+  width: fit-content;
+  max-width: 100%;
+}
+
+.tabs__tab a,
+.tabs-wrapper li a {
+  display: block;
+  padding: 0.4rem 0.9rem;
+  border-radius: var(--seeds-site-radius-sm);
+  color: var(--seeds-site-muted);
+  font-size: var(--seeds-site-step--1);
+  font-weight: 500;
+  text-decoration: none;
+
+  &:hover {
+    color: var(--seeds-site-ink);
+    background: var(--seeds-site-surface);
+  }
+
+  &.is-active {
+    color: var(--seeds-site-on-primary);
+    background: var(--seeds-site-primary);
+  }
+}
+
+.tabs__tab.is-active a {
+  color: var(--seeds-site-on-primary);
+  background: var(--seeds-site-primary);
+}
+
+// "Add content" style buttons above listings.
+.action-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0 0 1.5rem;
+  padding: 0;
+  list-style: none;
+
+  a {
+    display: inline-flex;
+    gap: 0.4rem;
+    align-items: center;
+    padding: 0.45rem 0.95rem;
+    border-radius: var(--seeds-site-radius-sm);
+    color: var(--seeds-site-on-primary);
+    font-size: var(--seeds-site-step--1);
+    font-weight: 600;
+    text-decoration: none;
+    background: var(--seeds-site-primary);
+
+    &:hover {
+      color: var(--seeds-site-on-secondary);
+      background: var(--seeds-site-secondary);
+    }
+  }
+}
+
+// Status messages (Seeds UI markup).
+.messages-list {
+  margin-block-end: 1.5rem;
+}
+
+.messages__wrapper {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.seeds_messages {
+  --seeds-site-message: var(--seeds-site-primary);
+  display: block;
+  padding: 1rem 1.15rem;
+  border: 1px solid color-mix(in srgb, var(--seeds-site-message) 30%, #fff);
+  border-inline-start: 4px solid var(--seeds-site-message);
+  border-radius: var(--seeds-site-radius-sm);
+  color: var(--seeds-site-ink);
+  background: color-mix(in srgb, var(--seeds-site-message) 7%, #fff);
+  box-shadow: none;
+}
+
+.seeds_messages--status {
+  --seeds-site-message: var(--seeds-site-success);
+}
+
+.seeds_messages--warning {
+  --seeds-site-message: var(--seeds-site-warning);
+}
+
+.seeds_messages--error {
+  --seeds-site-message: var(--seeds-site-danger);
+}
+
+.seeds_messages-wrapper {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.seeds_messages-icon-wrapper {
+  display: flex;
+  flex: 1;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+
+.seeds_messages-icon {
+  flex: none;
+  color: var(--seeds-site-message);
+
+  svg {
+    width: 1.35rem;
+    height: 1.35rem;
+  }
+}
+
+.seeds_messages-body {
+  flex: 1;
+  min-width: 0;
+
+  a {
+    color: inherit;
+    font-weight: 600;
+  }
+}
+
+.messages__list {
+  margin: 0;
+  padding-inline-start: 1.1rem;
+}
+
+// Language switcher (core block), for multilingual sites. Lives in the top bar.
+.language-switcher-language-url .links,
+.block-language .links {
+  display: flex;
+  gap: 0.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  a {
+    display: block;
+    padding: 0.2rem 0.55rem;
+    border-radius: 6px;
+    text-decoration: none;
+  }
+
+  .is-active a,
+  a.is-active {
+    color: var(--seeds-site-on-accent);
+    background: var(--seeds-site-accent);
+  }
+
+  a:not(.is-active):hover {
+    background: var(--seeds-site-tone-card);
+  }
+}
+
+// Search block (if placed in a region).
+.search-block-form,
+.block-search {
+  .form-item {
+    margin: 0;
+  }
+}
+
+// Contextual links and the Canvas / Seeds toolbar edit pencils sit above cards.
+.contextual-region {
+  position: relative;
+}

@@ -1,0 +1,131 @@
+// Section (components/seeds_site_section): a full-width band with an optional
+// heading and "View all" link, and a slot laid out as a stack or a 2, 3 or 4
+// column grid. Colours come from its tone (_tones.scss).
+@use "../variables" as *;
+@use "../mixin" as *;
+
+.seeds-site-section {
+  position: relative;
+  padding-block: var(--seeds-site-section);
+}
+
+// Two sections with the same light background read as one band.
+.seeds-site-section--tone-light + .seeds-site-section--tone-light,
+.seeds-site-section--tone-white + .seeds-site-section--tone-white {
+  padding-block-start: 0;
+}
+
+.seeds-site-section__inner {
+  @include container;
+  position: relative;
+}
+
+.seeds-site-section--width-narrow .seeds-site-section__inner {
+  max-width: calc(var(--seeds-site-width-narrow) + 2 * var(--seeds-site-gutter));
+}
+
+.seeds-site-section--width-wide .seeds-site-section__inner {
+  max-width: 1480px;
+}
+
+.seeds-site-section__header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem 3rem;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-block-end: clamp(2rem, 4vw, 3rem);
+}
+
+.seeds-site-section__titles {
+  flex: 1 1 32rem;
+  max-width: 48rem;
+}
+
+.seeds-site-section--align-center .seeds-site-section__header {
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  .seeds-site-section__titles {
+    flex-basis: auto;
+  }
+}
+
+.seeds-site-section__link {
+  flex: none;
+}
+
+.seeds-site-eyebrow {
+  @include eyebrow;
+}
+
+.seeds-site-section__heading {
+  @include title-rule;
+  margin: 0;
+  font-size: var(--seeds-site-step-4);
+}
+
+.seeds-site-section--align-center .seeds-site-section__heading::after {
+  margin-inline: auto;
+}
+
+.seeds-site-section__intro {
+  margin: 1.25rem 0 0;
+  font-size: var(--seeds-site-step-1);
+  line-height: 1.65;
+}
+
+.seeds-site-section__content {
+  display: grid;
+  gap: clamp(1.25rem, 2.5vw, 2rem);
+
+  // Blocks dropped into a section (Latest news, FAQ...) don't need their own title.
+  > .block > .block__title {
+    @include visually-hidden;
+  }
+}
+
+@include up(md) {
+  .seeds-site-section--layout-grid-2 .seeds-site-section__content,
+  .seeds-site-section--layout-grid-3 .seeds-site-section__content,
+  .seeds-site-section--layout-grid-4 .seeds-site-section__content {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@include up(lg) {
+  .seeds-site-section--layout-grid-3 .seeds-site-section__content {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .seeds-site-section--layout-grid-4 .seeds-site-section__content {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+// Stacked sections: one item per row, except buttons, which line up.
+.seeds-site-section--layout-stack .seeds-site-section__content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.75rem 0.75rem;
+
+  > * {
+    flex: 1 1 100%;
+    min-width: 0;
+  }
+
+  > .seeds-site-button-wrapper {
+    flex: 0 0 auto;
+    margin: 0;
+  }
+}
+
+.seeds-site-section--align-center.seeds-site-section--layout-stack .seeds-site-section__content {
+  justify-content: center;
+}
+
+// Canvas shows an empty slot while editing; give it some room.
+.seeds-site-section__content:empty {
+  min-height: 6rem;
+}

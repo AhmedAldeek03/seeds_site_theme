@@ -1,0 +1,20 @@
+{#
+/**
+ * @file
+ * Social media links from the theme settings.
+ *
+ * Variables:
+ * - social: list of { name, label, url }.
+ * - modifier: 'topbar' or 'footer'.
+ */
+#}
+<ul class="social-links social-links--{{ modifier }}">
+  {% for item in social %}
+    <li>
+      <a class="social-links__link" href="{{ item.url }}" rel="noopener" target="_blank">
+        {% include '@seeds_site_theme/includes/icon.html.twig' with { name: item.name } only %}
+        <span class="visually-hidden">{{ item.label }} {{ '(opens in a new tab)'|t }}</span>
+      </a>
+    </li>
+  {% endfor %}
+</ul>

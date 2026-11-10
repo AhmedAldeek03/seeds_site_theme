@@ -1,0 +1,22 @@
+{#
+/**
+ * @file
+ * Seeds site theme: the body text (field_body) on cards.
+ *
+ * Prints the tag and date line (card_meta, from
+ * seeds_site_theme_preprocess_field()) before the text. The card styles move
+ * it above the card title.
+ */
+#}
+{%
+  set classes = [
+    'field',
+    'field--name-' ~ field_name|clean_class,
+    'field--type-' ~ field_type|clean_class,
+    'field--label-' ~ label_display,
+  ]
+%}
+{{ card_meta }}
+{% for item in items %}
+  <div{{ attributes.addClass(classes, 'field__item') }}>{{ item.content }}</div>
+{% endfor %}

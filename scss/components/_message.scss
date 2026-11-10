@@ -1,0 +1,94 @@
+// Message (components/seeds_site_message): a message from the chair, the
+// director or the founder, with a portrait and a signature.
+@use "../variables" as *;
+@use "../mixin" as *;
+@use "../icons" as *;
+
+.seeds-site-message {
+  padding-block: var(--seeds-site-section);
+}
+
+.seeds-site-message__inner {
+  @include container;
+  display: grid;
+  gap: clamp(2.5rem, 5vw, 5rem);
+  align-items: center;
+}
+
+.seeds-site-message:not(.seeds-site-message--has-image) .seeds-site-message__inner {
+  max-width: calc(52rem + 2 * var(--seeds-site-gutter));
+}
+
+@include up(lg) {
+  .seeds-site-message--has-image .seeds-site-message__inner {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  }
+}
+
+// Portrait in an arched frame with an accent outline.
+.seeds-site-message__portrait {
+  position: relative;
+  max-width: 26rem;
+  margin: 0 auto;
+  padding: 0.85rem;
+  border: 2px solid var(--seeds-site-accent);
+  border-radius: 999px 999px var(--seeds-site-radius-lg) var(--seeds-site-radius-lg);
+
+  img {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    border-radius: 999px 999px calc(var(--seeds-site-radius-lg) - 4px) calc(var(--seeds-site-radius-lg) - 4px);
+    object-fit: cover;
+  }
+}
+
+.seeds-site-message__heading {
+  @include title-rule;
+  margin: 0 0 1.75rem;
+  font-size: var(--seeds-site-step-4);
+}
+
+.seeds-site-message__text {
+  @include prose;
+  position: relative;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: var(--seeds-site-step-1);
+  font-weight: 400;
+
+  // A large quote mark behind the first lines.
+  &::before {
+    @include icon(icon(quote), 4.5rem);
+    position: absolute;
+    inset-block-start: -0.75rem;
+    inset-inline-start: -1rem;
+    color: var(--seeds-site-accent);
+    opacity: 0.18;
+    @include flip-rtl;
+  }
+}
+
+.seeds-site-message__signature {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  margin: 2rem 0 0;
+  padding-inline-start: 1rem;
+  border-inline-start: 3px solid var(--seeds-site-accent);
+}
+
+.seeds-site-message__name {
+  color: var(--seeds-site-tone-heading);
+  font-size: var(--seeds-site-step-1);
+  font-weight: 600;
+}
+
+.seeds-site-message__role {
+  color: var(--seeds-site-tone-muted);
+  font-size: 0.95rem;
+}
+
+.seeds-site-message__link {
+  margin-block-start: 1.75rem;
+}

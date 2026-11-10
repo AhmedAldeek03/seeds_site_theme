@@ -1,0 +1,24 @@
+'$schema': 'https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json'
+name: 'Key figure'
+description: 'A big number with a label, for example "1,200+ students". Put several in a Section with 3 or 4 columns.'
+group: 'Seeds site'
+status: stable
+props:
+  type: object
+  required:
+    - value
+    - label
+  properties:
+    value:
+      type: string
+      title: 'Number'
+      examples:
+        - '1,200+'
+    label:
+      type: string
+      title: 'Label'
+      examples:
+        - 'Students supported'
+    text:
+      type: string
+      title: 'Text'

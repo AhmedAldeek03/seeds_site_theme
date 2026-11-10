@@ -1,0 +1,14 @@
+{#
+/**
+ * @file
+ * Milestone: a year, a heading and a short text, drawn as a point on a
+ * timeline. Milestones placed one after another join into one timeline.
+ */
+#}
+<div{{ attributes.addClass('seeds-site-milestone') }}>
+  <span class="seeds-site-milestone__year">{{ year }}</span>
+  <h3 class="seeds-site-milestone__heading">{{ heading }}</h3>
+  {% if text %}
+    <p class="seeds-site-milestone__text">{{ text }}</p>
+  {% endif %}
+</div>

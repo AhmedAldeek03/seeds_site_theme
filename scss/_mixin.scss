@@ -1,0 +1,244 @@
+@use "variables" as *;
+
+// Media query from a named breakpoint up.
+@mixin up($name) {
+  @media (min-width: bp($name)) {
+    @content;
+  }
+}
+
+// Media query below a named breakpoint.
+@mixin down($name) {
+  @media (max-width: (bp($name) - 0.02px)) {
+    @content;
+  }
+}
+
+// The page width wrapper used by the header, sections and footer.
+@mixin container($width: var(--seeds-site-width)) {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: $width;
+  margin-inline: auto;
+  padding-inline: var(--seeds-site-gutter);
+}
+
+@mixin focus-ring($color: var(--seeds-site-focus)) {
+  outline: 3px solid $color;
+  outline-offset: 2px;
+}
+
+@mixin visually-hidden {
+  position: absolute !important;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+  width: 1px;
+  height: 1px;
+  word-wrap: normal;
+}
+
+// An inline SVG icon drawn with the current text colour.
+@mixin icon($svg, $size: 1em) {
+  content: "";
+  display: inline-block;
+  flex: none;
+  width: $size;
+  height: $size;
+  background-color: currentColor;
+  mask: $svg center / contain no-repeat;
+}
+
+// A title with a short line in the accent colour under it. The line follows
+// the text alignment: centred titles get a centred line.
+@mixin title-rule($width: 3.5rem, $gap: 1rem) {
+  &::after {
+    content: "";
+    display: block;
+    width: $width;
+    height: 4px;
+    margin-block-start: $gap;
+    border-radius: 4px;
+    background: var(--seeds-site-tone-rule, var(--seeds-site-accent));
+  }
+
+  :where([style*="text-align: center"], .text-center, .is-centered) &::after {
+    margin-inline: auto;
+  }
+}
+
+// The small label above a title ("Our work", "Latest news").
+@mixin eyebrow {
+  display: block;
+  margin: 0 0 0.75rem;
+  color: var(--seeds-site-tone-eyebrow, var(--seeds-site-secondary-text));
+  font-size: var(--seeds-site-step--1);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+
+  :lang(ar) & {
+    font-size: var(--seeds-site-step-0);
+    letter-spacing: 0;
+  }
+}
+
+// A small rounded label: tags and categories.
+@mixin tag-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.7rem;
+  border: 1px solid var(--seeds-site-secondary-line);
+  border-radius: 999px;
+  color: var(--seeds-site-secondary-text);
+  font-size: 0.78rem;
+  font-weight: 600;
+  line-height: 1.5;
+  text-decoration: none;
+  background: var(--seeds-site-secondary-light);
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+}
+
+// A white card with a light border; lifts on hover when it is a link.
+@mixin card-shell {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border: 1px solid var(--seeds-site-tone-border, var(--seeds-site-line));
+  border-radius: var(--seeds-site-radius-lg) !important;
+  color: var(--seeds-site-body);
+  background: var(--seeds-site-tone-card, #fff);
+  box-shadow: var(--seeds-site-shadow-sm);
+  transition: box-shadow 0.3s var(--seeds-site-ease), transform 0.3s var(--seeds-site-ease), border-color 0.3s;
+}
+
+@mixin card-hover {
+  border-color: var(--seeds-site-accent-line);
+  box-shadow: var(--seeds-site-shadow-lg);
+  transform: translateY(-4px);
+}
+
+// "Read more" style link: primary colour with an arrow that moves on hover.
+@mixin arrow-link {
+  display: inline-flex;
+  gap: 0.45rem;
+  align-items: center;
+  color: var(--seeds-site-tone-link, var(--seeds-site-primary-text));
+  font-weight: 600;
+  text-decoration: none;
+
+  &::after {
+    content: "";
+    flex: none;
+    width: 1.1em;
+    height: 1.1em;
+    background-color: currentColor;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14M13 6l6 6-6 6'/%3E%3C/svg%3E") center / contain no-repeat;
+    transform: scaleX(var(--seeds-site-flip));
+    transition: translate 0.25s var(--seeds-site-ease);
+  }
+}
+
+// Directional icons (arrows, chevrons) flip in right-to-left pages.
+@mixin flip-rtl {
+  transform: scaleX(var(--seeds-site-flip));
+}
+
+// Long text: articles, pages and CKEditor content (see also ckeditor5.scss).
+@mixin prose {
+  color: var(--seeds-site-body);
+  font-size: 1.0625rem;
+  line-height: 1.75;
+
+  > :first-child {
+    margin-block-start: 0;
+  }
+
+  > :last-child {
+    margin-block-end: 0;
+  }
+
+  h2,
+  h3,
+  h4 {
+    margin-block: 2em 0.6em;
+  }
+
+  h2 {
+    font-size: var(--seeds-site-step-3);
+  }
+
+  h3 {
+    font-size: var(--seeds-site-step-2);
+  }
+
+  h4 {
+    font-size: var(--seeds-site-step-1);
+  }
+
+  a {
+    font-weight: 500;
+  }
+
+  ul,
+  ol {
+    padding-inline-start: 1.4em;
+  }
+
+  li + li {
+    margin-block-start: 0.35em;
+  }
+
+  li::marker {
+    color: var(--seeds-site-primary-text);
+  }
+
+  img {
+    border-radius: var(--seeds-site-radius);
+  }
+
+  figure,
+  .media,
+  drupal-media,
+  .embedded-entity {
+    margin-block: 2rem;
+  }
+
+  table {
+    display: block;
+    overflow-x: auto;
+    margin-block: 2rem;
+  }
+
+  blockquote {
+    margin-block: 2rem;
+  }
+
+  .align-left {
+    float: inline-start;
+    max-width: 50%;
+    margin-block: 0.4rem 1rem;
+    margin-inline-end: 1.5rem;
+  }
+
+  .align-right {
+    float: inline-end;
+    max-width: 50%;
+    margin-block: 0.4rem 1rem;
+    margin-inline-start: 1.5rem;
+  }
+
+  .align-center {
+    margin-inline: auto;
+  }
+
+  .text-align-center {
+    text-align: center;
+  }
+
+  .text-align-right {
+    text-align: end;
+  }
+}

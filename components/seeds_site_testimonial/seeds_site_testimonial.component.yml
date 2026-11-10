@@ -1,0 +1,30 @@
+'$schema': 'https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json'
+name: 'Testimonial'
+description: 'A quote from a person, with their name, role and photo. Put several in a Section with 2 or 3 columns.'
+group: 'Seeds site'
+status: stable
+props:
+  type: object
+  required:
+    - quote
+    - name
+  properties:
+    quote:
+      type: string
+      title: 'Quote'
+      examples:
+        - 'The after-school classes gave my daughter the confidence to apply for university.'
+    name:
+      type: string
+      title: 'Name'
+      examples:
+        - 'Rania S.'
+    role:
+      type: string
+      title: 'Role'
+      examples:
+        - 'Parent'
+    image:
+      type: object
+      $ref: json-schema-definitions://canvas.module/image
+      title: 'Photo'

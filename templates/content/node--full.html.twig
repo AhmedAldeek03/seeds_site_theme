@@ -1,0 +1,63 @@
+{#
+/**
+ * @file
+ * Seeds site theme: full content pages (News, Event, Team member, Gallery,
+ * Publication, Partner and any type that follows the Seeds field names).
+ *
+ * The page title is printed by the Page title block in the page header.
+ * Detail fields (field_date, field_date_range, field_plain_text, field_link,
+ * field_term, field_media_1) move to a side card; see
+ * seeds_site_theme_preprocess_node() for the per-type list.
+ *
+ * Extra variables:
+ * - aside: render array of the fields shown in the side card.
+ * - share: list of { name, label, url } share links.
+ */
+#}
+{%
+  set classes = [
+    'node',
+    'node--type-' ~ node.bundle|clean_class,
+    'node--view-mode-' ~ view_mode|clean_class,
+    not node.isPublished() ? 'node--unpublished',
+  ]
+%}
+<article{{ attributes.addClass(classes) }}>
+  {{ title_prefix }}
+  {{ title_suffix }}
+  {% if display_submitted %}
+    <div class="node__meta">
+      {{ 'By'|t }} {{ author_name }}, {{ date }}
+      {{ metadata }}
+    </div>
+  {% endif %}
+  <div class="node-layout{{ aside or share ? ' node-layout--with-aside' }}">
+    <div{{ content_attributes.addClass('node__content', 'node-layout__main') }}>
+      {{ content }}
+    </div>
+    {% if aside or share %}
+      <aside class="node-layout__aside" aria-label="{{ 'Details'|t }}">
+        {% if aside %}
+          <div class="node-facts">
+            {{ aside }}
+          </div>
+        {% endif %}
+        {% if share %}
+          <div class="node-share">
+            <h2 class="node-share__title">{{ 'Share this page'|t }}</h2>
+            <ul class="social-links social-links--share">
+              {% for item in share %}
+                <li>
+                  <a class="social-links__link" href="{{ item.url }}"{% if item.name != 'mail' %} rel="noopener" target="_blank"{% endif %}>
+                    {% include '@seeds_site_theme/includes/icon.html.twig' with { name: item.name } only %}
+                    <span class="visually-hidden">{{ 'Share on @network'|t({ '@network': item.label }) }}</span>
+                  </a>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+        {% endif %}
+      </aside>
+    {% endif %}
+  </div>
+</article>

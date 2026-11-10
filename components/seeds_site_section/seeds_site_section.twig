@@ -1,0 +1,54 @@
+{#
+/**
+ * @file
+ * Section: a full-width band with an optional heading, a "View all" link and
+ * a content slot. The tone (background) sets the colours of everything in it.
+ */
+#}
+{% set tone = tone ?: 'white' %}
+{% set has_link = link_text and link_url %}
+{%
+  set classes = [
+    'seeds-site-section',
+    'seeds-site-full',
+    'seeds-site-tone--' ~ tone,
+    'seeds-site-section--tone-' ~ tone,
+    'seeds-site-section--layout-' ~ (layout ?: 'stack'),
+    'seeds-site-section--align-' ~ (align ?: 'start'),
+    'seeds-site-section--width-' ~ (width ?: 'default'),
+    has_link ? 'seeds-site-section--has-link',
+  ]
+%}
+{% set heading_id = heading ? ('section-' ~ (anchor ?: heading))|clean_id : null %}
+{% set attributes = attributes.addClass(classes) %}
+{% if anchor %}
+  {% set attributes = attributes.setAttribute('id', anchor|trim('#')|clean_class) %}
+{% endif %}
+{% if heading_id %}
+  {% set attributes = attributes.setAttribute('aria-labelledby', heading_id) %}
+{% endif %}
+<section{{ attributes }}>
+  <div class="seeds-site-section__inner">
+    {% if eyebrow or heading or intro or has_link %}
+      <header class="seeds-site-section__header">
+        <div class="seeds-site-section__titles">
+          {% if eyebrow %}
+            <p class="seeds-site-eyebrow">{{ eyebrow }}</p>
+          {% endif %}
+          {% if heading %}
+            <h2 class="seeds-site-section__heading" id="{{ heading_id }}">{{ heading }}</h2>
+          {% endif %}
+          {% if intro %}
+            <p class="seeds-site-section__intro">{{ intro }}</p>
+          {% endif %}
+        </div>
+        {% if has_link %}
+          <a class="button button--secondary seeds-site-section__link" href="{{ link_url }}">{{ link_text }}</a>
+        {% endif %}
+      </header>
+    {% endif %}
+    <div class="seeds-site-section__content">
+      {% block content %}{{ content }}{% endblock %}
+    </div>
+  </div>
+</section>

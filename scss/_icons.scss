@@ -1,0 +1,47 @@
+// Line icons (24px grid, 2px stroke) used as CSS masks, so they take the
+// text colour. The same set is available to templates in
+// templates/includes/icon.html.twig.
+@use "sass:map";
+@use "sass:string";
+
+@function _replace($string, $search, $replace) {
+  $index: string.index($string, $search);
+  @while $index {
+    $string: string.slice($string, 1, $index - 1) + $replace + string.slice($string, $index + string.length($search));
+    $index: string.index($string, $search);
+  }
+  @return $string;
+}
+
+@function svg-url($inner, $stroke: true) {
+  $attributes: if($stroke, "fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'", "fill='black'");
+  $svg: "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' #{$attributes}>#{$inner}</svg>";
+  @return url("data:image/svg+xml,#{_replace(_replace($svg, '<', '%3C'), '>', '%3E')}");
+}
+
+$icons: (
+  arrow: svg-url("<path d='M5 12h14M13 6l6 6-6 6'/>"),
+  chevron: svg-url("<path d='m6 9 6 6 6-6'/>"),
+  search: svg-url("<circle cx='11' cy='11' r='7'/><path d='m20 20-3.5-3.5'/>"),
+  calendar: svg-url("<rect x='3' y='5' width='18' height='16' rx='2'/><path d='M16 3v4M8 3v4M3 10h18'/>"),
+  pin: svg-url("<path d='M12 21s-7-6.1-7-11a7 7 0 0 1 14 0c0 4.9-7 11-7 11z'/><circle cx='12' cy='10' r='2.5'/>"),
+  download: svg-url("<path d='M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 20h14'/>"),
+  file: svg-url("<path d='M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z'/><path d='M14 3v5h5'/>"),
+  external: svg-url("<path d='M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5'/>"),
+  phone: svg-url("<path d='M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2'/>"),
+  mail: svg-url("<rect x='3' y='5' width='18' height='14' rx='2'/><path d='m3 7 9 6 9-6'/>"),
+  tag: svg-url("<path d='M3 12V4a1 1 0 0 1 1-1h8l9 9-9 9z'/><circle cx='7.5' cy='7.5' r='1.2'/>"),
+  plus: svg-url("<path d='M12 5v14M5 12h14'/>"),
+  check: svg-url("<path d='m5 12 5 5 9-10'/>"),
+  user: svg-url("<circle cx='12' cy='8' r='4'/><path d='M4 21a8 8 0 0 1 16 0'/>"),
+  link: svg-url("<path d='M10 14a4 4 0 0 0 5.66 0l3-3a4 4 0 0 0-5.66-5.66l-1 1M14 10a4 4 0 0 0-5.66 0l-3 3a4 4 0 0 0 5.66 5.66l1-1'/>"),
+  clock: svg-url("<circle cx='12' cy='12' r='9'/><path d='M12 7v5l3 2'/>"),
+  images: svg-url("<rect x='3' y='3' width='18' height='18' rx='2'/><circle cx='9' cy='9' r='2'/><path d='m21 15-5-5L5 21'/>"),
+  info: svg-url("<circle cx='12' cy='12' r='9'/><path d='M12 11v5M12 8h.01'/>"),
+  home: svg-url("<path d='M4 11 12 4l8 7v8a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z'/>"),
+  quote: svg-url("<path d='M4 17V11a6 6 0 0 1 6-6v3a3 3 0 0 0-3 3h3v6zM14 17V11a6 6 0 0 1 6-6v3a3 3 0 0 0-3 3h3v6z'/>", false),
+);
+
+@function icon($name) {
+  @return map.get($icons, $name);
+}

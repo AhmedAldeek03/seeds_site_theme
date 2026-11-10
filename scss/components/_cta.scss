@@ -1,0 +1,68 @@
+// Call to action (components/seeds_site_cta): a highlighted panel with a
+// heading, text and up to two buttons. The panel takes the chosen tone.
+@use "../variables" as *;
+@use "../mixin" as *;
+
+.seeds-site-cta {
+  padding-block: clamp(1.5rem, 4vw, 3rem);
+}
+
+.seeds-site-cta__inner {
+  @include container;
+}
+
+.seeds-site-cta__panel {
+  position: relative;
+  display: grid;
+  gap: 2rem;
+  align-items: center;
+  overflow: hidden;
+  padding: clamp(2rem, 5vw, 3.75rem);
+  border-radius: var(--seeds-site-radius-lg);
+
+  // Two rings in the end corner.
+  &::before {
+    content: "";
+    position: absolute;
+    inset-block-start: -7rem;
+    inset-inline-end: -5rem;
+    width: 18rem;
+    aspect-ratio: 1;
+    border: 1px solid var(--seeds-site-tone-border);
+    border-radius: 50%;
+    box-shadow: 0 0 0 2.5rem color-mix(in srgb, var(--seeds-site-tone-heading) 4%, transparent), 0 0 0 calc(2.5rem + 1px) var(--seeds-site-tone-border);
+    pointer-events: none;
+  }
+
+  > * {
+    position: relative;
+  }
+
+  @include up(lg) {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 3rem;
+  }
+}
+
+// Light panels get a border.
+.seeds-site-cta__panel:is(.seeds-site-tone--light, .seeds-site-tone--primary-light, .seeds-site-tone--secondary-light) {
+  border: 1px solid var(--seeds-site-tone-border);
+}
+
+.seeds-site-cta__heading {
+  @include title-rule(3rem, 1rem);
+  margin: 0;
+  font-size: var(--seeds-site-step-4);
+}
+
+.seeds-site-cta__text {
+  max-width: 42rem;
+  margin: 1.25rem 0 0;
+  font-size: var(--seeds-site-step-1);
+}
+
+.seeds-site-cta__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}

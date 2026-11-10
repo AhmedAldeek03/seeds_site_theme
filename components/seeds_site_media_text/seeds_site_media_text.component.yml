@@ -1,0 +1,64 @@
+'$schema': 'https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json'
+name: 'Image and text'
+description: 'An image beside a heading, formatted text and a button. Good for "About us" and programme pages.'
+group: 'Seeds site'
+status: stable
+props:
+  type: object
+  required:
+    - heading
+  properties:
+    eyebrow:
+      type: string
+      title: 'Label above the heading'
+      examples:
+        - 'Who we are'
+    heading:
+      type: string
+      title: 'Heading'
+      examples:
+        - 'An independent foundation, rooted in its community'
+    text:
+      type: string
+      title: 'Text'
+      contentMediaType: text/html
+      x-formatting-context: block
+      examples:
+        - '<p>We started as a small group of volunteers. Today we run programmes for hundreds of families every year.</p><ul><li>Free after-school classes</li><li>Health days every month</li><li>Small grants for local businesses</li></ul>'
+    image:
+      type: object
+      $ref: json-schema-definitions://canvas.module/image
+      title: 'Image'
+    button_text:
+      type: string
+      title: 'Button text'
+    button_url:
+      type: string
+      format: uri-reference
+      title: 'Button link'
+    image_position:
+      type: string
+      title: 'Image position'
+      enum:
+        - start
+        - end
+      meta:enum:
+        start: 'Before the text'
+        end: 'After the text'
+      examples:
+        - start
+    tone:
+      type: string
+      title: 'Background'
+      enum:
+        - white
+        - light
+        - primary-light
+        - secondary-light
+      meta:enum:
+        white: 'White'
+        light: 'Light (background colour)'
+        primary-light: 'Light primary'
+        secondary-light: 'Light secondary'
+      examples:
+        - white

@@ -1,0 +1,170 @@
+// Fields. Seeds fields are named by type (field_body, field_media,
+// field_term, field_date, field_date_range, field_link, field_media_1...), so
+// these styles apply to every Seeds feature.
+@use "variables" as *;
+@use "mixin" as *;
+@use "icons" as *;
+
+.text-content,
+.node--view-mode-full :is(.field--type-text-with-summary, .field--type-text-long, .field--type-text) {
+  @include prose;
+}
+
+.field__label {
+  color: var(--seeds-site-ink);
+  font-weight: 600;
+}
+
+.field--label-inline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+
+  .field__label::after {
+    content: ":";
+  }
+}
+
+// Terms (field_term): tag pills.
+.field--name-field-term .field__items,
+.field--name-field-term.field__item {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.field--name-field-term .field__item a,
+.field--name-field-term .field__item:not(:has(a)) {
+  @include tag-pill;
+}
+
+.field--name-field-term .field__item a:hover,
+.page-header__tags a:hover {
+  border-color: var(--seeds-site-secondary);
+  color: var(--seeds-site-on-secondary);
+  background: var(--seeds-site-secondary);
+}
+
+// Links (field_link) as buttons on full pages.
+.node--view-mode-full .field--name-field-link a {
+  display: inline-flex;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
+  padding: 0.65rem 1.35rem;
+  border-radius: var(--seeds-site-radius-sm);
+  color: var(--seeds-site-on-primary);
+  font-weight: 600;
+  text-decoration: none;
+  background: var(--seeds-site-primary);
+  transition: background-color 0.2s, color 0.2s;
+
+  &:hover {
+    color: var(--seeds-site-on-secondary);
+    background: var(--seeds-site-secondary);
+  }
+
+  &[target="_blank"]::after {
+    @include icon(icon(external), 1rem);
+  }
+}
+
+// Downloads: the Seeds "file" media type (templates/field/field--field-media-file).
+.file-download-list {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.field--name-field-media-1 > .field__items {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.file-download {
+  display: flex;
+  gap: 0.9rem;
+  align-items: center;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--seeds-site-line);
+  border-radius: var(--seeds-site-radius);
+  color: var(--seeds-site-ink);
+  text-decoration: none;
+  background: #fff;
+  transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+
+  &:hover {
+    border-color: var(--seeds-site-accent);
+    color: var(--seeds-site-ink);
+    box-shadow: var(--seeds-site-shadow);
+  }
+}
+
+.file-download__icon {
+  position: relative;
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: var(--seeds-site-radius-sm);
+  color: var(--seeds-site-primary-text);
+  background: var(--seeds-site-accent-light);
+
+  .icon {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+}
+
+.file-download__type {
+  position: absolute;
+  inset-block-end: 0.35rem;
+  font-size: 0.5rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.file-download__text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.35;
+}
+
+.file-download__name {
+  overflow: hidden;
+  font-weight: 600;
+  text-overflow: ellipsis;
+}
+
+.file-download__meta {
+  color: var(--seeds-site-muted);
+  font-size: var(--seeds-site-step--1);
+}
+
+.file-download__action {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 999px;
+  color: var(--seeds-site-primary-text);
+  transition: background-color 0.15s, color 0.15s;
+
+  .icon {
+    width: 1.15rem;
+    height: 1.15rem;
+  }
+
+  .file-download:hover & {
+    color: var(--seeds-site-on-primary);
+    background: var(--seeds-site-primary);
+  }
+}
+
+// Dates and times.
+time {
+  white-space: nowrap;
+}

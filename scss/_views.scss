@@ -1,0 +1,497 @@
+// Views: listing grids, exposed forms, pager, and the Seeds feature blocks
+// (FAQ accordion, partner logos, team, slider).
+@use "variables" as *;
+@use "mixin" as *;
+@use "icons" as *;
+
+// Seeds UI prints .view-content.row; listings become a responsive card grid.
+.view > .view-content.row {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr));
+  gap: clamp(1.25rem, 2.5vw, 2rem);
+  margin: 0;
+
+  > .views-row {
+    display: flex;
+    flex-direction: column;
+    width: auto;
+    padding: 0;
+
+    > :empty {
+      display: none;
+    }
+  }
+}
+
+.view-header {
+  margin-block-end: 1.25rem;
+  color: var(--seeds-site-muted);
+  font-size: var(--seeds-site-step--1);
+}
+
+.view-empty {
+  padding: 2.5rem 1.5rem;
+  border: 1px dashed var(--seeds-site-line-strong);
+  border-radius: var(--seeds-site-radius);
+  color: var(--seeds-site-muted);
+  text-align: center;
+  background: var(--seeds-site-surface);
+}
+
+.view-footer {
+  margin-block-start: 2rem;
+  text-align: center;
+}
+
+// Exposed forms (search, filters).
+.view-filters {
+  margin-block-end: 2rem;
+}
+
+.views-exposed-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1rem;
+  align-items: flex-end;
+  padding: 1.25rem;
+  border: 1px solid var(--seeds-site-line);
+  border-block-start: 3px solid var(--seeds-site-accent);
+  border-radius: var(--seeds-site-radius);
+  background: var(--seeds-site-surface);
+
+  .form-item {
+    flex: 1 1 14rem;
+    margin: 0;
+  }
+
+  .form-actions {
+    margin: 0;
+  }
+}
+
+// The search page: a large search field.
+.view-search .views-exposed-form {
+  .form-item-keys {
+    flex-basis: 24rem;
+
+    input {
+      min-height: 3.25rem;
+      padding-inline-start: 3rem;
+      font-size: var(--seeds-site-step-1);
+      background: #fff icon(search) no-repeat 1rem center / 1.25rem;
+    }
+  }
+
+  .form-submit {
+    min-height: 3.25rem;
+  }
+}
+
+// Pager (Seeds UI markup).
+.pager {
+  margin-block-start: 3rem;
+}
+
+.pager__items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pager__link,
+.pager__item > a,
+.pager__item > span {
+  display: inline-grid;
+  place-items: center;
+  min-width: 2.75rem;
+  height: 2.75rem;
+  padding-inline: 0.75rem;
+  border: 1.5px solid var(--seeds-site-primary-line);
+  border-radius: var(--seeds-site-radius-sm);
+  color: var(--seeds-site-primary-text);
+  font-weight: 500;
+  text-decoration: none;
+  background: #fff;
+  transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+
+  &:hover {
+    border-color: var(--seeds-site-primary);
+    color: var(--seeds-site-on-primary);
+    background: var(--seeds-site-primary);
+  }
+
+  svg {
+    width: 1rem;
+    height: 1rem;
+  }
+}
+
+.pager__item--control svg {
+  @include flip-rtl;
+}
+
+.pager__link.is-active,
+.pager__item--active > span {
+  border-color: var(--seeds-site-primary);
+  color: var(--seeds-site-on-primary);
+  background: var(--seeds-site-primary);
+}
+
+.pager__item--ellipsis {
+  display: grid;
+  place-items: end center;
+  min-width: 1.5rem;
+  color: var(--seeds-site-muted);
+}
+
+// FAQ (faq_recipe): <details> accordion, no JavaScript.
+.view-faqs > .view-content.row {
+  display: grid;
+  grid-template-columns: none;
+  gap: 0.75rem;
+  max-width: var(--seeds-site-width-narrow);
+  margin-inline: auto;
+}
+
+.faq {
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid var(--seeds-site-tone-border, var(--seeds-site-line));
+  border-radius: var(--seeds-site-radius);
+  background: var(--seeds-site-tone-card, #fff);
+  transition: border-color 0.2s, box-shadow 0.2s;
+
+  &[open] {
+    border-color: var(--seeds-site-accent-line);
+    box-shadow: inset 4px 0 0 var(--seeds-site-accent), var(--seeds-site-shadow);
+  }
+
+  [dir="rtl"] &[open] {
+    box-shadow: inset -4px 0 0 var(--seeds-site-accent), var(--seeds-site-shadow);
+  }
+}
+
+.faq__question {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.2rem 1.5rem;
+  border: 0 !important;
+  color: var(--seeds-site-tone-heading, var(--seeds-site-ink));
+  font-size: var(--seeds-site-step-1);
+  font-weight: 600;
+  list-style: none;
+  cursor: pointer;
+
+  &::-webkit-details-marker {
+    display: none;
+  }
+
+  // A plus that turns into a cross.
+  &::after {
+    @include icon(icon(plus), 1.4rem);
+    color: var(--seeds-site-accent);
+    transition: transform 0.25s var(--seeds-site-ease);
+  }
+
+  .faq[open] &::after {
+    transform: rotate(45deg);
+  }
+}
+
+.faq__answer {
+  padding: 0 1.5rem 1.5rem !important;
+  color: var(--seeds-site-tone-text, var(--seeds-site-body));
+
+  p:last-child {
+    margin-block-end: 0;
+  }
+}
+
+// Partners (partners_recipe): logo wall.
+.view-partners > .view-content.row {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 11rem), 1fr));
+  gap: 1rem;
+
+  .views-row {
+    display: block;
+  }
+
+  .views-field,
+  .field-content {
+    height: 100%;
+  }
+
+  a,
+  .field-content > img {
+    display: grid;
+    place-items: center;
+    height: 100%;
+    min-height: 7rem;
+    padding: 1.25rem;
+    border: 1px solid var(--seeds-site-tone-border, var(--seeds-site-line));
+    border-radius: var(--seeds-site-radius-lg);
+    background: #fff;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  a:hover {
+    border-color: var(--seeds-site-accent-line);
+    box-shadow: var(--seeds-site-shadow);
+  }
+
+  // A fixed box, so lazy-loaded logos have a size before they load.
+  img {
+    width: 100%;
+    max-width: 10rem;
+    height: 4rem;
+    object-fit: contain;
+    filter: grayscale(1);
+    opacity: 0.75;
+    transition: filter 0.25s, opacity 0.25s;
+  }
+
+  a:hover img,
+  a:focus-visible img {
+    filter: none;
+    opacity: 1;
+  }
+}
+
+// Team (team_recipe).
+.view-team > .view-content.row {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr));
+}
+
+// Slider (slider_recipe). Slick builds a carousel when its library is
+// installed; without it, the slides scroll sideways (CSS scroll snap).
+.view-slider > .view-content.row {
+  display: block;
+}
+
+.slick__slide,
+.view-slider .slick__slider > .slick__slide {
+  // Image fills the slide; the text rows sit on top of it at the bottom.
+  position: relative;
+  display: grid;
+  grid-template-rows: 1fr auto auto auto;
+  min-height: clamp(22rem, 55vw, 36rem);
+  overflow: hidden;
+  border-radius: var(--seeds-site-radius-lg);
+  color: #fff;
+  background: var(--seeds-site-dark);
+
+  > .views-field {
+    grid-column: 1;
+    z-index: 1;
+    max-width: 44rem;
+    padding-inline: clamp(1.5rem, 5vw, 4rem);
+  }
+
+  > .views-field-field-media {
+    grid-area: 1 / 1 / -1 / -1;
+    z-index: 0;
+    max-width: none;
+    padding: 0;
+
+    .field-content,
+    img {
+      width: 100%;
+      height: 100%;
+    }
+
+    img {
+      object-fit: cover;
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgb(6 16 28 / 85%) 0%, rgb(6 16 28 / 35%) 45%, transparent 75%);
+    }
+  }
+
+  > .views-field-field-plain-text {
+    grid-row: 2;
+    margin-block-end: 0.75rem;
+    color: #fff;
+    font-size: var(--seeds-site-step-5);
+    font-weight: 700;
+    line-height: 1.1;
+    text-wrap: balance;
+  }
+
+  > .views-field-field-plain-long {
+    grid-row: 3;
+    margin-block-end: 1.5rem;
+    color: rgb(255 255 255 / 88%);
+    font-size: var(--seeds-site-step-1);
+  }
+
+  > .views-field-field-link {
+    grid-row: 4;
+    padding-block-end: clamp(1.5rem, 5vw, 3.5rem);
+
+    a {
+      display: inline-flex;
+      gap: 0.5rem;
+      align-items: center;
+      padding: 0.7rem 1.4rem;
+      border-radius: var(--seeds-site-radius-sm);
+      color: var(--seeds-site-primary-text);
+      font-weight: 600;
+      text-decoration: none;
+      background: #fff;
+
+      &:hover {
+        background: var(--seeds-site-surface);
+      }
+    }
+  }
+}
+
+.slick__slider:not(.slick-initialized) {
+  display: grid;
+  grid-auto-columns: 100%;
+  grid-auto-flow: column;
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: thin;
+  padding-block-end: 0.75rem;
+
+  > .slick__slide {
+    scroll-snap-align: start;
+  }
+}
+
+.slick__slider:not(.slick-initialized) ~ .slick__arrow {
+  display: none;
+}
+
+.slick__arrow {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  margin-block-start: 1rem;
+
+  button {
+    display: grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    padding: 0;
+    border: 1px solid var(--seeds-site-line);
+    border-radius: 999px;
+    color: transparent;
+    font-size: 0;
+    background: #fff;
+    cursor: pointer;
+
+    &::before {
+      @include icon(icon(arrow), 1.25rem);
+      color: var(--seeds-site-ink);
+    }
+
+    &:hover {
+      border-color: var(--seeds-site-primary);
+    }
+  }
+
+  .slick-prev::before {
+    transform: scaleX(calc(-1 * var(--seeds-site-flip)));
+  }
+
+  .slick-next::before {
+    @include flip-rtl;
+  }
+}
+
+.slick-dots {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+
+  button {
+    width: 0.75rem;
+    height: 0.75rem;
+    padding: 0;
+    border: 0;
+    border-radius: 999px;
+    font-size: 0;
+    background: var(--seeds-site-line-strong);
+    cursor: pointer;
+  }
+
+  .slick-active button {
+    width: 2rem;
+    background: var(--seeds-site-accent);
+  }
+}
+
+// Canvas pages in listings (search results).
+.seeds-site-page-card__type {
+  margin-block-start: 0.75rem;
+  color: var(--seeds-site-primary-text);
+  font-size: var(--seeds-site-step--1);
+  font-weight: 600;
+}
+
+.seeds-site-page-card > header {
+  padding-block-start: 1.5rem;
+}
+
+// Page not found.
+.seeds-site-not-found {
+  display: grid;
+  gap: 1.5rem;
+  justify-items: start;
+  max-width: 40rem;
+}
+
+.seeds-site-not-found__lead {
+  margin: 0;
+  font-size: var(--seeds-site-step-1);
+}
+
+.seeds-site-not-found__search {
+  display: flex;
+  gap: 0.75rem;
+  width: 100%;
+
+  input {
+    flex: 1;
+  }
+}
+
+// Contact details next to the Contact us form.
+.seeds-site-contact-card__list {
+  display: grid;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+  }
+
+  .icon {
+    flex: none;
+    width: 1.25rem;
+    height: 1.25rem;
+    margin-block-start: 0.15rem;
+    color: var(--seeds-site-primary-text);
+  }
+}

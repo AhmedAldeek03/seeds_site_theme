@@ -1,0 +1,65 @@
+// Testimonial (components/seeds_site_testimonial): a quote with a name.
+@use "../variables" as *;
+@use "../mixin" as *;
+@use "../icons" as *;
+
+.seeds-site-testimonial {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  height: 100%;
+  margin: 0;
+  padding: clamp(1.75rem, 3vw, 2.25rem);
+  border: 1px solid var(--seeds-site-tone-border);
+  border-radius: var(--seeds-site-radius-lg);
+  background: var(--seeds-site-tone-card);
+
+  &::before {
+    @include icon(icon(quote), 2.25rem);
+    color: var(--seeds-site-accent);
+    @include flip-rtl;
+  }
+}
+
+.seeds-site-testimonial__quote {
+  flex: 1;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  color: var(--seeds-site-tone-heading);
+  font-size: var(--seeds-site-step-1);
+  font-weight: 400;
+  line-height: 1.6;
+
+  p {
+    margin: 0;
+  }
+}
+
+.seeds-site-testimonial__person {
+  display: flex;
+  gap: 0.85rem;
+  align-items: center;
+  padding-block-start: 1.25rem;
+  border-block-start: 1px solid var(--seeds-site-tone-border);
+
+  img {
+    width: 3.25rem;
+    height: 3.25rem;
+    border-radius: 999px;
+    object-fit: cover;
+    box-shadow: 0 0 0 2px var(--seeds-site-accent-line);
+  }
+}
+
+.seeds-site-testimonial__name {
+  display: block;
+  color: var(--seeds-site-tone-heading);
+  font-style: normal;
+  font-weight: 600;
+}
+
+.seeds-site-testimonial__role {
+  color: var(--seeds-site-tone-muted);
+  font-size: var(--seeds-site-step--1);
+}

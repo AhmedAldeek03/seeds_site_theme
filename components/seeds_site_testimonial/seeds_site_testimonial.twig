@@ -1,0 +1,22 @@
+{#
+/**
+ * @file
+ * Testimonial: a quote with the person's name, role and photo.
+ */
+#}
+<figure{{ attributes.addClass('seeds-site-testimonial') }}>
+  <blockquote class="seeds-site-testimonial__quote">
+    <p>{{ quote }}</p>
+  </blockquote>
+  <figcaption class="seeds-site-testimonial__person">
+    {% if image.src is defined and image.src %}
+      {% include 'canvas:image' with { src: image.src, alt: '', width: 96, height: 96, sizes: '48px', class: 'seeds-site-testimonial__photo' } only %}
+    {% endif %}
+    <span>
+      <cite class="seeds-site-testimonial__name">{{ name }}</cite>
+      {% if role %}
+        <span class="seeds-site-testimonial__role">{{ role }}</span>
+      {% endif %}
+    </span>
+  </figcaption>
+</figure>

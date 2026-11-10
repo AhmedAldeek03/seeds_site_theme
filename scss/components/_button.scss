@@ -1,0 +1,8 @@
+// Button (components/seeds_site_button). Uses the .button styles in
+// _elements.scss, which take their colours from the section's tone; this only
+// spaces buttons placed next to each other.
+.seeds-site-button-wrapper {
+  display: inline-flex;
+  margin-block: 0.25rem;
+  margin-inline-end: 0.5rem;
+}

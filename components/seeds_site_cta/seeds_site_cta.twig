@@ -1,0 +1,30 @@
+{#
+/**
+ * @file
+ * Call to action: a highlighted panel with a heading, text and buttons.
+ */
+#}
+{% set tone = tone ?: 'primary' %}
+{% set attributes = attributes.addClass('seeds-site-cta', 'seeds-site-full', 'seeds-site-cta--tone-' ~ tone) %}
+<section{{ attributes }}>
+  <div class="seeds-site-cta__inner">
+    <div class="seeds-site-cta__panel seeds-site-tone--{{ tone }}">
+      <div class="seeds-site-cta__content">
+        <h2 class="seeds-site-cta__heading">{{ heading }}</h2>
+        {% if text %}
+          <p class="seeds-site-cta__text">{{ text }}</p>
+        {% endif %}
+      </div>
+      {% if (button_text and button_url) or (secondary_text and secondary_url) %}
+        <div class="seeds-site-cta__actions">
+          {% if button_text and button_url %}
+            <a class="button button--large" href="{{ button_url }}">{{ button_text }}</a>
+          {% endif %}
+          {% if secondary_text and secondary_url %}
+            <a class="button button--large button--secondary" href="{{ secondary_url }}">{{ secondary_text }}</a>
+          {% endif %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>

@@ -10,3 +10,37 @@ blazy:
 # Without this, the login page shows a PHP warning from Seeds UI.
 login_form:
   override: false
+# Brand defaults. Keep in sync with includes/brand.inc and scss/_variables.scss.
+brand:
+  primary: '#14406b'
+  secondary: '#1f6f78'
+  accent: '#c29a4a'
+  surface: '#f8f5ef'
+  headings: primary
+  font: plex
+  corners: soft
+header:
+  sticky: true
+  topbar: true
+  search: true
+  search_path: /search
+  cta_text: ''
+  cta_url: ''
+contact:
+  phone: ''
+  email: ''
+  address: ''
+footer:
+  about: ''
+  copyright: ''
+  logo_white: true
+  tone: dark
+  registration: ''
+social:
+  facebook: ''
+  x: ''
+  instagram: ''
+  linkedin: ''
+  youtube: ''
+  tiktok: ''
+  whatsapp: ''

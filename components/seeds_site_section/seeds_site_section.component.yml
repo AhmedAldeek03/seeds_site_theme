@@ -1,0 +1,99 @@
+'$schema': 'https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json'
+name: 'Section'
+description: 'A full-width band with an optional heading. Drop other components or blocks (Latest news, FAQ...) into it, stacked or in 2 to 4 columns.'
+group: 'Seeds site'
+status: stable
+props:
+  type: object
+  properties:
+    eyebrow:
+      type: string
+      title: 'Label above the heading'
+      examples:
+        - 'Our work'
+    heading:
+      type: string
+      title: 'Heading'
+      examples:
+        - 'Programmes that open doors'
+    intro:
+      type: string
+      title: 'Introduction'
+      examples:
+        - 'Three ways we support families in our neighbourhood.'
+    link_text:
+      type: string
+      title: 'Link text'
+      description: 'Optional. A "View all" style link next to the heading, for example to all news.'
+    link_url:
+      type: string
+      format: uri-reference
+      title: 'Link'
+    layout:
+      type: string
+      title: 'Layout'
+      enum:
+        - stack
+        - grid-2
+        - grid-3
+        - grid-4
+      meta:enum:
+        stack: 'Stacked'
+        grid-2: '2 columns'
+        grid-3: '3 columns'
+        grid-4: '4 columns'
+      examples:
+        - grid-3
+    tone:
+      type: string
+      title: 'Background'
+      enum:
+        - white
+        - light
+        - primary-light
+        - secondary-light
+        - primary
+        - secondary
+        - dark
+      meta:enum:
+        white: 'White'
+        light: 'Light (background colour)'
+        primary-light: 'Light primary'
+        secondary-light: 'Light secondary'
+        primary: 'Primary colour'
+        secondary: 'Secondary colour'
+        dark: 'Dark'
+      examples:
+        - white
+    align:
+      type: string
+      title: 'Heading alignment'
+      enum:
+        - start
+        - center
+      meta:enum:
+        start: 'Start (left in English, right in Arabic)'
+        center: 'Centred'
+      examples:
+        - start
+    width:
+      type: string
+      title: 'Width'
+      enum:
+        - default
+        - narrow
+        - wide
+      meta:enum:
+        default: 'Default'
+        narrow: 'Narrow (for text)'
+        wide: 'Wide'
+      examples:
+        - default
+    anchor:
+      type: string
+      title: 'Anchor'
+      description: 'Optional. Lets links jump to this section, for example #programmes.'
+slots:
+  content:
+    title: 'Content'
+    description: 'Components and blocks shown in this section.'

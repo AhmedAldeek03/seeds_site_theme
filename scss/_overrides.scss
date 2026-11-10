@@ -1,0 +1,163 @@
+// Brand styles for parts other modules and Seeds UI provide: the Klaro cookie
+// banner, the Seeds UI login page, Webform, and print.
+@use "variables" as *;
+@use "mixin" as *;
+
+// Klaro cookie banner (Seeds site installs Klaro).
+.klaro {
+  --font-family: var(--seeds-site-font);
+  --title-font-family: var(--seeds-site-font);
+  --green1: var(--seeds-site-primary);
+  --green2: var(--seeds-site-secondary);
+  --green3: var(--seeds-site-primary-light);
+  --blue1: var(--seeds-site-primary);
+  --blue2: var(--seeds-site-secondary);
+  --button-text-color: var(--seeds-site-on-primary);
+  --border-radius: var(--seeds-site-radius);
+  --box-shadow-color: rgb(16 32 51 / 20%);
+
+  .cookie-notice:not(.cookie-modal-notice) {
+    border: 1px solid var(--seeds-site-line) !important;
+    border-radius: var(--seeds-site-radius-lg) !important;
+    box-shadow: var(--seeds-site-shadow-lg) !important;
+
+    .cn-body {
+      padding: 1.25rem !important;
+    }
+  }
+
+  .cm-btn {
+    border-radius: var(--seeds-site-radius-sm) !important;
+    font-weight: 600;
+  }
+
+  .cm-btn.cm-btn-success,
+  .cm-btn.cm-btn-accept-all {
+    color: var(--seeds-site-on-primary) !important;
+    background: var(--seeds-site-primary) !important;
+  }
+
+}
+
+// Seeds UI login page (page--user--login.html.twig): brand colours and font.
+#login-box {
+  font-family: var(--seeds-site-font);
+  background: linear-gradient(135deg, var(--seeds-site-dark-2) 0%, var(--seeds-site-dark) 100%);
+}
+
+#login-box .login-container {
+  border-radius: var(--seeds-site-radius-lg);
+}
+
+#login-box .login-logo {
+  background-color: transparent;
+}
+
+#login-box .logo {
+  color: var(--seeds-site-on-primary);
+  background: var(--seeds-site-primary);
+}
+
+#login-box .user-login-form .form-submit {
+  border-radius: var(--seeds-site-radius-sm);
+  color: var(--seeds-site-on-primary);
+  background: var(--seeds-site-primary);
+
+  &:hover {
+    color: var(--seeds-site-on-secondary);
+    background: var(--seeds-site-secondary);
+  }
+}
+
+#login-box .user-login-form .form-element:focus {
+  border-color: var(--seeds-site-primary);
+}
+
+// Other account pages (register, password reset) use the normal layout.
+.path-user .main-content form:not(.user-login-form) {
+  max-width: 36rem;
+}
+
+// Webform (Contact us and other forms).
+.webform-submission-form {
+  max-width: 44rem;
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  border: 1px solid var(--seeds-site-line);
+  border-radius: var(--seeds-site-radius-lg);
+  background: #fff;
+  box-shadow: var(--seeds-site-shadow-sm);
+
+  .form-actions {
+    margin-block-start: 1.5rem;
+  }
+
+  .form-submit {
+    min-width: 10rem;
+  }
+}
+
+.webform-confirmation {
+  max-width: 44rem;
+  padding: 2rem;
+  border-radius: var(--seeds-site-radius-lg);
+  background: var(--seeds-site-primary-light);
+}
+
+.webform-confirmation__back {
+  margin-block-start: 1rem;
+}
+
+// Captcha.
+.captcha {
+  margin-block: 1.5rem;
+}
+
+// Editoria11y and the Seeds toolbar sit above the sticky header.
+ed11y-element-panel,
+.seeds-toolbar {
+  z-index: 1000;
+}
+
+// Print: content only, readable links.
+@media print {
+  .site-topbar,
+  .site-header,
+  .site-footer,
+  .tabs-wrapper,
+  .breadcrumb,
+  .klaro,
+  .sidebar,
+  .pager,
+  .skip-link {
+    display: none !important;
+  }
+
+  .page-header {
+    padding: 0;
+    border: 0;
+    background: none;
+
+    &::after {
+      display: none;
+    }
+  }
+
+  body {
+    color: #000;
+    font-size: 11pt;
+  }
+
+  .text-content a[href^="http"]::after,
+  .node--view-mode-full .field--type-text-with-summary a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.85em;
+  }
+
+  .node-layout--with-aside {
+    display: block;
+  }
+
+  img {
+    break-inside: avoid;
+  }
+}

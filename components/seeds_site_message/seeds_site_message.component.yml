@@ -1,0 +1,64 @@
+'$schema': 'https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json'
+name: 'Message'
+description: 'A message from the chair, the director or the founder: a portrait, a heading, the message and a signature.'
+group: 'Seeds site'
+status: stable
+props:
+  type: object
+  required:
+    - heading
+    - text
+  properties:
+    eyebrow:
+      type: string
+      title: 'Label above the heading'
+      examples:
+        - 'Welcome message'
+    heading:
+      type: string
+      title: 'Heading'
+      examples:
+        - 'A message from our chair'
+    text:
+      type: string
+      title: 'Message'
+      contentMediaType: text/html
+      x-formatting-context: block
+      examples:
+        - '<p>When we started, we believed that every family deserves a fair chance. That belief still guides everything we do.</p><p>Thank you to our partners, volunteers and donors: none of this would be possible without you.</p>'
+    name:
+      type: string
+      title: 'Name'
+      examples:
+        - 'Dr. Leila Haddad'
+    role:
+      type: string
+      title: 'Role'
+      examples:
+        - 'Chair of the Board of Trustees'
+    image:
+      type: object
+      $ref: json-schema-definitions://canvas.module/image
+      title: 'Portrait'
+    link_text:
+      type: string
+      title: 'Link text'
+    link_url:
+      type: string
+      format: uri-reference
+      title: 'Link'
+    tone:
+      type: string
+      title: 'Background'
+      enum:
+        - white
+        - light
+        - primary-light
+        - secondary-light
+      meta:enum:
+        white: 'White'
+        light: 'Light (background colour)'
+        primary-light: 'Light primary'
+        secondary-light: 'Light secondary'
+      examples:
+        - light

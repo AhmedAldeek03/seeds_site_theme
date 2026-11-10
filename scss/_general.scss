@@ -1,0 +1,157 @@
+// Utility classes that Seeds UI templates and components use (a small,
+// Bootstrap-compatible subset; Seeds UI ships the markup but not these styles).
+@use "sass:map";
+@use "variables" as *;
+@use "mixin" as *;
+
+.container {
+  @include container;
+}
+
+.row {
+  --seeds-site-row-gap: 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  margin-inline: calc(var(--seeds-site-row-gap) * -0.5);
+}
+
+.row > * {
+  flex-shrink: 0;
+  width: 100%;
+  max-width: 100%;
+  padding-inline: calc(var(--seeds-site-row-gap) * 0.5);
+}
+
+// Seeds UI's page template wraps the header in container > row > col-12.
+.header .row {
+  margin-inline: 0;
+}
+
+.header .row > * {
+  padding-inline: 0;
+}
+
+@function math-percentage($columns) {
+  @return calc(100% * #{$columns} / 12);
+}
+
+.col {
+  flex: 1 0 0%;
+}
+
+@for $i from 1 through 12 {
+  .col-#{$i} {
+    flex: 0 0 auto;
+    width: math-percentage($i);
+  }
+}
+
+@each $name, $min in $breakpoints {
+  @media (min-width: $min) {
+    .col-#{$name} {
+      flex: 1 0 0%;
+    }
+    @for $i from 1 through 12 {
+      .col-#{$name}-#{$i} {
+        flex: 0 0 auto;
+        width: math-percentage($i);
+      }
+    }
+  }
+}
+
+.d-none { display: none !important; }
+.d-block { display: block !important; }
+.d-flex { display: flex !important; }
+.d-grid { display: grid !important; }
+.d-inline-flex { display: inline-flex !important; }
+
+@each $name, $min in $breakpoints {
+  @media (min-width: $min) {
+    .d-#{$name}-none { display: none !important; }
+    .d-#{$name}-block { display: block !important; }
+    .d-#{$name}-flex { display: flex !important; }
+  }
+}
+
+.flex-wrap { flex-wrap: wrap; }
+.flex-column { flex-direction: column; }
+.grow,
+.flex-grow-1 { flex-grow: 1; }
+.justify-content-start { justify-content: flex-start; }
+.justify-content-center { justify-content: center; }
+.justify-content-end { justify-content: flex-end; }
+.justify-content-between { justify-content: space-between; }
+.align-items-start { align-items: flex-start; }
+.align-items-center { align-items: center; }
+.align-items-end { align-items: flex-end; }
+.order-first { order: -1; }
+.order-last { order: 99; }
+
+.position-relative { position: relative; }
+.position-absolute { position: absolute; }
+.top-0 { inset-block-start: 0; }
+.bottom-0 { inset-block-end: 0; }
+.start-0 { inset-inline-start: 0; }
+.end-0 { inset-inline-end: 0; }
+.top-50 { inset-block-start: 50%; }
+.start-50 { inset-inline-start: 50%; }
+.translate-middle { transform: translate(-50%, -50%); }
+.translate-middle-x { transform: translateX(-50%); }
+.translate-middle-y { transform: translateY(-50%); }
+.overflow-hidden { overflow: hidden; }
+
+$spacers: (0: 0, 1: 0.25rem, 2: 0.5rem, 3: 1rem, 4: 1.5rem, 5: 3rem);
+
+@each $key, $value in $spacers {
+  .m-#{$key} { margin: $value !important; }
+  .mb-#{$key} { margin-block-end: $value !important; }
+  .mt-#{$key} { margin-block-start: $value !important; }
+  .p-#{$key} { padding: $value !important; }
+  .py-#{$key} { padding-block: $value !important; }
+  .px-#{$key} { padding-inline: $value !important; }
+}
+
+.text-start { text-align: start; }
+.text-center { text-align: center; }
+.text-end { text-align: end; }
+.text-black { color: var(--seeds-site-ink); }
+.text-white { color: #fff; }
+.text-muted { color: var(--seeds-site-muted); }
+
+.visually-hidden,
+.sr-only {
+  @include visually-hidden;
+}
+
+.visually-hidden.focusable:focus,
+.sr-only.focusable:focus {
+  position: static !important;
+  overflow: visible;
+  clip: auto;
+  width: auto;
+  height: auto;
+}
+
+.clearfix::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+// Seeds UI cards and teasers: zoom the image a little on hover.
+.image-scale {
+  overflow: hidden;
+}
+
+.image-scale img {
+  transition: transform 0.5s var(--seeds-site-ease);
+}
+
+:is(a, article, .card-default, .teaser):hover .image-scale img {
+  transform: scale(1.04);
+}
+
+[x-cloak] {
+  display: none !important;
+}

@@ -1,0 +1,94 @@
+// Image and text (components/seeds_site_media_text): an image beside a
+// heading, rich text and a button.
+@use "../variables" as *;
+@use "../mixin" as *;
+
+.seeds-site-media-text {
+  padding-block: var(--seeds-site-section);
+}
+
+.seeds-site-media-text__inner {
+  @include container;
+  display: grid;
+  gap: clamp(2.5rem, 5vw, 5rem);
+  align-items: center;
+
+  @include up(lg) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.seeds-site-media-text--image-end .seeds-site-media-text__media {
+  @include up(lg) {
+    order: 2;
+  }
+}
+
+// The image sits on a panel of the accent tint, offset to the start.
+.seeds-site-media-text__media {
+  position: relative;
+  padding-block-end: 1.25rem;
+  padding-inline-start: 1.25rem;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset-block: 2.5rem 0;
+    inset-inline: 0 2.5rem;
+    border-radius: var(--seeds-site-radius-lg);
+    background: var(--seeds-site-accent-light);
+  }
+
+  img {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 5 / 4;
+    border-radius: var(--seeds-site-radius-lg);
+    object-fit: cover;
+  }
+}
+
+.seeds-site-media-text:is(.seeds-site-tone--light, .seeds-site-tone--primary-light, .seeds-site-tone--secondary-light) .seeds-site-media-text__media::before {
+  background: var(--seeds-site-accent-line);
+}
+
+.seeds-site-media-text__heading {
+  @include title-rule;
+  margin: 0 0 1.5rem;
+  font-size: var(--seeds-site-step-4);
+}
+
+.seeds-site-media-text__text {
+  @include prose;
+  font-size: var(--seeds-site-step-1);
+
+  li::marker {
+    content: "";
+  }
+
+  ul {
+    padding: 0;
+    list-style: none;
+  }
+
+  ul li {
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  // Check marks in the accent colour.
+  ul li::before {
+    content: "";
+    flex: none;
+    width: 1.4rem;
+    height: 1.4rem;
+    margin-block-start: 0.2rem;
+    border-radius: 999px;
+    background: var(--seeds-site-accent-light) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 12 4 4 8-9'/%3E%3C/svg%3E") center / 0.8rem no-repeat;
+    box-shadow: inset 0 0 0 1.5px var(--seeds-site-accent);
+  }
+}
+
+.seeds-site-media-text__actions {
+  margin-block-start: 2rem;
+}

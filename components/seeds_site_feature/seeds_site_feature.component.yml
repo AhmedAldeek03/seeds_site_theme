@@ -1,0 +1,95 @@
+'$schema': 'https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json'
+name: 'Feature'
+description: 'An icon, a heading, a short text and an optional link. Put several in a Section with 3 or 4 columns.'
+group: 'Seeds site'
+status: stable
+props:
+  type: object
+  required:
+    - heading
+  properties:
+    icon:
+      type: string
+      title: 'Icon'
+      enum:
+        - none
+        - star
+        - heart
+        - users
+        - graduation
+        - health
+        - book
+        - globe
+        - leaf
+        - shield
+        - lightbulb
+        - chart
+        - handshake
+        - briefcase
+        - home
+        - calendar
+        - pin
+        - mail
+        - phone
+        - check
+        - flag
+        - building
+        - target
+        - award
+      meta:enum:
+        none: 'No icon'
+        star: 'Star'
+        heart: 'Heart'
+        users: 'People'
+        graduation: 'Education'
+        health: 'Health'
+        book: 'Book'
+        globe: 'Globe'
+        leaf: 'Leaf'
+        shield: 'Shield'
+        lightbulb: 'Idea'
+        chart: 'Chart'
+        handshake: 'Partnership'
+        briefcase: 'Work'
+        home: 'Home'
+        calendar: 'Calendar'
+        pin: 'Location'
+        mail: 'Email'
+        phone: 'Phone'
+        check: 'Check mark'
+        flag: 'Flag'
+        building: 'Building'
+        target: 'Target'
+        award: 'Award'
+      examples:
+        - star
+    heading:
+      type: string
+      title: 'Heading'
+      examples:
+        - 'Education'
+    text:
+      type: string
+      title: 'Text'
+      examples:
+        - 'Scholarships, mentoring and after-school programmes for young people.'
+    link_text:
+      type: string
+      title: 'Link text'
+    link_url:
+      type: string
+      format: uri-reference
+      title: 'Link'
+    style:
+      type: string
+      title: 'Style'
+      enum:
+        - card
+        - plain
+        - line
+      meta:enum:
+        card: 'Card'
+        plain: 'Plain'
+        line: 'With a line on top'
+      examples:
+        - card

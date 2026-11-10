@@ -1,3 +1,129 @@
 seeds_site_theme.settings:
   type: theme_settings
   label: 'Seeds site theme settings'
+  mapping:
+    navbar:
+      type: mapping
+      label: 'Navigation bar'
+      mapping:
+        navbar_container:
+          type: boolean
+          label: 'Navigation bar in a container'
+    blazy:
+      type: mapping
+      label: 'Blazy'
+      mapping:
+        override:
+          type: boolean
+          label: 'Override Blazy loader'
+    login_form:
+      type: mapping
+      label: 'Login form'
+      mapping:
+        override:
+          type: boolean
+          label: 'Override the login form'
+    brand:
+      type: mapping
+      label: 'Brand'
+      mapping:
+        primary:
+          type: color_hex
+          label: 'Primary colour'
+        secondary:
+          type: color_hex
+          label: 'Secondary colour'
+        accent:
+          type: color_hex
+          label: 'Accent colour'
+        surface:
+          type: color_hex
+          label: 'Background colour'
+        headings:
+          type: string
+          label: 'Heading colour'
+        font:
+          type: string
+          label: 'Font'
+        corners:
+          type: string
+          label: 'Corners'
+    header:
+      type: mapping
+      label: 'Header'
+      mapping:
+        sticky:
+          type: boolean
+          label: 'Sticky header'
+        topbar:
+          type: boolean
+          label: 'Top bar'
+        search:
+          type: boolean
+          label: 'Search button'
+        search_path:
+          type: string
+          label: 'Search page'
+        cta_text:
+          type: label
+          label: 'Header button text'
+        cta_url:
+          type: string
+          label: 'Header button link'
+    contact:
+      type: mapping
+      label: 'Contact details'
+      mapping:
+        phone:
+          type: string
+          label: 'Phone'
+        email:
+          type: email
+          label: 'Email'
+        address:
+          type: text
+          label: 'Address'
+    footer:
+      type: mapping
+      label: 'Footer'
+      mapping:
+        about:
+          type: text
+          label: 'About text'
+        copyright:
+          type: label
+          label: 'Copyright note'
+        logo_white:
+          type: boolean
+          label: 'White logo in the footer'
+        tone:
+          type: string
+          label: 'Footer background'
+        registration:
+          type: label
+          label: 'Registration note'
+    social:
+      type: mapping
+      label: 'Social media'
+      mapping:
+        facebook:
+          type: uri
+          label: 'Facebook'
+        x:
+          type: uri
+          label: 'X'
+        instagram:
+          type: uri
+          label: 'Instagram'
+        linkedin:
+          type: uri
+          label: 'LinkedIn'
+        youtube:
+          type: uri
+          label: 'YouTube'
+        tiktok:
+          type: uri
+          label: 'TikTok'
+        whatsapp:
+          type: uri
+          label: 'WhatsApp'

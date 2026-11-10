@@ -1,0 +1,36 @@
+{
+  "name": "seeds_site_theme",
+  "private": true,
+  "description": "Build tooling for the Seeds site theme (Seeds UI subtheme). Compiled CSS in dist/ is committed, so sites don't need Node.",
+  "scripts": {
+    "build": "npm-run-all css-compile css-prefix css-rtl css-minify",
+    "css-compile": "sass --style expanded --no-source-map --no-error-css scss/:dist/css/",
+    "css-prefix": "postcss --config postcss.config.mjs --replace \"dist/css/*.css\" \"!dist/css/*.rtl*.css\" \"!dist/css/*.min.css\"",
+    "css-rtl": "cross-env NODE_ENV=RTL postcss --config postcss.config.mjs --dir dist/css --ext .rtl.css \"dist/css/*.css\" \"!dist/css/*.min.css\" \"!dist/css/*.rtl.css\"",
+    "css-minify": "cleancss -O1 --format breakWith=lf --output dist/css/ --batch --batch-suffix .min \"dist/css/*.css\" \"!dist/css/*.min.css\"",
+    "watch": "nodemon --watch scss/ --watch components/ --ext scss --exec \"npm run build\"",
+    "lint": "stylelint \"scss/**/*.scss\""
+  },
+  "browserslist": [
+    "last 2 Chrome major versions",
+    "last 2 Firefox major versions",
+    "last 2 Safari major versions",
+    "last 2 Edge major versions",
+    "last 2 iOS major versions",
+    "last 1 ChromeAndroid version",
+    "last 1 Samsung version",
+    "Firefox ESR"
+  ],
+  "devDependencies": {
+    "autoprefixer": "10.4.20",
+    "clean-css-cli": "5.6.3",
+    "cross-env": "7.0.3",
+    "nodemon": "3.1.7",
+    "npm-run-all2": "6.2.3",
+    "postcss": "8.4.47",
+    "postcss-cli": "11.0.0",
+    "rtlcss": "4.3.0",
+    "sass": "1.80.6"
+  },
+  "license": "GPL-2.0-or-later"
+}

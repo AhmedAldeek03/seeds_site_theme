@@ -1,0 +1,29 @@
+{% extends "block.html.twig" %}
+{#
+/**
+ * @file
+ * Seeds site theme: site branding (logo, name and slogan).
+ *
+ * Seeds UI fixes the logo at 200px wide and uses "Home" as its alt text.
+ * Here the logo keeps its proportions (height set in CSS) and the link is
+ * named after the site.
+ */
+#}
+{% set attributes = attributes.addClass('site-branding') %}
+{% block content %}
+  <a href="{{ path('<front>') }}" rel="home" class="site-branding__inner">
+    {% if site_logo %}
+      <img class="site-branding__logo" src="{{ site_logo }}" alt="{{ site_name ? '' : 'Home'|t }}" fetchpriority="high">
+    {% endif %}
+    {% if site_name or site_slogan %}
+      <span class="site-branding__text">
+        {% if site_name %}
+          <span class="site-branding__name">{{ site_name }}</span>
+        {% endif %}
+        {% if site_slogan %}
+          <span class="site-branding__slogan">{{ site_slogan }}</span>
+        {% endif %}
+      </span>
+    {% endif %}
+  </a>
+{% endblock %}

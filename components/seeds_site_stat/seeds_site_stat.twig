@@ -1,0 +1,13 @@
+{#
+/**
+ * @file
+ * Key figure: a big number with a label.
+ */
+#}
+<div{{ attributes.addClass('seeds-site-stat') }}>
+  <span class="seeds-site-stat__value">{{ value }}</span>
+  <span class="seeds-site-stat__label">{{ label }}</span>
+  {% if text %}
+    <p class="seeds-site-stat__text">{{ text }}</p>
+  {% endif %}
+</div>

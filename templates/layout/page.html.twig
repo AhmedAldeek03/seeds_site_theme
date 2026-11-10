@@ -1,0 +1,216 @@
+{#
+/**
+ * @file
+ * Seeds site theme: page layout.
+ *
+ * Same regions as Seeds UI. Adds a top bar, header search and call to action,
+ * a page header band (breadcrumb, title, tabs), an optional sidebar and a
+ * footer built from the theme settings (Appearance > Settings).
+ *
+ * The main navigation is printed once: inline on large screens, as a drawer
+ * on small ones (Seeds UI prints it twice, which duplicates element IDs).
+ *
+ * Extra variables (seeds_site_theme_preprocess_page()):
+ * - site: name, logo (URL), front (URL).
+ * - topbar: show (bool), phone, email.
+ * - header_cta: text, url. header_search: search page URL or empty.
+ * - footer: about, address, phone, email, copyright, registration,
+ *   logo_white (bool), tone ('dark', 'primary' or 'light').
+ * - social: list of { name, label, url }.
+ * - main_layout: 'contained', 'full' (Seeds Pollination) or 'canvas'.
+ */
+#}
+{% set icon = '@seeds_site_theme/includes/icon.html.twig' %}
+{# Rendered once here: a region with only empty blocks must not add a sidebar. #}
+{% set sidebar = page.sidebar_first|render %}
+{% set has_sidebar = sidebar|striptags('<img><iframe><form><input>')|trim is not empty %}
+{# The page header only shows when it has something to show (the front page hides its title). #}
+{% set featured_top = page.featured_top|render %}
+{% set has_page_header = featured_top|striptags('<img><a>')|trim is not empty %}
+<div id="page-wrapper">
+  <div id="page" class="page">
+    <header id="header" class="site-header{{ header_sticky ? ' site-header--sticky' }}" role="banner" aria-label="{{ 'Site header'|t }}" x-data="{ isOpen: false, searchOpen: false }" @keydown.escape="isOpen = false; searchOpen = false" :class="{ 'is-open': isOpen }">
+      {% if topbar.show or page.header %}
+        <div class="site-topbar seeds-site-tone--dark">
+          <div class="container site-topbar__inner">
+            <ul class="site-topbar__contact">
+              {% if topbar.phone %}
+                <li><a href="tel:{{ topbar.phone|replace({' ': ''}) }}">{% include icon with { name: 'phone' } only %}<span dir="ltr">{{ topbar.phone }}</span></a></li>
+              {% endif %}
+              {% if topbar.email %}
+                <li><a href="mailto:{{ topbar.email }}">{% include icon with { name: 'mail' } only %}<span>{{ topbar.email }}</span></a></li>
+              {% endif %}
+            </ul>
+            <div class="site-topbar__end">
+              {{ page.header }}
+              {% if social %}
+                {% include '@seeds_site_theme/includes/social-links.html.twig' with { social: social, modifier: 'topbar' } only %}
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      {% endif %}
+
+      <div class="site-header__main">
+        <div class="container site-header__inner">
+          <div class="site-header__brand header-logo">
+            {{ page.logo }}
+          </div>
+
+          {% if page.navigation or page.collapse_only or header_cta.text %}
+            <div id="mobile-collapse-menu" class="site-header__nav navigation-bar" :class="{ 'is-open': isOpen }">
+              {{ page.navigation }}
+              {% if page.collapse_only %}
+                <div class="site-header__collapse-only">
+                  {{ page.collapse_only }}
+                </div>
+              {% endif %}
+              {% if header_cta.text %}
+                <a class="button site-header__drawer-cta" href="{{ header_cta.url }}">{{ header_cta.text }}</a>
+              {% endif %}
+            </div>
+          {% endif %}
+
+          <div class="site-header__actions header-actions">
+            {{ page.header_actions }}
+            {% if header_search %}
+              <button type="button" class="site-header__icon-button" @click="searchOpen = !searchOpen; isOpen = false; if (searchOpen) $nextTick(() => $refs.searchInput.focus())" :aria-expanded="searchOpen.toString()" aria-expanded="false" aria-controls="site-search">
+                {% include icon with { name: 'search' } only %}
+                <span class="visually-hidden">{{ 'Search'|t }}</span>
+              </button>
+            {% endif %}
+            {% if header_cta.text %}
+              <a class="button button--small site-header__cta" href="{{ header_cta.url }}">{{ header_cta.text }}</a>
+            {% endif %}
+            {% if page.navigation or page.collapse_only %}
+              <button type="button" class="site-header__icon-button site-header__toggle navbar-toggler" @click="isOpen = !isOpen; searchOpen = false" :aria-expanded="isOpen.toString()" aria-expanded="false" aria-controls="mobile-collapse-menu">
+                <span x-show="!isOpen">{% include icon with { name: 'menu' } only %}</span>
+                <span x-show="isOpen" x-cloak>{% include icon with { name: 'close' } only %}</span>
+                <span class="visually-hidden">{{ 'Menu'|t }}</span>
+              </button>
+            {% endif %}
+          </div>
+        </div>
+
+        {% if header_search %}
+          <div id="site-search" class="site-search" x-show="searchOpen" x-transition.opacity x-cloak @click.outside="searchOpen = false">
+            <form class="container site-search__form" action="{{ header_search }}" method="get" role="search">
+              <label class="visually-hidden" for="site-search-input">{{ 'Search this site'|t }}</label>
+              <input id="site-search-input" x-ref="searchInput" type="search" name="keys" placeholder="{{ 'Search this site'|t }}" autocomplete="off">
+              <button class="button" type="submit">{{ 'Search'|t }}</button>
+            </form>
+          </div>
+        {% endif %}
+      </div>
+    </header>
+
+    {% if page.highlighted %}
+      <div class="highlighted">
+        <div class="container">
+          {{ page.highlighted }}
+        </div>
+      </div>
+    {% endif %}
+
+    {% if has_page_header %}
+      {% block featured %}
+        <div class="page-header featured-top seeds-site-tone--light">
+          <div class="container page-header__inner">
+            {{ page.breadcrumb }}
+            {{ featured_top }}
+          </div>
+        </div>
+      {% endblock %}
+    {% endif %}
+
+    <div id="main-wrapper" class="layout-main-wrapper">
+      {% block content %}
+        <div id="main" class="main main--{{ main_layout }}{{ main_layout == 'contained' ? ' container' }}{{ has_sidebar ? ' main--with-sidebar' }}">
+          <main class="main-content" role="main">
+            <a id="main-content" tabindex="-1"></a>
+            {{ page.content }}
+          </main>
+          {% if has_sidebar %}
+            <aside class="sidebar" role="complementary">
+              {{ sidebar }}
+            </aside>
+          {% endif %}
+        </div>
+      {% endblock %}
+    </div>
+
+    {% if page.featured_bottom %}
+      <div class="featured-bottom">
+        <div class="container">
+          {{ page.featured_bottom }}
+        </div>
+      </div>
+    {% endif %}
+
+    <footer class="site-footer seeds-site-tone--{{ footer.tone }}" role="contentinfo">
+      {% block footer %}
+        {% if page.footer_top %}
+          <div class="site-footer__top">
+            <div class="container">
+              {{ page.footer_top }}
+            </div>
+          </div>
+        {% endif %}
+
+        <div class="site-footer__main">
+          <div class="container site-footer__grid">
+            <div class="site-footer__about">
+              <a class="site-footer__brand" href="{{ site.front }}" rel="home">
+                {% if site.logo %}
+                  <img class="site-footer__logo{{ footer.logo_white ? ' site-footer__logo--white' }}" src="{{ site.logo }}" alt="" width="40" height="40" loading="lazy">
+                {% endif %}
+                <span>{{ site.name }}</span>
+              </a>
+              {% if footer.about %}
+                <p class="site-footer__text">{{ footer.about }}</p>
+              {% endif %}
+              {% if social %}
+                {% include '@seeds_site_theme/includes/social-links.html.twig' with { social: social, modifier: 'footer' } only %}
+              {% endif %}
+            </div>
+
+            {% if page.footer %}
+              <div class="site-footer__region">
+                {{ page.footer }}
+              </div>
+            {% endif %}
+
+            {% if footer.address or footer.phone or footer.email %}
+              <div class="site-footer__contact">
+                <h2 class="site-footer__heading">{{ 'Get in touch'|t }}</h2>
+                <ul class="site-footer__contact-list">
+                  {% if footer.address %}
+                    <li>{% include icon with { name: 'pin' } only %}<span>{{ footer.address|nl2br }}</span></li>
+                  {% endif %}
+                  {% if footer.phone %}
+                    <li>{% include icon with { name: 'phone' } only %}<a href="tel:{{ footer.phone|replace({' ': ''}) }}" dir="ltr">{{ footer.phone }}</a></li>
+                  {% endif %}
+                  {% if footer.email %}
+                    <li>{% include icon with { name: 'mail' } only %}<a href="mailto:{{ footer.email }}">{{ footer.email }}</a></li>
+                  {% endif %}
+                </ul>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="site-footer__bottom">
+          <div class="container site-footer__bottom-inner">
+            <div class="site-footer__legal">
+              <p class="site-footer__copyright">&copy; {{ 'now'|date('Y') }} {{ site.name }}{% if footer.copyright %}. {{ footer.copyright }}{% endif %}</p>
+              {% if footer.registration %}
+                <p class="site-footer__registration">{{ footer.registration }}</p>
+              {% endif %}
+            </div>
+            {{ page.footer_bottom }}
+          </div>
+        </div>
+      {% endblock %}
+    </footer>
+  </div>
+</div>

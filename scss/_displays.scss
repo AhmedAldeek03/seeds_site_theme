@@ -1,0 +1,959 @@
+// Entity displays:
+// - Landing: full content pages (page header details, lead image, text,
+//   details card and share links).
+// - Cards: the Card view mode, plain or as the Seeds UI card component.
+// - Seeds UI components: teaser, teaser 2 col, slider, statistic, accordion.
+@use "variables" as *;
+@use "mixin" as *;
+@use "icons" as *;
+
+// ---------------------------------------------------------------------------
+// Landing: page header details (seeds_site_theme_landing_header()).
+// ---------------------------------------------------------------------------
+.page-header__label {
+  @include eyebrow;
+}
+
+.page-header__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 1.5rem;
+  align-items: center;
+  margin-block-start: 1.5rem;
+  color: var(--seeds-site-muted);
+  font-size: var(--seeds-site-step--1);
+}
+
+.page-header__meta-item {
+  display: inline-flex;
+  gap: 0.45rem;
+  align-items: center;
+  font-weight: 500;
+
+  .icon {
+    width: 1.05rem;
+    height: 1.05rem;
+    color: var(--seeds-site-accent);
+  }
+}
+
+.page-header__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  a {
+    @include tag-pill;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Landing: full pages (templates/content/node--full.html.twig).
+// ---------------------------------------------------------------------------
+.node--view-mode-full {
+  max-width: none;
+}
+
+.node-layout {
+  display: grid;
+  gap: 2.5rem;
+}
+
+.node-layout:not(.node-layout--with-aside) {
+  max-width: var(--seeds-site-width-narrow);
+}
+
+@include up(lg) {
+  .node-layout--with-aside {
+    grid-template-columns: minmax(0, 1fr) 21rem;
+    gap: clamp(3rem, 5vw, 5rem);
+    align-items: start;
+  }
+
+  .node-layout__aside {
+    position: sticky;
+    inset-block-start: calc(var(--seeds-site-header-height) + 1.5rem);
+  }
+}
+
+.node-layout__main {
+  min-width: 0;
+  max-width: var(--seeds-site-width-narrow);
+
+  > .field + .field {
+    margin-block-start: 2rem;
+  }
+}
+
+// Lead image.
+.node--view-mode-full .node-layout__main > .field--name-field-media {
+  margin-block-end: 2.5rem;
+
+  img {
+    width: 100%;
+    border-radius: var(--seeds-site-radius-lg);
+  }
+}
+
+// Lead paragraph: the first paragraph of the text is a little larger.
+.node--view-mode-full .node-layout__main > .field--name-field-body > p:first-child {
+  color: var(--seeds-site-ink);
+  font-size: var(--seeds-site-step-1);
+  line-height: 1.65;
+}
+
+// Galleries use the whole width for the photos; share links go below them.
+.node--type-gallery .node-layout,
+.node--type-gallery .node-layout__main {
+  max-width: none;
+}
+
+.node--type-gallery .node-layout--with-aside {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.node--type-gallery .node-layout__aside {
+  position: static;
+}
+
+.node--type-gallery .node-layout__main > :is(.field--name-field-body, .field--name-field-date) {
+  max-width: var(--seeds-site-width-narrow);
+}
+
+// Dates in the text column (Gallery) read as a small meta line.
+.node-layout__main > .field--name-field-date {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  color: var(--seeds-site-muted);
+  font-size: var(--seeds-site-step--1);
+  font-weight: 500;
+
+  &::before {
+    @include icon(icon(calendar), 1rem);
+    color: var(--seeds-site-accent);
+  }
+}
+
+.node-layout__main > .field--name-field-date + .field {
+  margin-block-start: 1rem;
+}
+
+// Details card beside the text.
+.node-facts {
+  display: grid;
+  gap: 1.25rem;
+  padding: 1.75rem;
+  border: 1px solid var(--seeds-site-line);
+  border-block-start: 4px solid var(--seeds-site-accent);
+  border-radius: var(--seeds-site-radius-lg);
+  background: var(--seeds-site-surface);
+
+  > .field {
+    margin: 0;
+  }
+
+  .field__label {
+    margin-block-end: 0.35rem;
+    color: var(--seeds-site-muted);
+    font-size: var(--seeds-site-step--1);
+    font-weight: 500;
+  }
+
+  .field__item {
+    color: var(--seeds-site-ink);
+    font-weight: 500;
+  }
+
+  // Portraits and covers (Team member, Publication).
+  > .field--name-field-media img {
+    width: 100%;
+    border-radius: var(--seeds-site-radius);
+  }
+
+  > .field--name-field-link a {
+    width: 100%;
+  }
+
+  > .field + .field {
+    padding-block-start: 1.25rem;
+    border-block-start: 1px solid var(--seeds-site-accent-line);
+  }
+}
+
+// Icons in front of dates and event locations.
+.node-facts .field--name-field-date .field__item,
+.node-facts .field--name-field-date-range .field__item,
+.node--type-event .node-facts .field--name-field-plain-text .field__item {
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
+
+  &::before {
+    @include icon(icon(calendar), 1.15rem);
+    margin-block-start: 0.25rem;
+    color: var(--seeds-site-accent);
+  }
+}
+
+.node--type-event .node-facts .field--name-field-plain-text .field__item::before {
+  mask-image: icon(pin);
+}
+
+.node-facts .field--name-field-date-range .field__item {
+  flex-wrap: wrap;
+  column-gap: 0.35rem;
+}
+
+.node-facts .field--name-field-date-range time {
+  white-space: normal;
+}
+
+// Team member page: the job title under the portrait stands out.
+.node--type-team-member .node-facts .field--name-field-plain-text .field__item {
+  color: var(--seeds-site-secondary-text);
+  font-size: var(--seeds-site-step-1);
+}
+
+// Share links in the side column, under the details card.
+.node-share {
+  display: grid;
+  gap: 0.85rem;
+  padding: 1.5rem 1.75rem;
+  border: 1px solid var(--seeds-site-line);
+  border-radius: var(--seeds-site-radius-lg);
+}
+
+.node-facts + .node-share {
+  margin-block-start: 1.25rem;
+}
+
+.node-share__title {
+  margin: 0;
+  color: var(--seeds-site-ink);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+// Gallery page: photo grid; photos open in the lightbox (js/main.js).
+.field--name-field-media-unlimited {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr));
+  gap: 1rem;
+  margin-block-start: 2rem;
+
+  > .field__item {
+    overflow: hidden;
+    border-radius: var(--seeds-site-radius);
+    background: var(--seeds-site-surface);
+  }
+
+  .field,
+  .field__item,
+  .media {
+    margin: 0;
+  }
+
+  img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    transition: transform 0.5s var(--seeds-site-ease), opacity 0.2s;
+  }
+
+  .field__label {
+    @include visually-hidden;
+  }
+
+  // Remote videos keep their own ratio.
+  iframe {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    height: auto;
+    border: 0;
+  }
+}
+
+.seeds-site-lightbox-trigger {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: zoom-in;
+
+  &:hover img {
+    transform: scale(1.04);
+  }
+}
+
+// Lightbox dialog.
+.seeds-site-lightbox {
+  width: 100vw;
+  max-width: 100vw;
+  height: 100vh;
+  max-height: 100vh;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  color: #fff;
+  background: rgb(7 12 20 / 94%);
+
+  &::backdrop {
+    background: transparent;
+  }
+
+  &[open] {
+    display: grid;
+    grid-template: 1fr auto / auto 1fr auto;
+    align-items: center;
+  }
+}
+
+.seeds-site-lightbox__figure {
+  display: grid;
+  grid-area: 1 / 2;
+  gap: 0.75rem;
+  place-items: center;
+  height: 100%;
+  margin: 0;
+  padding: 3.5rem 0 1rem;
+
+  img {
+    max-width: min(100%, 1400px);
+    max-height: calc(100vh - 8rem);
+    border-radius: var(--seeds-site-radius-sm);
+    object-fit: contain;
+  }
+
+  figcaption {
+    color: rgb(255 255 255 / 75%);
+  }
+}
+
+.seeds-site-lightbox__button {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  margin: 0.75rem;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  color: #fff;
+  background: rgb(255 255 255 / 12%);
+  cursor: pointer;
+
+  &:hover {
+    background: rgb(255 255 255 / 24%);
+  }
+
+  .icon {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+}
+
+.seeds-site-lightbox__prev {
+  grid-area: 1 / 1;
+
+  .icon {
+    transform: scaleX(calc(-1 * var(--seeds-site-flip)));
+  }
+}
+
+.seeds-site-lightbox__next {
+  grid-area: 1 / 3;
+
+  .icon {
+    @include flip-rtl;
+  }
+}
+
+.seeds-site-lightbox__close {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-end: 0;
+}
+
+.seeds-site-lightbox__count {
+  grid-area: 2 / 1 / 3 / 4;
+  padding-block-end: 1rem;
+  color: rgb(255 255 255 / 70%);
+  font-size: var(--seeds-site-step--1);
+  text-align: center;
+}
+
+// ---------------------------------------------------------------------------
+// Cards. The same design for the plain Card view mode (title, then fields)
+// and the Seeds UI card component (Display Suite + UI Patterns), so News,
+// Events, Team, Gallery and Publications all match.
+// ---------------------------------------------------------------------------
+@mixin card-image {
+  position: relative;
+  overflow: hidden;
+  margin: 0;
+  background: var(--seeds-site-surface-2);
+
+  img {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    transition: transform 0.6s var(--seeds-site-ease);
+  }
+
+  // An accent line grows along the bottom of the image on hover.
+  &::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    inset-block-end: 0;
+    height: 4px;
+    background: var(--seeds-site-accent);
+    transform: scaleX(0);
+    transform-origin: var(--seeds-site-origin-start, left);
+    transition: transform 0.4s var(--seeds-site-ease);
+  }
+}
+
+[dir="rtl"] {
+  --seeds-site-origin-start: right;
+}
+
+.node--view-mode-card,
+.card-default {
+  @include card-shell;
+
+  &:hover {
+    @include card-hover;
+
+    img {
+      transform: scale(1.04);
+    }
+
+    .card-default-image::after,
+    .field--name-field-media::after {
+      transform: scaleX(1);
+    }
+  }
+
+  &:focus-within {
+    border-color: var(--seeds-site-primary);
+  }
+}
+
+// Tag and date above the title (templates/field/field--seeds-site-card-body).
+.seeds-site-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 0.75rem;
+  align-items: center;
+  margin-block-end: 0.75rem;
+  color: var(--seeds-site-muted);
+  font-size: var(--seeds-site-step--2);
+  font-weight: 500;
+}
+
+.seeds-site-card-meta__tag {
+  @include tag-pill;
+}
+
+.seeds-site-card-meta__date {
+  display: inline-flex;
+  gap: 0.35rem;
+  align-items: center;
+
+  &::before {
+    @include icon(icon(calendar), 0.95rem);
+    color: var(--seeds-site-accent);
+  }
+}
+
+@mixin card-title {
+  margin: 0 0 0.6rem;
+  color: var(--seeds-site-ink);
+  font-size: 1.1875rem;
+  font-weight: 600;
+  line-height: 1.35;
+  transition: color 0.2s;
+}
+
+@mixin card-text {
+  color: var(--seeds-site-muted);
+  font-size: 0.975rem;
+  line-height: 1.6;
+
+  p {
+    display: -webkit-box;
+    overflow: hidden;
+    margin: 0;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+}
+
+// Plain cards: the title comes first in the markup; show the image first,
+// then the tag and date line, the title and the other fields.
+.node--view-mode-card {
+  padding-block-end: 1.5rem;
+
+  > header {
+    order: 2;
+    padding: 1.35rem 1.5rem 0;
+  }
+
+  &:has(.seeds-site-card-meta) > header {
+    padding-block-start: 0;
+  }
+
+  > .node__content {
+    display: contents;
+  }
+
+  .seeds-site-card-meta {
+    order: 1;
+    margin: 0;
+    padding: 1.35rem 1.5rem 0.75rem;
+  }
+
+  .node__content > .field {
+    order: 3;
+    margin: 0;
+    padding-inline: 1.5rem;
+  }
+
+  .node__content > .field--name-field-media {
+    order: 0;
+    padding: 0;
+    @include card-image;
+  }
+
+  .node__title {
+    @include card-title;
+
+    a {
+      color: inherit;
+      text-decoration: none;
+
+      // The whole card is clickable through its title link.
+      &::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+      }
+    }
+  }
+
+  &:hover .node__title {
+    color: var(--seeds-site-primary-text);
+  }
+
+  // Other links stay clickable above the card link.
+  .node__content a:not(.node__title a) {
+    position: relative;
+    z-index: 2;
+  }
+
+  .field--name-field-body,
+  .field--name-field-plain-long {
+    @include card-text;
+  }
+
+  .field--name-field-date,
+  .field--name-field-date-range {
+    display: flex;
+    gap: 0.4rem;
+    align-items: center;
+    margin-block-end: 0.5rem;
+    color: var(--seeds-site-muted);
+    font-size: var(--seeds-site-step--1);
+    font-weight: 500;
+
+    &::before {
+      @include icon(icon(calendar), 1rem);
+      color: var(--seeds-site-accent);
+    }
+  }
+
+  .field--name-field-plain-text {
+    margin-block-end: 0.35rem;
+    color: var(--seeds-site-secondary-text);
+    font-size: 0.95rem;
+    font-weight: 500;
+  }
+}
+
+// Seeds UI card component.
+.card-default-image {
+  @include card-image;
+
+  .field {
+    margin: 0;
+  }
+
+  a {
+    display: block;
+  }
+}
+
+.card-default .card-content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 1.4rem 1.5rem 1.5rem;
+  background: none !important;
+}
+
+.card-default-title {
+  @include card-title;
+  order: 0;
+}
+
+.card-default:hover .card-default-title {
+  color: var(--seeds-site-primary-text);
+}
+
+// The body opens up so the tag and date line can move above the title.
+.card-default-body {
+  display: contents;
+
+  > .seeds-site-card-meta {
+    order: -1;
+  }
+
+  > .field {
+    @include card-text;
+    margin-block-end: 1.25rem;
+  }
+
+  > .field + .field {
+    margin-block-start: -0.75rem;
+  }
+
+  // Event date and location in the Seeds UI event card: before the title.
+  > .field--name-field-date-range,
+  > .field--name-field-plain-text {
+    display: flex;
+    order: -1;
+    gap: 0.45rem;
+    align-items: flex-start;
+    margin: 0 0 0.35rem;
+    font-size: var(--seeds-site-step--1);
+    line-height: 1.45;
+
+    .field__label {
+      @include visually-hidden;
+    }
+
+    &::before {
+      @include icon(icon(calendar), 1rem);
+      margin-block-start: 0.1rem;
+      color: var(--seeds-site-accent);
+    }
+  }
+
+  > .field--name-field-date-range {
+    flex-wrap: wrap;
+    color: var(--seeds-site-primary-text);
+    font-weight: 600;
+
+    time {
+      white-space: normal;
+    }
+  }
+
+  > .field--name-field-plain-text {
+    margin-block-end: 0.85rem;
+
+    &::before {
+      mask-image: icon(pin);
+    }
+  }
+}
+
+.card-default-link {
+  order: 1;
+  margin-block-start: auto;
+  padding-block-start: 1rem;
+  border-block-start: 1px solid var(--seeds-site-line);
+
+  a {
+    @include arrow-link;
+    font-size: 0.95rem;
+
+    // The whole card is clickable through its "Read more" link.
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+    }
+  }
+
+  .card-default:hover & a::after {
+    translate: calc(4px * var(--seeds-site-flip)) 0;
+  }
+}
+
+// Card variations by Seeds feature.
+// Team: a round portrait with an accent ring, centred text.
+.node--type-team-member.node--view-mode-card {
+  padding-block-start: 1.75rem;
+  text-align: center;
+
+  .node__content > .field--name-field-media {
+    width: 9rem;
+    margin-inline: auto;
+    padding: 0;
+    overflow: visible;
+    border-radius: 50%;
+    background: none;
+    box-shadow: 0 0 0 4px #fff, 0 0 0 6px var(--seeds-site-accent-line);
+    transition: box-shadow 0.3s;
+
+    &::after {
+      display: none;
+    }
+
+    img {
+      aspect-ratio: 1;
+      border-radius: 50%;
+    }
+  }
+
+  &:hover .node__content > .field--name-field-media {
+    box-shadow: 0 0 0 4px #fff, 0 0 0 6px var(--seeds-site-accent);
+
+    img {
+      transform: none;
+    }
+  }
+
+  .field--name-field-body {
+    display: none;
+  }
+}
+
+// Publications: the cover stands on a light shelf.
+.node--type-publication.node--view-mode-card .node__content > .field--name-field-media {
+  display: grid;
+  place-items: center;
+  padding: 1.75rem 1.5rem 0;
+  background: linear-gradient(to bottom, var(--seeds-site-surface-2) 82%, transparent 82%);
+
+  img {
+    width: auto;
+    max-width: 62%;
+    aspect-ratio: 3 / 4;
+    border-radius: 4px;
+    box-shadow: 0 12px 28px -8px rgb(24 34 47 / 35%);
+  }
+
+  &::after {
+    display: none;
+  }
+}
+
+.node--type-publication.node--view-mode-card:hover .node__content > .field--name-field-media img {
+  transform: translateY(-4px);
+}
+
+// Gallery: a photo icon on the cover.
+.node--type-gallery.node--view-mode-card .node__content > .field--name-field-media::before {
+  @include icon(icon(images), 1.35rem);
+  position: absolute;
+  z-index: 2;
+  inset-block-start: 0.9rem;
+  inset-inline-end: 0.9rem;
+  color: #fff;
+  filter: drop-shadow(0 1px 3px rgb(0 0 0 / 70%));
+}
+
+// ---------------------------------------------------------------------------
+// Seeds UI teaser component.
+// ---------------------------------------------------------------------------
+.teaser {
+  display: flex;
+  gap: 1.25rem;
+  align-items: center;
+}
+
+.teaser-img {
+  flex: none;
+  width: 8rem;
+  overflow: hidden;
+  border-radius: var(--seeds-site-radius);
+
+  img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+  }
+}
+
+.teaser-title {
+  margin-block-end: 0.35rem;
+  color: var(--seeds-site-ink);
+  font-weight: 600;
+}
+
+.teaser-body {
+  color: var(--seeds-site-muted);
+  font-size: 0.95rem;
+}
+
+// Seeds UI teaser 2 col component (image beside text).
+[class*="-teaser"] > .row {
+  --seeds-site-row-gap: 3rem;
+  align-items: center;
+}
+
+[class$="-teaser-img"] img,
+[class*="-teaser-img "] img {
+  width: 100%;
+  border-radius: var(--seeds-site-radius-lg);
+}
+
+[class$="-teaser-title"] {
+  @include title-rule;
+  margin-block-end: 1.25rem;
+  color: var(--seeds-site-tone-heading);
+  font-size: var(--seeds-site-step-4);
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+[class$="-teaser-body"] {
+  color: var(--seeds-site-tone-text);
+  font-size: var(--seeds-site-step-1);
+}
+
+// Seeds UI slider component (one slide).
+.slider {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--seeds-site-radius-lg);
+  color: #fff;
+  background: var(--seeds-site-dark);
+}
+
+.slider-image img {
+  width: 100%;
+  min-height: 22rem;
+  max-height: 70vh;
+  object-fit: cover;
+}
+
+.slider-content {
+  inset-block-end: 0;
+  inset-inline: 0;
+  padding-block: 3rem;
+  background: linear-gradient(to top, rgb(7 12 20 / 80%), transparent);
+}
+
+.slider-title {
+  font-size: var(--seeds-site-step-5);
+  font-weight: 600;
+  line-height: 1.1;
+}
+
+// Seeds UI statistics component.
+.statistic {
+  border-radius: var(--seeds-site-radius-lg);
+  text-align: center;
+  background: var(--seeds-site-tone-panel);
+
+  > span {
+    display: block;
+    color: var(--seeds-site-tone-heading);
+    font-size: var(--seeds-site-step-5);
+    font-weight: 600;
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+.statistic-content {
+  margin-block-start: 0.5rem;
+  color: var(--seeds-site-tone-muted);
+}
+
+// Seeds UI accordion component.
+.accordion {
+  overflow: hidden;
+  border: 1px solid var(--seeds-site-tone-border);
+  border-radius: var(--seeds-site-radius);
+  background: var(--seeds-site-tone-card);
+
+  & + & {
+    margin-block-start: 0.75rem;
+  }
+}
+
+.accordion-header {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  padding: 1.1rem 1.35rem;
+  color: var(--seeds-site-tone-heading);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.accordion-icon svg {
+  color: var(--seeds-site-accent);
+  transition: transform 0.2s var(--seeds-site-ease);
+}
+
+.accordion-item.active .accordion-icon svg {
+  transform: rotate(180deg);
+}
+
+.accordion-content {
+  padding: 0 1.35rem 1.35rem;
+  color: var(--seeds-site-tone-text);
+}
+
+// Event dates on cards (seeds_site_theme_card_date_range()): a badge with the
+// day and month in the top start corner of the image, and one short line.
+.seeds-site-date-badge {
+  position: absolute;
+  z-index: 2;
+  inset-block-start: 1rem;
+  inset-inline-start: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 3.5rem;
+  padding: 0.45rem 0.6rem 0.4rem;
+  border-block-end: 3px solid var(--seeds-site-accent);
+  border-radius: var(--seeds-site-radius-sm);
+  color: var(--seeds-site-primary-text);
+  background: #fff;
+  box-shadow: 0 6px 16px -6px rgb(7 12 20 / 35%);
+  line-height: 1;
+}
+
+.seeds-site-date-badge__day {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.seeds-site-date-badge__month {
+  margin-block-start: 0.2rem;
+  color: var(--seeds-site-muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.card-default-body > .field--name-field-date-range,
+.node--view-mode-card .field--name-field-date-range {
+  time {
+    white-space: normal;
+  }
+}

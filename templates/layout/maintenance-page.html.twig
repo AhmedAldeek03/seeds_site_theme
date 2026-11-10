@@ -1,0 +1,27 @@
+{#
+/**
+ * @file
+ * Seeds site theme: maintenance page (site offline, updates running).
+ *
+ * A centred card on the brand's dark band, with the logo, title and message.
+ */
+#}
+<div class="maintenance-page">
+  <div class="maintenance-page__card">
+    <div class="maintenance-page__brand">
+      {% if logo %}
+        <img src="{{ logo }}" alt="" width="48" height="48">
+      {% endif %}
+      {% if site_name %}
+        <span>{{ site_name }}</span>
+      {% endif %}
+    </div>
+    {% if title %}
+      <h1 class="maintenance-page__title">{{ title }}</h1>
+    {% endif %}
+    {{ page.highlighted }}
+    <div class="maintenance-page__content">
+      {{ page.content }}
+    </div>
+  </div>
+</div>

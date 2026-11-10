@@ -1,0 +1,610 @@
+<?php
+
+/**
+ * @file
+ * Seeds site theme: a Seeds UI subtheme.
+ */
+
+declare(strict_types=1);
+
+use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Language\LanguageInterface;
+use Drupal\Core\Render\Element;
+use Drupal\Core\StringTranslation\ByteSizeMarkup;
+use Drupal\Core\Url;
+
+require_once __DIR__ . '/includes/brand.inc';
+
+/**
+ * Social networks offered in the theme settings, in display order.
+ */
+function seeds_site_theme_social_networks(): array {
+  return [
+    'facebook' => 'Facebook',
+    'x' => 'X',
+    'instagram' => 'Instagram',
+    'linkedin' => 'LinkedIn',
+    'youtube' => 'YouTube',
+    'tiktok' => 'TikTok',
+    'whatsapp' => 'WhatsApp',
+  ];
+}
+
+/**
+ * Turns a path or URL from the theme settings into a URL string, or ''.
+ */
+function seeds_site_theme_url(?string $value): string {
+  $value = trim((string) $value);
+  if ($value === '') {
+    return '';
+  }
+  try {
+    if (preg_match('/^(\/|\?|#)/', $value)) {
+      return Url::fromUserInput($value)->toString();
+    }
+    if (preg_match('/^(https?:|mailto:|tel:)/', $value)) {
+      return Url::fromUri($value)->toString();
+    }
+  }
+  catch (\InvalidArgumentException) {
+  }
+  return '';
+}
+
+/**
+ * Implements hook_library_info_alter().
+ *
+ * Adds the brand stylesheet generated from the theme settings to the global
+ * library (see includes/brand.inc).
+ */
+function seeds_site_theme_library_info_alter(array &$libraries, string $extension): void {
+  if ($extension === 'seeds_site_theme' && isset($libraries['global'])) {
+    $uri = seeds_site_theme_brand_css_uri();
+    if ($uri) {
+      $libraries['global']['css']['theme'][$uri] = [];
+    }
+  }
+}
+
+/**
+ * Implements hook_css_alter().
+ *
+ * Seeds UI subthemes attach style-ltr or style-rtl in hook_preprocess_html().
+ * Canvas's editor preview only loads the libraries listed in the .info.yml
+ * file, so this theme lists style-ltr there and swaps it for the
+ * right-to-left build (made by rtlcss) on right-to-left pages.
+ */
+function seeds_site_theme_css_alter(array &$css, $assets, LanguageInterface $language): void {
+  if ($language->getDirection() !== LanguageInterface::DIRECTION_RTL) {
+    return;
+  }
+  $path = \Drupal::service('extension.list.theme')->getPath('seeds_site_theme') . '/dist/css/';
+  foreach (['style.min.css' => 'style.rtl.min.css'] as $ltr => $rtl) {
+    if (isset($css[$path . $ltr])) {
+      $css[$path . $rtl] = ['data' => $path . $rtl] + $css[$path . $ltr];
+      unset($css[$path . $ltr]);
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for html.html.twig.
+ */
+function seeds_site_theme_preprocess_html(array &$variables): void {
+  $variables['attributes']['class'][] = 'seeds-site-theme';
+  if (theme_get_setting('header.sticky')) {
+    $variables['attributes']['class'][] = 'has-sticky-header';
+  }
+  $variables['#cache']['tags'][] = 'config:seeds_site_theme.settings';
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for page.html.twig.
+ */
+function seeds_site_theme_preprocess_page(array &$variables): void {
+  $site_config = \Drupal::config('system.site');
+  $theme_config = \Drupal::config('seeds_site_theme.settings');
+  $cacheability = CacheableMetadata::createFromObject($site_config)->addCacheableDependency($theme_config);
+
+  $header = (array) theme_get_setting('header');
+  $contact = (array) theme_get_setting('contact');
+  $footer = (array) theme_get_setting('footer');
+
+  $variables['site'] = [
+    'name' => $site_config->get('name'),
+    'logo' => theme_get_setting('logo.url'),
+    'front' => Url::fromRoute('<front>')->toString(),
+  ];
+
+  $social = [];
+  foreach (seeds_site_theme_social_networks() as $name => $label) {
+    $url = seeds_site_theme_url(theme_get_setting('social.' . $name));
+    if ($url) {
+      $social[] = ['name' => $name, 'label' => $label, 'url' => $url];
+    }
+  }
+  $variables['social'] = $social;
+
+  $variables['topbar'] = [
+    'show' => !empty($header['topbar']) && (!empty($contact['phone']) || !empty($contact['email']) || $social),
+    'phone' => $contact['phone'] ?? '',
+    'email' => $contact['email'] ?? '',
+  ];
+  $variables['header_sticky'] = !empty($header['sticky']);
+  $cta_url = seeds_site_theme_url($header['cta_url'] ?? '');
+  $variables['header_cta'] = [
+    'text' => $cta_url ? ($header['cta_text'] ?? '') : '',
+    'url' => $cta_url,
+  ];
+  $variables['header_search'] = '';
+  if (!empty($header['search'])) {
+    $search = \Drupal::pathValidator()->getUrlIfValid($header['search_path'] ?? '/search');
+    $variables['header_search'] = $search ? $search->toString() : '';
+  }
+
+  $variables['footer'] = [
+    'about' => $footer['about'] ?? '',
+    'copyright' => $footer['copyright'] ?? '',
+    'logo_white' => !empty($footer['logo_white']),
+    'tone' => in_array($footer['tone'] ?? '', ['dark', 'primary', 'light'], TRUE) ? $footer['tone'] : 'dark',
+    'registration' => $footer['registration'] ?? '',
+    'address' => $contact['address'] ?? '',
+    'phone' => $contact['phone'] ?? '',
+    'email' => $contact['email'] ?? '',
+  ];
+
+  // Page width: Seeds Pollination's per-bundle "full width" setting, or the
+  // Canvas layout, where each section sets its own width.
+  $variables['main_layout'] = !empty($variables['is_full_width']) ? 'full' : 'contained';
+  $canvas_page = seeds_site_theme_current_canvas_page();
+  if ($canvas_page) {
+    $variables['main_layout'] = 'canvas';
+    $cacheability->addCacheableDependency($canvas_page);
+    // A page that opens with a Hero used as the page heading doesn't need the
+    // separate page title: the Hero prints the <h1>.
+    foreach ($canvas_page->getComponentTree() as $item) {
+      if ($item->getParentUuid() !== NULL) {
+        continue;
+      }
+      $inputs = $item->getInputs() ?? [];
+      $page_heading = $inputs['page_heading'] ?? TRUE;
+      if ($item->getComponentId() === 'sdc.seeds_site_theme.seeds_site_hero' && seeds_site_theme_input_true($page_heading)) {
+        // page.html.twig drops the page header band when nothing is left in it.
+        unset($variables['page']['featured_top']['seeds_site_theme_page_title']);
+      }
+      break;
+    }
+  }
+
+  seeds_site_theme_page_extras($variables);
+  seeds_site_theme_landing_header($variables, $cacheability);
+  $cacheability->addCacheContexts(['route'])->applyTo($variables);
+}
+
+/**
+ * The Canvas page being viewed, or previewed in the Canvas editor, if any.
+ */
+function seeds_site_theme_current_canvas_page(): ?object {
+  $route_match = \Drupal::routeMatch();
+  $page = $route_match->getParameter('canvas_page');
+  // The Canvas editor renders its preview on canvas.api.layout.* routes.
+  if (!$page && str_starts_with((string) $route_match->getRouteName(), 'canvas.api.layout')) {
+    $page = $route_match->getParameter('entity');
+  }
+  if (is_object($page) && method_exists($page, 'getEntityTypeId') && $page->getEntityTypeId() === 'canvas_page') {
+    return $page;
+  }
+  return NULL;
+}
+
+/**
+ * Reads a boolean Canvas input, stored either as a value or as a prop source.
+ */
+function seeds_site_theme_input_true(mixed $input): bool {
+  if (is_array($input)) {
+    $input = $input['value'] ?? TRUE;
+  }
+  return (bool) $input;
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for node.html.twig.
+ *
+ * On full pages, the Seeds detail fields move to a side card. Field names
+ * follow the Seeds convention (named by type), so the same list works for
+ * every Seeds feature recipe.
+ */
+function seeds_site_theme_preprocess_node(array &$variables): void {
+  if ($variables['view_mode'] !== 'full') {
+    return;
+  }
+  $bundle = $variables['node']->bundle();
+  // Tags (field_term) show in the page header instead (seeds_site_theme_landing_header()).
+  unset($variables['content']['field_term']);
+  $aside_fields = ['field_date', 'field_date_range', 'field_plain_text', 'field_link', 'field_media_1'];
+  // Portraits and covers sit at the top of the side card.
+  if (in_array($bundle, ['team_member', 'publication'], TRUE)) {
+    array_unshift($aside_fields, 'field_media');
+  }
+  // Albums use the full width for their photos; the date stays in the text.
+  if ($bundle === 'gallery') {
+    $aside_fields = [];
+  }
+
+  $variables['share'] = seeds_site_theme_share_links($variables['node']);
+
+  $variables['aside'] = [];
+  foreach ($aside_fields as $weight => $field_name) {
+    $element = $variables['content'][$field_name] ?? NULL;
+    if (!is_array($element) || empty($element['#items']) || !Element::isVisibleElement($element)) {
+      continue;
+    }
+    // Labels help in the side card: show the field label unless it is the
+    // image, the link button or the file list (which has its own design).
+    if (!in_array($field_name, ['field_media', 'field_link'], TRUE) && ($element['#label_display'] ?? '') !== 'above') {
+      $element['#label_display'] = 'above';
+    }
+    $element['#weight'] = $weight;
+    $variables['aside'][$field_name] = $element;
+    unset($variables['content'][$field_name]);
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for field--field-media-file.html.twig.
+ */
+function seeds_site_theme_preprocess_field__field_media_file(array &$variables): void {
+  $variables['downloads'] = [];
+  $media = $variables['element']['#object'];
+  foreach ($variables['element']['#items'] as $item) {
+    /** @var \Drupal\file\FileInterface|null $file */
+    $file = $item->entity;
+    if (!$file) {
+      continue;
+    }
+    $extension = strtoupper(pathinfo($file->getFilename(), PATHINFO_EXTENSION));
+    $variables['downloads'][] = [
+      'url' => $file->createFileUrl(),
+      'name' => $media->label() ?: $file->getFilename(),
+      'extension' => $extension,
+      'size' => ByteSizeMarkup::create((int) $file->getSize()),
+    ];
+    CacheableMetadata::createFromRenderArray($variables)->addCacheableDependency($file)->applyTo($variables);
+  }
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter() for block templates.
+ *
+ * Adds a region suggestion (block--REGION--PLUGIN) so footer blocks can be
+ * themed as footer columns.
+ */
+function seeds_site_theme_theme_suggestions_block_alter(array &$suggestions, array $variables): void {
+  $id = $variables['elements']['#id'] ?? NULL;
+  if ($id && ($block = \Drupal::entityTypeManager()->getStorage('block')->load($id))) {
+    $suggestions[] = 'block__' . $block->getRegion();
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for page--user--login.html.twig.
+ *
+ * Seeds UI's login page shows the site's first letter unless a login logo is
+ * set in its settings; use the site logo instead.
+ */
+function seeds_site_theme_preprocess_page__user__login(array &$variables): void {
+  $login = (array) theme_get_setting('login_form');
+  $logo = theme_get_setting('logo.url');
+  if (empty($login['override']) && $logo) {
+    $variables['logo'] = ['style' => 'background-image: url(' . $logo . ');'];
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for views-view-unformatted.html.twig.
+ *
+ * Canvas pages always render all their components, whatever the view mode.
+ * In listings (such as search results) that would print a whole page inside
+ * a card, so show them as a card with the title and description instead.
+ */
+function seeds_site_theme_preprocess_views_view_unformatted(array &$variables): void {
+  foreach ($variables['rows'] as &$row) {
+    $page = $row['content']['#canvas_page'] ?? NULL;
+    if (!is_object($page) || !method_exists($page, 'getComponentTree')) {
+      continue;
+    }
+    $row['content'] = [
+      '#type' => 'inline_template',
+      '#template' => '<article class="node node--view-mode-card seeds-site-page-card"><header><h2 class="node__title"><a href="{{ url }}" rel="bookmark">{{ title }}</a></h2></header><div class="node__content">{% if description %}<div class="field field--name-field-body">{{ description }}</div>{% endif %}<div class="field seeds-site-page-card__type">{{ type }}</div></div></article>',
+      '#context' => [
+        'url' => $page->toUrl()->toString(),
+        'title' => $page->label(),
+        'description' => $page->hasField('description') ? $page->get('description')->value : '',
+        'type' => t('Page'),
+      ],
+      '#cache' => ['tags' => $page->getCacheTags()],
+    ];
+  }
+}
+
+/**
+ * Adds helpful links to the "Page not found" page and contact details next to
+ * the Contact us form.
+ */
+function seeds_site_theme_page_extras(array &$variables): void {
+  $route = \Drupal::routeMatch()->getRouteName();
+  if ($route === 'system.404') {
+    $search = '';
+    if (theme_get_setting('header.search')) {
+      $url = \Drupal::pathValidator()->getUrlIfValid(theme_get_setting('header.search_path') ?: '/search');
+      $search = $url ? $url->toString() : '';
+    }
+    $variables['page']['content']['seeds_site_theme_not_found'] = [
+      '#type' => 'inline_template',
+      '#template' => '<div class="seeds-site-not-found"><p class="seeds-site-not-found__lead">{{ lead }}</p>{% if search %}<form class="seeds-site-not-found__search" action="{{ search }}" method="get" role="search"><label class="visually-hidden" for="not-found-search">{{ search_label }}</label><input id="not-found-search" type="search" name="keys" placeholder="{{ search_label }}"><button class="button" type="submit">{{ search_button }}</button></form>{% endif %}<a class="button button--ghost" href="{{ home }}">{{ home_label }}</a></div>',
+      '#context' => [
+        'lead' => t('The page may have moved, or the link may be wrong. Try searching, or start again from the home page.'),
+        'search' => $search,
+        'search_label' => t('Search this site'),
+        'search_button' => t('Search'),
+        'home' => Url::fromRoute('<front>')->toString(),
+        'home_label' => t('Go to the home page'),
+      ],
+      '#weight' => 100,
+    ];
+  }
+
+  $webform = \Drupal::routeMatch()->getParameter('webform');
+  $contact = array_filter((array) theme_get_setting('contact'));
+  if ($route === 'entity.webform.canonical' && is_object($webform) && $webform->id() === 'contact_us' && $contact) {
+    $variables['page']['sidebar_first']['seeds_site_theme_contact'] = [
+      '#type' => 'inline_template',
+      '#template' => '<div class="block seeds-site-contact-card"><h2 class="block__title">{{ heading }}</h2><ul class="seeds-site-contact-card__list">{% if address %}<li>{% include "@seeds_site_theme/includes/icon.html.twig" with { name: "pin" } only %}<span>{{ address|nl2br }}</span></li>{% endif %}{% if phone %}<li>{% include "@seeds_site_theme/includes/icon.html.twig" with { name: "phone" } only %}<a href="tel:{{ phone|replace({" ": ""}) }}" dir="ltr">{{ phone }}</a></li>{% endif %}{% if email %}<li>{% include "@seeds_site_theme/includes/icon.html.twig" with { name: "mail" } only %}<a href="mailto:{{ email }}">{{ email }}</a></li>{% endif %}</ul></div>',
+      '#context' => [
+        'heading' => t('Other ways to reach us'),
+        'address' => $contact['address'] ?? '',
+        'phone' => $contact['phone'] ?? '',
+        'email' => $contact['email'] ?? '',
+      ],
+    ];
+  }
+}
+
+/**
+ * Share links for a page: the usual networks and email, no scripts.
+ */
+function seeds_site_theme_share_links(object $entity): array {
+  try {
+    $url = $entity->toUrl('canonical', ['absolute' => TRUE])->toString();
+  }
+  catch (\Throwable) {
+    return [];
+  }
+  $title = (string) $entity->label();
+  $u = rawurlencode($url);
+  $t = rawurlencode($title);
+  return [
+    ['name' => 'facebook', 'label' => 'Facebook', 'url' => "https://www.facebook.com/sharer/sharer.php?u=$u"],
+    ['name' => 'x', 'label' => 'X', 'url' => "https://x.com/intent/post?url=$u&text=$t"],
+    ['name' => 'linkedin', 'label' => 'LinkedIn', 'url' => "https://www.linkedin.com/sharing/share-offsite/?url=$u"],
+    ['name' => 'whatsapp', 'label' => 'WhatsApp', 'url' => "https://wa.me/?text=$t%20$u"],
+    ['name' => 'mail', 'label' => (string) t('Email'), 'url' => "mailto:?subject=$t&body=$u"],
+  ];
+}
+
+/**
+ * A date for cards and page headers: "12 March 2027".
+ */
+function seeds_site_theme_format_date(int $timestamp): string {
+  return \Drupal::service('date.formatter')->format($timestamp, 'custom', 'j F Y');
+}
+
+/**
+ * The date that describes a node: field_date, the start of field_date_range,
+ * or the date it was created. Field names follow the Seeds convention.
+ */
+function seeds_site_theme_node_date(object $node, bool $created_fallback = TRUE): ?int {
+  foreach (['field_date', 'field_date_range'] as $field_name) {
+    if ($node->hasField($field_name) && !$node->get($field_name)->isEmpty()) {
+      $date = $node->get($field_name)->first()?->get('start_date')?->getValue() ?? NULL;
+      if ($date instanceof \Drupal\Core\Datetime\DrupalDateTime) {
+        return $date->getTimestamp();
+      }
+    }
+  }
+  return $created_fallback && method_exists($node, 'getCreatedTime') ? (int) $node->getCreatedTime() : NULL;
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for field.html.twig.
+ *
+ * Cards (the Card view mode, plain or as a Seeds UI card):
+ * - Images use the "large" image style (480px) instead of a thumbnail.
+ * - Articles (nodes with Tags, field_term) get a line with their first tag
+ *   and their date above the title, unless the card already shows a date.
+ */
+function seeds_site_theme_preprocess_field(array &$variables): void {
+  $element = $variables['element'];
+  if (($element['#view_mode'] ?? '') === 'full' && $variables['field_name'] === 'field_date_range' && ($element['#entity_type'] ?? '') === 'node') {
+    seeds_site_theme_card_date_range($variables, FALSE);
+    return;
+  }
+  if (($element['#view_mode'] ?? '') !== 'card' || ($element['#entity_type'] ?? '') !== 'node') {
+    return;
+  }
+  $node = $element['#object'];
+
+  if ($variables['field_name'] === 'field_media' && $node->bundle() !== 'partner' && \Drupal\image\Entity\ImageStyle::load('large')) {
+    foreach ($variables['items'] as &$item) {
+      if (isset($item['content']['#image_style'])) {
+        $item['content']['#image_style'] = 'large';
+      }
+    }
+    unset($item);
+  }
+
+  if ($variables['field_name'] === 'field_date_range') {
+    seeds_site_theme_card_date_range($variables);
+    return;
+  }
+
+  if ($variables['field_name'] !== 'field_body' || !$node->hasField('field_term')) {
+    return;
+  }
+  $display = \Drupal::service('entity_display.repository')->getViewDisplay('node', $node->bundle(), 'card');
+  $shows_date = $display->getComponent('field_date') || $display->getComponent('field_date_range');
+  $term = $node->get('field_term')->entity;
+  $timestamp = $shows_date ? NULL : seeds_site_theme_node_date($node);
+  if (!$term && !$timestamp) {
+    return;
+  }
+  $variables['card_meta'] = [
+    '#type' => 'inline_template',
+    '#template' => '<div class="seeds-site-card-meta">{% if tag %}<span class="seeds-site-card-meta__tag">{{ tag }}</span>{% endif %}{% if date %}<time class="seeds-site-card-meta__date" datetime="{{ iso }}">{{ date }}</time>{% endif %}</div>',
+    '#context' => [
+      'tag' => $term?->label(),
+      'date' => $timestamp ? seeds_site_theme_format_date($timestamp) : '',
+      'iso' => $timestamp ? date('c', $timestamp) : '',
+    ],
+  ];
+  if ($term) {
+    CacheableMetadata::createFromRenderArray($variables)->addCacheableDependency($term)->applyTo($variables);
+  }
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter() for field templates.
+ */
+function seeds_site_theme_theme_suggestions_field_alter(array &$suggestions, array $variables): void {
+  if (($variables['element']['#view_mode'] ?? '') === 'card' && ($variables['element']['#field_name'] ?? '') === 'field_body') {
+    $suggestions[] = 'field__seeds_site_card_body';
+  }
+}
+
+/**
+ * The page header of full content pages ("landing"): the content type above
+ * the title, and the date, reading time and tags under it.
+ */
+function seeds_site_theme_landing_header(array &$variables, CacheableMetadata $cacheability): void {
+  $node = \Drupal::routeMatch()->getParameter('node');
+  if (!$node instanceof \Drupal\node\NodeInterface || \Drupal::routeMatch()->getRouteName() !== 'entity.node.canonical' || !isset($variables['page']['featured_top'])) {
+    return;
+  }
+  $cacheability->addCacheableDependency($node);
+  $type = \Drupal::entityTypeManager()->getStorage('node_type')->load($node->bundle());
+
+  $meta = [];
+  // Events: the date and the place. Articles: the date and the reading time.
+  $is_event = $node->hasField('field_date_range') && !$node->get('field_date_range')->isEmpty();
+  if ($is_event) {
+    $meta[] = ['icon' => 'calendar', 'text' => seeds_site_theme_date_range_text($node->get('field_date_range')->first())];
+    if ($node->hasField('field_plain_text') && !$node->get('field_plain_text')->isEmpty()) {
+      $meta[] = ['icon' => 'pin', 'text' => $node->get('field_plain_text')->value];
+    }
+  }
+  elseif (!$node->hasField('field_date_range')) {
+    $timestamp = seeds_site_theme_node_date($node, $node->hasField('field_term'));
+    if ($timestamp) {
+      $meta[] = ['icon' => 'calendar', 'text' => seeds_site_theme_format_date($timestamp), 'datetime' => date('c', $timestamp)];
+    }
+  }
+  if (!$is_event && $node->hasField('field_body') && !$node->get('field_body')->isEmpty() && $node->hasField('field_term')) {
+    $words = str_word_count(strip_tags((string) $node->get('field_body')->value));
+    $words = max($words, (int) (mb_strlen(strip_tags((string) $node->get('field_body')->value)) / 6));
+    $meta[] = ['icon' => 'clock', 'text' => (string) \Drupal::translation()->formatPlural(max(1, (int) ceil($words / 200)), '1 min read', '@count min read')];
+  }
+  $tags = [];
+  if ($node->hasField('field_term')) {
+    foreach ($node->get('field_term') as $item) {
+      if ($item->entity && $item->entity->access('view')) {
+        $tags[] = ['label' => $item->entity->label(), 'url' => $item->entity->toUrl()->toString()];
+        $cacheability->addCacheableDependency($item->entity);
+      }
+    }
+  }
+
+  $label = [
+    '#type' => 'inline_template',
+    '#template' => '<p class="page-header__label">{{ label }}</p>',
+    '#context' => ['label' => $type?->label()],
+  ];
+  $details = [
+    '#type' => 'inline_template',
+    '#template' => '{% if meta or tags %}<div class="page-header__meta">{% for item in meta %}<span class="page-header__meta-item">{% include "@seeds_site_theme/includes/icon.html.twig" with { name: item.icon } only %}{% if item.datetime %}<time datetime="{{ item.datetime }}">{{ item.text }}</time>{% else %}{{ item.text }}{% endif %}</span>{% endfor %}{% if tags %}<ul class="page-header__tags">{% for tag in tags %}<li><a href="{{ tag.url }}">{{ tag.label }}</a></li>{% endfor %}</ul>{% endif %}</div>{% endif %}',
+    '#context' => ['meta' => $meta, 'tags' => $tags],
+  ];
+  $region = $variables['page']['featured_top'];
+  $children = array_filter($region, static fn ($key) => !str_starts_with((string) $key, '#'), ARRAY_FILTER_USE_KEY);
+  $properties = array_diff_key($region, $children);
+  // The label goes before the page title, the details right after it (the
+  // tabs for editors can follow in the same region).
+  $ordered = ['seeds_site_theme_label' => $label];
+  $placed = FALSE;
+  foreach ($children as $key => $child) {
+    $ordered[$key] = $child;
+    if (!$placed && str_contains((string) $key, 'page_title')) {
+      $ordered['seeds_site_theme_meta'] = $details;
+      $placed = TRUE;
+    }
+  }
+  if (!$placed) {
+    $ordered['seeds_site_theme_meta'] = $details;
+  }
+  $variables['page']['featured_top'] = $properties + $ordered;
+  $variables['landing'] = TRUE;
+}
+
+/**
+ * A date range as one short line.
+ *
+ * "Sun, 14 Feb 2027 · 11:00 – 17:00" on one day, "14 Feb – 16 Feb 2027"
+ * across days.
+ */
+function seeds_site_theme_date_range_text(?object $item): string {
+  $start = $item?->get('start_date')?->getValue();
+  $end = $item?->get('end_date')?->getValue();
+  if (!$start instanceof \Drupal\Core\Datetime\DrupalDateTime) {
+    return '';
+  }
+  $format = static fn ($date, string $pattern) => \Drupal::service('date.formatter')->format($date->getTimestamp(), 'custom', $pattern);
+  if (!$end instanceof \Drupal\Core\Datetime\DrupalDateTime || $format($start, 'Ymd') === $format($end, 'Ymd')) {
+    return $format($start, 'D, j M Y') . ' · ' . $format($start, 'H:i') . ($end && $format($end, 'H:i') !== $format($start, 'H:i') ? ' – ' . $format($end, 'H:i') : '');
+  }
+  return $format($start, $format($start, 'Y') === $format($end, 'Y') ? 'j M' : 'j M Y') . ' – ' . $format($end, 'j M Y');
+}
+
+/**
+ * Event dates on cards: a date badge on the image and one short line.
+ *
+ * "Sun, 14 Feb 2027 · 11:00 – 17:00" on one day, "14 Feb – 16 Feb 2027"
+ * across days.
+ */
+function seeds_site_theme_card_date_range(array &$variables, bool $badge = TRUE): void {
+  $item = $variables['element']['#items']->first();
+  $start = $item?->get('start_date')?->getValue();
+  if (!$start instanceof \Drupal\Core\Datetime\DrupalDateTime) {
+    return;
+  }
+  $format = static fn ($date, string $pattern) => \Drupal::service('date.formatter')->format($date->getTimestamp(), 'custom', $pattern);
+  $text = seeds_site_theme_date_range_text($item);
+  if (!$badge) {
+    $variables['items'] = [[
+      'attributes' => new \Drupal\Core\Template\Attribute(),
+      'content' => ['#markup' => '<time datetime="' . $format($start, 'c') . '">' . \Drupal\Component\Utility\Html::escape($text) . '</time>'],
+    ]];
+    return;
+  }
+  $variables['items'] = [[
+    'attributes' => new \Drupal\Core\Template\Attribute(),
+    'content' => [
+      '#type' => 'inline_template',
+      '#template' => '<span class="seeds-site-date-badge" aria-hidden="true"><span class="seeds-site-date-badge__day">{{ day }}</span><span class="seeds-site-date-badge__month">{{ month }}</span></span><time datetime="{{ iso }}">{{ text }}</time>',
+      '#context' => [
+        'day' => $format($start, 'j'),
+        'month' => $format($start, 'M'),
+        'iso' => $format($start, 'c'),
+        'text' => $text,
+      ],
+    ],
+  ]];
+}

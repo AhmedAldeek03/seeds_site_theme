@@ -1,0 +1,93 @@
+// Milestone (components/seeds_site_milestone): a point on a timeline.
+// Stacked in a Section, milestones form a timeline down the page; in a 3 or
+// 4 column Section, a timeline across it.
+@use "../variables" as *;
+@use "../mixin" as *;
+
+.seeds-site-milestone {
+  position: relative;
+  padding-block-end: 2.25rem;
+  padding-inline-start: 2.75rem;
+
+  // The line.
+  &::before {
+    content: "";
+    position: absolute;
+    inset-block: 0.6rem 0;
+    inset-inline-start: 0.55rem;
+    width: 2px;
+    background: var(--seeds-site-tone-border);
+  }
+
+  // The dot.
+  &::after {
+    content: "";
+    position: absolute;
+    inset-block-start: 0.35rem;
+    inset-inline-start: 0;
+    width: 1.2rem;
+    height: 1.2rem;
+    border: 3px solid var(--seeds-site-accent);
+    border-radius: 50%;
+    background: var(--seeds-site-tone-bg);
+    box-shadow: 0 0 0 4px var(--seeds-site-tone-bg);
+  }
+
+  &:last-child::before {
+    display: none;
+  }
+}
+
+.seeds-site-milestone__year {
+  display: inline-block;
+  margin-block-end: 0.4rem;
+  color: var(--seeds-site-tone-eyebrow);
+  font-size: var(--seeds-site-step-2);
+  font-weight: 600;
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+}
+
+.seeds-site-milestone__heading {
+  margin: 0 0 0.4rem;
+  font-size: var(--seeds-site-step-1);
+}
+
+.seeds-site-milestone__text {
+  margin: 0;
+  color: var(--seeds-site-tone-muted);
+}
+
+// Stacked: no gap between milestones, so the line runs on.
+.seeds-site-section--layout-stack .seeds-site-section__content:has(> .seeds-site-milestone) {
+  row-gap: 0;
+  max-width: 48rem;
+}
+
+.seeds-site-section--align-center.seeds-site-section--layout-stack .seeds-site-section__content:has(> .seeds-site-milestone) {
+  margin-inline: auto;
+}
+
+// Across: the line runs along the top of a 3 or 4 column grid.
+@include up(lg) {
+  :is(.seeds-site-section--layout-grid-3, .seeds-site-section--layout-grid-4) .seeds-site-section__content:has(> .seeds-site-milestone) {
+    column-gap: 0;
+  }
+
+  :is(.seeds-site-section--layout-grid-3, .seeds-site-section--layout-grid-4) .seeds-site-milestone {
+    padding-block: 2.5rem 0;
+    padding-inline: 0 1.5rem;
+
+    &::before {
+      display: block;
+      inset-block: 0.55rem auto;
+      inset-inline: 0;
+      width: auto;
+      height: 2px;
+    }
+
+    &:last-child::before {
+      inset-inline-end: 50%;
+    }
+  }
+}

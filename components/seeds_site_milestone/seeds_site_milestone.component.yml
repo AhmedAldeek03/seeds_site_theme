@@ -1,0 +1,26 @@
+'$schema': 'https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json'
+name: 'Milestone'
+description: 'A year and what happened: one point of your history. Put several in a Section: stacked, they make a timeline down the page; in 3 or 4 columns, a timeline across it.'
+group: 'Seeds site'
+status: stable
+props:
+  type: object
+  required:
+    - year
+    - heading
+  properties:
+    year:
+      type: string
+      title: 'Year or date'
+      examples:
+        - '2010'
+    heading:
+      type: string
+      title: 'Heading'
+      examples:
+        - 'The foundation is created'
+    text:
+      type: string
+      title: 'Text'
+      examples:
+        - 'Twelve volunteers open the first learning centre.'

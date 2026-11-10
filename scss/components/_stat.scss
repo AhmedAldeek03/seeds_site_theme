@@ -1,0 +1,50 @@
+// Key figure (components/seeds_site_stat): a big number with a label.
+@use "../variables" as *;
+@use "../mixin" as *;
+
+.seeds-site-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.seeds-site-stat__value {
+  @include title-rule(2.5rem, 0.85rem);
+  color: var(--seeds-site-tone-heading);
+  font-size: clamp(2.5rem, 2rem + 2.2vw, 3.75rem);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+
+.seeds-site-stat__label {
+  margin-block-start: 0.35rem;
+  color: var(--seeds-site-tone-heading);
+  font-size: var(--seeds-site-step-1);
+  font-weight: 600;
+}
+
+.seeds-site-stat__text {
+  margin: 0;
+  color: var(--seeds-site-tone-muted);
+  font-size: 0.95rem;
+}
+
+// Centred sections centre the figures too.
+.seeds-site-section--align-center .seeds-site-stat {
+  align-items: center;
+  text-align: center;
+
+  .seeds-site-stat__value::after {
+    margin-inline: auto;
+  }
+}
+
+// In a grid, a thin divider between figures on large screens.
+@include up(lg) {
+  :is(.seeds-site-section--layout-grid-3, .seeds-site-section--layout-grid-4) .seeds-site-stat + .seeds-site-stat {
+    padding-inline-start: 2rem;
+    border-inline-start: 1px solid var(--seeds-site-tone-border);
+  }
+}

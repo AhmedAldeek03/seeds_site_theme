@@ -1,0 +1,13 @@
+// Content styles inside CKEditor 5, so editors see text as it will appear.
+// Loaded through ckeditor5-stylesheets in seeds_site_theme.info.yml. Only the
+// fonts, tokens and text styles: nothing that changes the admin theme.
+@use "tokens" as *;
+@use "mixin" as *;
+
+@include font-faces;
+
+.ck-content {
+  @include tokens;
+  font-family: var(--seeds-site-font);
+  @include prose;
+}

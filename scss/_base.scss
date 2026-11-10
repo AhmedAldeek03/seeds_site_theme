@@ -1,0 +1,209 @@
+// Fonts, design tokens and base element styles.
+@use "sass:map";
+@use "variables" as *;
+@use "mixin" as *;
+@use "tokens" as *;
+
+@include font-faces;
+
+:root {
+  @include tokens;
+}
+
+[dir="rtl"] {
+  --seeds-site-flip: -1;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-padding-top: calc(var(--seeds-site-header-height) + 1rem);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+body {
+  margin: 0;
+  color: var(--seeds-site-body);
+  font-family: var(--seeds-site-font);
+  font-size: var(--seeds-site-step-0);
+  line-height: 1.7;
+  background: #fff;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+// Arabic script needs more room between lines.
+:lang(ar) body,
+body:lang(ar) {
+  line-height: 1.8;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0 0 0.6em;
+  color: var(--seeds-site-tone-heading, var(--seeds-site-ink));
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+
+:lang(ar) :is(h1, h2, h3, h4, h5, h6) {
+  line-height: 1.45;
+  letter-spacing: 0;
+}
+
+h1 {
+  font-size: var(--seeds-site-step-5);
+}
+h2 {
+  font-size: var(--seeds-site-step-4);
+}
+h3 {
+  font-size: var(--seeds-site-step-3);
+}
+h4 {
+  font-size: var(--seeds-site-step-2);
+}
+h5 {
+  font-size: var(--seeds-site-step-1);
+}
+h6 {
+  font-size: var(--seeds-site-step-0);
+}
+
+p,
+ul,
+ol,
+dl,
+blockquote,
+figure,
+table,
+pre {
+  margin: 0 0 1.1em;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+img,
+video,
+svg,
+iframe {
+  max-width: 100%;
+}
+
+img,
+video {
+  height: auto;
+}
+
+img {
+  display: block;
+}
+
+a {
+  color: var(--seeds-site-tone-link, var(--seeds-site-primary-text));
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+  transition: color 0.15s;
+}
+
+a:hover {
+  color: var(--seeds-site-secondary-text);
+}
+
+:where(
+    .seeds-site-tone--primary,
+    .seeds-site-tone--secondary,
+    .seeds-site-tone--dark,
+    .seeds-site-tone--accent
+  )
+  a:hover {
+  color: inherit;
+}
+
+:focus-visible {
+  @include focus-ring;
+}
+
+::selection {
+  color: var(--seeds-site-on-primary);
+  background: var(--seeds-site-primary);
+}
+
+hr {
+  height: 1px;
+  margin: 2.5rem 0;
+  border: 0;
+  background: var(--seeds-site-line);
+}
+
+strong,
+b {
+  color: inherit;
+  font-weight: 600;
+}
+
+small {
+  font-size: var(--seeds-site-step--1);
+}
+
+code,
+kbd,
+pre,
+samp {
+  font-family: $font-mono;
+  font-size: 0.9em;
+}
+
+// Skip link (from Seeds UI's html.html.twig).
+.skip-link {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 1rem;
+  z-index: 1000;
+}
+
+.skip-link.focusable:focus {
+  position: absolute !important;
+  clip: auto;
+  width: auto;
+  height: auto;
+  margin-block-start: 0.75rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--seeds-site-radius-sm);
+  color: var(--seeds-site-on-primary);
+  font-weight: 600;
+  text-decoration: none;
+  background: var(--seeds-site-primary);
+  box-shadow: var(--seeds-site-shadow-lg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

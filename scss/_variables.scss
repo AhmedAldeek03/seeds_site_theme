@@ -1,0 +1,112 @@
+// Design tokens: Sass values used to build the CSS custom properties in
+// _tokens.scss. Colours, font and corners can be changed without a rebuild at
+// Appearance > Settings > Seeds site theme; the theme then writes a small
+// brand.css that overrides the matching custom properties.
+@use "sass:color";
+@use "sass:map";
+@use "sass:math";
+
+// Brand defaults. Keep in sync with config/install/seeds_site_theme.settings.yml
+// and SEEDS_SITE_THEME_BRAND_DEFAULTS in includes/brand.inc.
+$primary: #14406b;
+$secondary: #1f6f78;
+$accent: #c29a4a;
+$surface: #f8f5ef;
+$ink: #18222f;
+$night: #070c14;
+
+// color.mix() rounded to whole channels, like the PHP version.
+@function mix($a, $b, $weight) {
+  $c: color.mix($a, $b, $weight);
+  @return rgb(math.round(color.channel($c, "red", $space: rgb)), math.round(color.channel($c, "green", $space: rgb)), math.round(color.channel($c, "blue", $space: rgb)));
+}
+
+// Contrast helpers (WCAG 2), the same as includes/brand.inc.
+@function luminance($color) {
+  $sum: 0;
+  @each $channel, $weight in ("red": 0.2126, "green": 0.7152, "blue": 0.0722) {
+    $c: math.div(color.channel($color, $channel, $space: rgb), 255);
+    $c: if($c <= 0.03928, math.div($c, 12.92), math.pow(math.div($c + 0.055, 1.055), 2.4));
+    $sum: $sum + $c * $weight;
+  }
+  @return $sum;
+}
+
+@function contrast($a, $b) {
+  $la: luminance($a);
+  $lb: luminance($b);
+  @return math.div(math.max($la, $lb) + 0.05, math.min($la, $lb) + 0.05);
+}
+
+// Darkens a colour in 5% steps until it reaches 4.5:1 on every background.
+@function readable-on($color, $backgrounds) {
+  $candidate: $color;
+  @for $step from 1 through 20 {
+    $ok: true;
+    @each $bg in $backgrounds {
+      @if contrast($candidate, $bg) < 4.5 {
+        $ok: false;
+      }
+    }
+    @if $ok {
+      @return $candidate;
+    }
+    $candidate: mix(#000, $color, $step * 5%);
+  }
+  @return $candidate;
+}
+
+@function text-on($bg) {
+  @return if(contrast(#fff, $bg) >= 4.5, #fff, $ink);
+}
+
+// Derived palette (seeds_site_theme_palette() uses the same formulas).
+$primary-light: mix($primary, #fff, 7%);
+$primary-line: mix($primary, #fff, 20%);
+$secondary-light: mix($secondary, #fff, 9%);
+$secondary-line: mix($secondary, #fff, 20%);
+$accent-hover: mix(#000, $accent, 12%);
+$accent-light: mix($accent, #fff, 14%);
+$accent-line: mix($accent, #fff, 32%);
+$surface-2: mix($accent, $surface, 8%);
+$dark: mix($primary, $night, 42%);
+$dark-2: mix($primary, $night, 55%);
+
+$light-backgrounds: (#fff, $surface, $surface-2, $primary-light, $secondary-light, $accent-light);
+$primary-text: readable-on($primary, $light-backgrounds);
+$secondary-text: readable-on($secondary, $light-backgrounds);
+$heading: $primary-text;
+$on-primary: text-on($primary);
+$on-secondary: text-on($secondary);
+$on-accent: text-on($accent);
+
+// Neutrals.
+$body: #3b4655;
+$muted: #5d6877;
+$line: #e4e2dc;
+$line-strong: #c9c6bd;
+
+// Status colours (all at least 4.5:1 on white).
+$success: #1d7348;
+$warning: #8a5300;
+$danger: #b42318;
+
+// Fonts. IBM Plex Sans covers Latin; IBM Plex Sans Arabic covers Arabic.
+// Each @font-face has a unicode-range, so browsers only download what a page uses.
+$font-plex: "IBM Plex Sans", "IBM Plex Sans Arabic", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+$font-cairo: "Cairo", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+$font-system: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", "Noto Sans Arabic", Tahoma, sans-serif;
+$font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+// Breakpoints. 992px matches Seeds UI, which switches the header navigation
+// between desktop and mobile there (d-lg-*).
+$breakpoints: (
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+);
+
+@function bp($name) {
+  @return map.get($breakpoints, $name);
+}

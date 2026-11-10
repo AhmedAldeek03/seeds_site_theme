@@ -1,4 +1,29 @@
+# Built from scss/ with `npm run build` (Seeds UI subtheme pipeline: Sass,
+# Autoprefixer, rtlcss). dist/ is committed so sites don't need Node.
 global:
+  js:
+    js/main.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+
+style-ltr:
+  css:
+    component:
+      dist/css/style.min.css: {}
+
+style-rtl:
+  css:
+    component:
+      dist/css/style.rtl.min.css: {}
+
+# The colour preview on the theme settings page (runs in the admin theme).
+settings:
   css:
     theme:
-      css/site.css: {}
+      css/settings.css: {}
+  js:
+    js/settings.js: {}
+  dependencies:
+    - core/drupal
+    - core/once

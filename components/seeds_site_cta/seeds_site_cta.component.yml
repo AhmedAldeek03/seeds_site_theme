@@ -1,0 +1,59 @@
+'$schema': 'https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json'
+name: 'Call to action'
+description: 'A highlighted panel with a heading, a short text and up to two buttons.'
+group: 'Seeds site'
+status: stable
+props:
+  type: object
+  required:
+    - heading
+  properties:
+    heading:
+      type: string
+      title: 'Heading'
+      examples:
+        - 'Partner with us'
+    text:
+      type: string
+      title: 'Text'
+      examples:
+        - 'Partners, volunteers and donors make our work possible. We would love to hear from you.'
+    button_text:
+      type: string
+      title: 'Button text'
+      examples:
+        - 'Contact us'
+    button_url:
+      type: string
+      format: uri-reference
+      title: 'Button link'
+      examples:
+        - '/contact-us'
+    secondary_text:
+      type: string
+      title: 'Second button text'
+    secondary_url:
+      type: string
+      format: uri-reference
+      title: 'Second button link'
+    tone:
+      type: string
+      title: 'Colour'
+      enum:
+        - primary
+        - secondary
+        - dark
+        - accent
+        - light
+        - primary-light
+        - secondary-light
+      meta:enum:
+        primary: 'Primary colour'
+        secondary: 'Secondary colour'
+        dark: 'Dark'
+        accent: 'Accent colour'
+        light: 'Light (background colour)'
+        primary-light: 'Light primary'
+        secondary-light: 'Light secondary'
+      examples:
+        - primary

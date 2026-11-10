@@ -1,0 +1,30 @@
+// Seeds site theme: main stylesheet.
+//
+// Built with `npm run build` into dist/css/style.css and, with rtlcss,
+// dist/css/style.rtl.css. Same partials as the Seeds UI subtheme kit, plus
+// the Canvas section components (components/).
+//
+// Seeds UI ships markup but almost no CSS; this file styles its templates and
+// components, and the Seeds feature recipes (fields are named by type, so the
+// same styles fit every feature).
+
+@use "base";
+@use "tones";
+@use "general";
+@use "elements";
+@use "fields";
+@use "layout";
+@use "blocks";
+@use "displays";
+@use "views";
+@use "components/section";
+@use "components/hero";
+@use "components/feature";
+@use "components/stat";
+@use "components/cta";
+@use "components/media-text";
+@use "components/testimonial";
+@use "components/button";
+@use "components/message";
+@use "components/milestone";
+@use "overrides";

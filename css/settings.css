@@ -1,0 +1,86 @@
+/**
+ * @file
+ * Colour preview on the Seeds site theme settings page. Plain CSS: it runs in
+ * the admin theme, not with the theme's own stylesheet. The --p-* colours are
+ * the derived palette (includes/brand.inc), updated live by js/settings.js.
+ */
+
+.seeds-site-settings-preview {
+  margin-block: 1.5rem 0.5rem;
+}
+
+.seeds-site-settings-preview__label {
+  margin: 0 0 0.75rem;
+  font-weight: 600;
+}
+
+.seeds-site-settings-preview__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+  gap: 0.75rem;
+}
+
+.seeds-site-settings-preview__tone {
+  --bg: #fff;
+  --title: var(--p-heading);
+  --text: #3a4656;
+  --eyebrow: var(--p-secondary-text);
+  --button-bg: var(--p-primary);
+  --button-color: var(--p-on-primary);
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 1rem;
+  border: 1px solid rgb(0 0 0 / 10%);
+  border-radius: 10px;
+  color: var(--text);
+  background: var(--bg);
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.seeds-site-settings-preview__tone--light { --bg: var(--p-surface); }
+.seeds-site-settings-preview__tone--primary-light { --bg: var(--p-primary-light); }
+.seeds-site-settings-preview__tone--secondary-light { --bg: var(--p-secondary-light); }
+
+.seeds-site-settings-preview__tone--primary,
+.seeds-site-settings-preview__tone--secondary,
+.seeds-site-settings-preview__tone--dark {
+  --title: var(--on);
+  --text: var(--on);
+  --eyebrow: var(--p-accent);
+  --button-bg: #fff;
+  --button-color: var(--p-primary-text);
+}
+
+.seeds-site-settings-preview__tone--primary { --bg: var(--p-primary); --on: var(--p-on-primary); }
+.seeds-site-settings-preview__tone--secondary { --bg: var(--p-secondary); --on: var(--p-on-secondary); }
+.seeds-site-settings-preview__tone--dark { --bg: var(--p-dark); --on: #fff; }
+
+.seeds-site-settings-preview__eyebrow {
+  color: var(--eyebrow);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.seeds-site-settings-preview__title {
+  color: var(--title);
+  font-size: 1.05rem;
+}
+
+.seeds-site-settings-preview__rule {
+  width: 2.25rem;
+  height: 3px;
+  border-radius: 3px;
+  background: var(--p-accent);
+}
+
+.seeds-site-settings-preview__button {
+  align-self: flex-start;
+  margin-block-start: 0.35rem;
+  padding: 0.3rem 0.7rem;
+  border-radius: 6px;
+  color: var(--button-color);
+  background: var(--button-bg);
+  font-weight: 600;
+}

@@ -1,0 +1,395 @@
+// Buttons, forms, tables and other HTML elements.
+@use "variables" as *;
+@use "mixin" as *;
+@use "icons" as *;
+
+// Buttons. Drupal's .button and submit inputs, plus modifiers used by the
+// theme's components: --secondary (outline), --accent, --ghost (text with
+// arrow), --light and --light-outline (on photos), --small, --large.
+// Colours come from the tone around the button (_tones.scss): primary that
+// turns secondary on hover on light backgrounds, white on coloured ones.
+.button,
+input[type="submit"],
+input[type="button"],
+input[type="reset"],
+button.form-submit,
+.form-submit {
+  --seeds-site-button-bg: var(--seeds-site-tone-btn-bg, var(--seeds-site-primary));
+  --seeds-site-button-color: var(--seeds-site-tone-btn-color, var(--seeds-site-on-primary));
+  --seeds-site-button-bg-hover: var(--seeds-site-tone-btn-bg-hover, var(--seeds-site-secondary));
+  --seeds-site-button-color-hover: var(--seeds-site-tone-btn-color-hover, var(--seeds-site-on-secondary));
+  --seeds-site-button-border: var(--seeds-site-button-bg);
+  --seeds-site-button-border-hover: var(--seeds-site-button-bg-hover);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55em;
+  min-height: 3rem;
+  margin: 0;
+  padding: 0.7rem 1.5rem;
+  border: 1.5px solid var(--seeds-site-button-border);
+  border-radius: var(--seeds-site-radius-sm);
+  color: var(--seeds-site-button-color);
+  font: inherit;
+  font-weight: 600;
+  line-height: 1.2;
+  text-align: center;
+  text-decoration: none;
+  background: var(--seeds-site-button-bg);
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s, color 0.2s, box-shadow 0.2s;
+  -webkit-appearance: none;
+  appearance: none;
+
+  &:hover {
+    border-color: var(--seeds-site-button-border-hover);
+    color: var(--seeds-site-button-color-hover);
+    background: var(--seeds-site-button-bg-hover);
+  }
+
+  &:disabled,
+  &.is-disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+}
+
+// Outline.
+.button--secondary,
+.button.button--secondary {
+  --seeds-site-button-bg: transparent;
+  --seeds-site-button-color: var(--seeds-site-tone-outline, var(--seeds-site-primary-text));
+  --seeds-site-button-border: currentColor;
+  --seeds-site-button-bg-hover: var(--seeds-site-tone-outline-hover-bg, var(--seeds-site-primary));
+  --seeds-site-button-color-hover: var(--seeds-site-tone-outline-hover-color, var(--seeds-site-on-primary));
+  --seeds-site-button-border-hover: var(--seeds-site-button-color);
+}
+
+.button--secondary:hover {
+  border-color: var(--seeds-site-tone-outline, var(--seeds-site-primary));
+}
+
+.button--accent {
+  --seeds-site-button-bg: var(--seeds-site-accent);
+  --seeds-site-button-color: var(--seeds-site-on-accent);
+  --seeds-site-button-bg-hover: var(--seeds-site-accent-hover);
+  --seeds-site-button-color-hover: var(--seeds-site-on-accent);
+}
+
+// On photos (hero with the image behind the text).
+.button--light {
+  --seeds-site-button-bg: #fff;
+  --seeds-site-button-color: var(--seeds-site-primary-text);
+  --seeds-site-button-bg-hover: var(--seeds-site-surface);
+  --seeds-site-button-color-hover: var(--seeds-site-primary-text);
+}
+
+.button--light-outline {
+  --seeds-site-button-bg: transparent;
+  --seeds-site-button-color: #fff;
+  --seeds-site-button-border: rgb(255 255 255 / 75%);
+  --seeds-site-button-bg-hover: rgb(255 255 255 / 14%);
+  --seeds-site-button-color-hover: #fff;
+  --seeds-site-button-border-hover: #fff;
+}
+
+// Text with an arrow.
+.button--ghost {
+  @include arrow-link;
+  --seeds-site-button-bg: transparent;
+  --seeds-site-button-bg-hover: transparent;
+  --seeds-site-button-color: var(--seeds-site-tone-link, var(--seeds-site-primary-text));
+  --seeds-site-button-color-hover: var(--seeds-site-button-color);
+  --seeds-site-button-border: transparent;
+  --seeds-site-button-border-hover: transparent;
+  min-height: 0;
+  padding: 0.25rem 0;
+
+  &:hover::after {
+    translate: calc(4px * var(--seeds-site-flip)) 0;
+  }
+}
+
+.button--small {
+  min-height: 2.5rem;
+  padding: 0.45rem 1.05rem;
+  font-size: var(--seeds-site-step--1);
+}
+
+.button--large {
+  min-height: 3.375rem;
+  padding: 0.85rem 1.85rem;
+  font-size: 1.0625rem;
+}
+
+// Danger actions (Drupal's delete buttons and links).
+.button--danger,
+#edit-delete.button {
+  --seeds-site-button-bg: var(--seeds-site-danger);
+  --seeds-site-button-bg-hover: color-mix(in srgb, var(--seeds-site-danger) 85%, #000);
+  --seeds-site-button-color: #fff;
+  --seeds-site-button-color-hover: #fff;
+}
+
+.button-group,
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.form-actions {
+  margin-block: 1.75rem 0;
+}
+
+// Forms.
+form {
+  margin: 0;
+}
+
+.form-item,
+.form-wrapper,
+.js-form-item {
+  margin-block: 0 1.35rem;
+}
+
+.form-actions .form-item,
+.form-wrapper .form-wrapper:last-child {
+  margin-block-end: 0;
+}
+
+label,
+.form-item__label,
+legend,
+.fieldset__label {
+  display: block;
+  margin-block-end: 0.4rem;
+  color: var(--seeds-site-ink);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+label.option {
+  display: inline;
+  font-weight: 400;
+}
+
+.form-required::after {
+  content: "*";
+  margin-inline-start: 0.25em;
+  color: var(--seeds-site-danger);
+}
+
+input:is([type="text"], [type="email"], [type="tel"], [type="url"], [type="search"], [type="password"], [type="number"], [type="date"], [type="time"], [type="datetime-local"]),
+textarea,
+select {
+  display: block;
+  width: 100%;
+  min-height: 2.875rem;
+  padding: 0.65rem 0.9rem;
+  border: 1px solid var(--seeds-site-line-strong);
+  border-radius: var(--seeds-site-radius-sm);
+  color: var(--seeds-site-ink);
+  font: inherit;
+  line-height: 1.4;
+  box-shadow: inset 0 1px 2px rgb(24 34 47 / 4%);
+  background-color: #fff;
+  transition: border-color 0.15s, box-shadow 0.15s;
+
+  &::placeholder {
+    color: color-mix(in srgb, var(--seeds-site-muted) 80%, #fff);
+  }
+
+  &:hover {
+    border-color: var(--seeds-site-muted);
+  }
+
+  &:focus {
+    border-color: var(--seeds-site-primary);
+    outline: 0;
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--seeds-site-primary) 16%, transparent);
+  }
+
+  &.error,
+  &[aria-invalid="true"] {
+    border-color: var(--seeds-site-danger);
+  }
+}
+
+textarea {
+  min-height: 9rem;
+  resize: vertical;
+}
+
+select {
+  padding-inline-end: 2.5rem;
+  background-image: icon(chevron);
+  background-repeat: no-repeat;
+  background-position: right 0.85rem center;
+  background-size: 1rem;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+// Seeds UI and Drupal size attributes would otherwise shrink inputs.
+input[size] {
+  max-width: 100%;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+  width: 1.15rem;
+  height: 1.15rem;
+  margin: 0;
+  margin-inline-end: 0.5rem;
+  vertical-align: -0.15em;
+  accent-color: var(--seeds-site-primary);
+}
+
+.form-type-checkbox,
+.form-type-radio,
+.js-form-type-checkbox,
+.js-form-type-radio {
+  display: flex;
+  align-items: baseline;
+  margin-block-end: 0.5rem;
+}
+
+.description,
+.form-item__description,
+.fieldset__description {
+  margin-block-start: 0.35rem;
+  color: var(--seeds-site-muted);
+  font-size: var(--seeds-site-step--1);
+}
+
+.form-item--error-message,
+.form-item__error-message {
+  margin-block-start: 0.35rem;
+  color: var(--seeds-site-danger);
+  font-size: var(--seeds-site-step--1);
+  font-weight: 500;
+}
+
+fieldset {
+  min-width: 0;
+  margin: 0 0 1.5rem;
+  padding: 1.25rem 1.25rem 0.25rem;
+  border: 1px solid var(--seeds-site-line);
+  border-radius: var(--seeds-site-radius);
+}
+
+legend {
+  padding-inline: 0.4rem;
+}
+
+// Tables.
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+th,
+td {
+  padding: 0.75rem 1rem;
+  border-block-end: 1px solid var(--seeds-site-line);
+  text-align: start;
+  vertical-align: top;
+}
+
+th {
+  color: var(--seeds-site-heading);
+  font-weight: 600;
+  background: var(--seeds-site-surface);
+}
+
+thead th {
+  border-block-end: 2px solid var(--seeds-site-accent-line);
+}
+
+tbody tr:hover {
+  background: color-mix(in srgb, var(--seeds-site-surface) 60%, #fff);
+}
+
+caption {
+  margin-block-end: 0.5rem;
+  color: var(--seeds-site-muted);
+  font-size: var(--seeds-site-step--1);
+  text-align: start;
+}
+
+// Details (also used by Webform and Drupal forms).
+details {
+  margin-block-end: 1rem;
+  border: 1px solid var(--seeds-site-line);
+  border-radius: var(--seeds-site-radius);
+  background: #fff;
+}
+
+details > summary {
+  padding: 0.9rem 1.15rem;
+  color: var(--seeds-site-ink);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+details[open] > summary {
+  border-block-end: 1px solid var(--seeds-site-line);
+}
+
+details > :not(summary) {
+  padding-inline: 1.15rem;
+}
+
+blockquote {
+  margin-inline: 0;
+  padding-block: 0.25rem;
+  padding-inline: 1.5rem 0;
+  border-inline-start: 4px solid var(--seeds-site-accent);
+  color: var(--seeds-site-tone-heading, var(--seeds-site-ink));
+  font-size: var(--seeds-site-step-2);
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+blockquote p:last-child {
+  margin-block-end: 0;
+}
+
+figure {
+  margin-inline: 0;
+}
+
+figcaption,
+.caption > figcaption {
+  margin-block-start: 0.6rem;
+  color: var(--seeds-site-muted);
+  font-size: var(--seeds-site-step--1);
+}
+
+pre {
+  overflow-x: auto;
+  padding: 1rem 1.25rem;
+  border-radius: var(--seeds-site-radius-sm);
+  color: #fff;
+  background: var(--seeds-site-dark);
+}
+
+:not(pre) > code {
+  padding: 0.1em 0.35em;
+  border-radius: 4px;
+  background: var(--seeds-site-surface-2);
+}
+
+abbr[title] {
+  text-decoration: underline dotted;
+  cursor: help;
+}
+
+mark {
+  padding: 0 0.15em;
+  color: inherit;
+  background: var(--seeds-site-accent-light);
+}

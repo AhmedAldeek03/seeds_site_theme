@@ -1,24 +1,30 @@
 name: 'Seeds site theme'
 type: theme
-description: 'The look of the Seeds site template: a light Seeds UI subtheme with a styled header, menu, cards, forms and footer.'
+description: 'The look of the Seeds site template: a Seeds UI subtheme with brand settings (colours, font, corners), Arabic and right-to-left support, styles for every Seeds feature and a library of Canvas sections.'
 core_version_requirement: ^11
 base theme: seeds_ui
 # The same regions as Seeds UI. A subtheme does not inherit them: without this
 # list it gets Drupal's default regions and the header blocks are disabled.
 regions:
-  header: "Header | Header top region - always visible on desktop and mobile."
+  header: "Header | Top bar - next to the contact details and social links (for example a language switcher)."
   logo: "Logo | Logo region - always visible in main header on desktop and mobile."
-  navigation: "Navigation | Main navigation region - main header on desktop + mobile collapse."
+  navigation: "Navigation | Main navigation - inline on large screens, in the menu drawer on small ones."
   header_actions: "Header Actions | Header actions region - always visible in main header on desktop and mobile."
-  collapse_only: "Collapse Only | Collapse only region - mobile collapse only."
+  collapse_only: "Collapse Only | Menu drawer only - shown on small screens."
   highlighted: "Highlighted | Important messages and announcements."
-  featured_top: "Featured Top | Hero section or page header content."
-  breadcrumb: "Breadcrumb | Navigation breadcrumb trail."
+  featured_top: "Featured Top | Page header: page title and tabs."
+  breadcrumb: "Breadcrumb | Navigation breadcrumb trail (in the page header)."
   content: "Content | Main page content."
   sidebar_first: "Sidebar | Primary sidebar for additional content."
   featured_bottom: "Featured Bottom | Website accessories, ratings, and additional content."
-  footer_top: "Footer Top | Upper footer content."
-  footer: "Footer | Main footer content."
-  footer_bottom: "Footer Bottom | Lower footer content."
+  footer_top: "Footer Top | Upper footer content (for example a newsletter sign-up)."
+  footer: "Footer | Footer columns - each block is a column."
+  footer_bottom: "Footer Bottom | Lower footer content, next to the copyright."
+# style-ltr is listed here (not only attached in hook_preprocess_html() as in
+# the Seeds UI kit) so the Canvas editor preview uses it too. On
+# right-to-left pages hook_css_alter() swaps it for style-rtl.
 libraries:
   - seeds_site_theme/global
+  - seeds_site_theme/style-ltr
+ckeditor5-stylesheets:
+  - dist/css/ckeditor5.css

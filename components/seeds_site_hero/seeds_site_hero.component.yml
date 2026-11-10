@@ -1,0 +1,88 @@
+'$schema': 'https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json'
+name: 'Hero'
+description: 'The opening band of a page: a big heading, text, up to two buttons and an image. As the first component of a page it replaces the page title.'
+group: 'Seeds site'
+status: stable
+props:
+  type: object
+  required:
+    - heading
+  properties:
+    eyebrow:
+      type: string
+      title: 'Label above the heading'
+      examples:
+        - 'Foundation'
+    heading:
+      type: string
+      title: 'Heading'
+      examples:
+        - 'Opening doors to education, health and opportunity'
+    text:
+      type: string
+      title: 'Text'
+      examples:
+        - 'For more than fifteen years we have worked with communities, schools and partners to turn ideas into lasting change.'
+    button_text:
+      type: string
+      title: 'Button text'
+      examples:
+        - 'Get in touch'
+    button_url:
+      type: string
+      format: uri-reference
+      title: 'Button link'
+      examples:
+        - '/contact-us'
+    secondary_text:
+      type: string
+      title: 'Second button text'
+    secondary_url:
+      type: string
+      format: uri-reference
+      title: 'Second button link'
+    image:
+      type: object
+      $ref: json-schema-definitions://canvas.module/image
+      title: 'Image'
+    layout:
+      type: string
+      title: 'Layout'
+      enum:
+        - split
+        - background
+        - centered
+      meta:enum:
+        split: 'Text beside the image'
+        background: 'Image behind the text'
+        centered: 'Centred, image below'
+      examples:
+        - split
+    tone:
+      type: string
+      title: 'Background'
+      description: 'Not used when the image is behind the text.'
+      enum:
+        - white
+        - light
+        - primary-light
+        - secondary-light
+        - primary
+        - secondary
+        - dark
+      meta:enum:
+        white: 'White'
+        light: 'Light (background colour)'
+        primary-light: 'Light primary'
+        secondary-light: 'Light secondary'
+        primary: 'Primary colour'
+        secondary: 'Secondary colour'
+        dark: 'Dark'
+      examples:
+        - light
+    page_heading:
+      type: boolean
+      title: 'Use as the page heading'
+      description: 'Shows the heading as the main page heading (h1) and hides the separate page title. Turn off for a second hero lower on the page.'
+      examples:
+        - true

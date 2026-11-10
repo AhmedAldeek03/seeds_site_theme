@@ -1,0 +1,53 @@
+{#
+/**
+ * @file
+ * Hero: the opening band of a page.
+ */
+#}
+{% set layout = layout ?: 'split' %}
+{% set has_image = image.src is defined and image.src %}
+{%
+  set classes = [
+    'seeds-site-hero',
+    'seeds-site-full',
+    'seeds-site-hero--layout-' ~ layout,
+    'seeds-site-hero--tone-' ~ (tone ?: 'light'),
+    'seeds-site-tone--' ~ (layout == 'background' and has_image ? 'dark' : (tone ?: 'light')),
+    has_image ? 'seeds-site-hero--has-image',
+  ]
+%}
+{% set heading_tag = page_heading is same as(false) ? 'h2' : 'h1' %}
+<section{{ attributes.addClass(classes) }}>
+  {% if has_image and layout == 'background' %}
+    <div class="seeds-site-hero__media">
+      {% include 'canvas:image' with { src: image.src, alt: '', width: image.width ?? null, height: image.height ?? null, sizes: '100vw', loading: 'eager', class: 'seeds-site-hero__image' }|filter(v => v is not null) only %}
+    </div>
+  {% endif %}
+  <div class="seeds-site-hero__inner">
+    <div class="seeds-site-hero__content">
+      {% if eyebrow %}
+        <p class="seeds-site-eyebrow">{{ eyebrow }}</p>
+      {% endif %}
+      <{{ heading_tag }} class="seeds-site-hero__heading">{{ heading }}</{{ heading_tag }}>
+      {% if text %}
+        <p class="seeds-site-hero__text">{{ text }}</p>
+      {% endif %}
+      {% if (button_text and button_url) or (secondary_text and secondary_url) %}
+        <div class="seeds-site-hero__actions">
+          {% set on_photo = layout == 'background' and has_image %}
+          {% if button_text and button_url %}
+            <a class="button button--large{{ on_photo ? ' button--accent' }}" href="{{ button_url }}">{{ button_text }}</a>
+          {% endif %}
+          {% if secondary_text and secondary_url %}
+            <a class="button button--large {{ on_photo ? 'button--light-outline' : 'button--secondary' }}" href="{{ secondary_url }}">{{ secondary_text }}</a>
+          {% endif %}
+        </div>
+      {% endif %}
+    </div>
+    {% if has_image and layout != 'background' %}
+      <div class="seeds-site-hero__media">
+        {% include 'canvas:image' with { src: image.src, alt: image.alt ?? '', width: image.width ?? null, height: image.height ?? null, sizes: layout == 'split' ? '(min-width: 992px) 50vw, 100vw' : '100vw', loading: 'eager', class: 'seeds-site-hero__image' }|filter(v => v is not null) only %}
+      </div>
+    {% endif %}
+  </div>
+</section>

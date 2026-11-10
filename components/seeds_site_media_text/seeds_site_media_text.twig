@@ -1,0 +1,38 @@
+{#
+/**
+ * @file
+ * Image and text: an image beside a heading, formatted text and a button.
+ */
+#}
+{%
+  set attributes = attributes.addClass(
+    'seeds-site-media-text',
+    'seeds-site-full',
+    'seeds-site-media-text--image-' ~ (image_position ?: 'start'),
+    'seeds-site-media-text--tone-' ~ (tone ?: 'white'),
+    'seeds-site-tone--' ~ (tone ?: 'white'),
+  )
+%}
+<section{{ attributes }}>
+  <div class="seeds-site-media-text__inner">
+    {% if image.src is defined and image.src %}
+      <div class="seeds-site-media-text__media">
+        {% include 'canvas:image' with { src: image.src, alt: image.alt ?? '', width: image.width ?? null, height: image.height ?? null, sizes: '(min-width: 992px) 50vw, 100vw', class: 'seeds-site-media-text__image' }|filter(v => v is not null) only %}
+      </div>
+    {% endif %}
+    <div class="seeds-site-media-text__content">
+      {% if eyebrow %}
+        <p class="seeds-site-eyebrow">{{ eyebrow }}</p>
+      {% endif %}
+      <h2 class="seeds-site-media-text__heading">{{ heading }}</h2>
+      {% if text %}
+        <div class="seeds-site-media-text__text">{{ text }}</div>
+      {% endif %}
+      {% if button_text and button_url %}
+        <div class="seeds-site-media-text__actions">
+          <a class="button button--large" href="{{ button_url }}">{{ button_text }}</a>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,39 @@
+{#
+/**
+ * @file
+ * Seeds site theme: the source field of the Seeds "file" media type.
+ *
+ * Seeds base shows this field as a plain URL. Here each file becomes a
+ * download link with its name, type and size, for example on Publications
+ * (field_media_1) and News attachments.
+ *
+ * Extra variables (seeds_site_theme_preprocess_field__field_media_file()):
+ * - downloads: list of { url, name, extension, size }.
+ */
+#}
+{%
+  set classes = [
+    'field',
+    'field--name-' ~ field_name|clean_class,
+    'field--type-' ~ field_type|clean_class,
+    'field--label-' ~ label_display,
+    'file-download-list',
+  ]
+%}
+<div{{ attributes.addClass(classes) }}>
+  {% for file in downloads %}
+    <a class="file-download" href="{{ file.url }}">
+      <span class="file-download__icon" aria-hidden="true">
+        {% include '@seeds_site_theme/includes/icon.html.twig' with { name: 'file' } only %}
+        <span class="file-download__type">{{ file.extension }}</span>
+      </span>
+      <span class="file-download__text">
+        <span class="file-download__name">{{ file.name }}</span>
+        <span class="file-download__meta">{{ file.extension }} &middot; {{ file.size }}</span>
+      </span>
+      <span class="file-download__action">
+        {% include '@seeds_site_theme/includes/icon.html.twig' with { name: 'download' } only %}
+      </span>
+    </a>
+  {% endfor %}
+</div>

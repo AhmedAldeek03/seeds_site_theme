@@ -1,0 +1,104 @@
+// Tones: the backgrounds a section, hero, call to action or the footer can
+// take. Each tone sets role colours (title, text, line under titles, cards,
+// buttons...) as custom properties, so anything placed inside picks the right
+// colours by itself: a card in a Light secondary section, a button in a
+// Primary call to action, a stat in a Dark band.
+//
+// Light tones: White, Light (the background colour), Light primary and
+// Light secondary: titles in the title colour, the accent line, white cards.
+// Strong tones: Primary, Secondary and Dark: white (or dark, for light
+// brand colours) text, accent details and light buttons.
+
+@mixin tone-light($bg, $panel: #fff, $border: var(--seeds-site-line)) {
+  --seeds-site-tone-bg: #{$bg};
+  --seeds-site-tone-heading: var(--seeds-site-heading);
+  --seeds-site-tone-text: var(--seeds-site-body);
+  --seeds-site-tone-muted: var(--seeds-site-muted);
+  --seeds-site-tone-eyebrow: var(--seeds-site-secondary-text);
+  --seeds-site-tone-rule: var(--seeds-site-accent);
+  --seeds-site-tone-link: var(--seeds-site-primary-text);
+  --seeds-site-tone-card: #fff;
+  --seeds-site-tone-panel: #{$panel};
+  --seeds-site-tone-border: #{$border};
+  --seeds-site-tone-icon: var(--seeds-site-primary-text);
+  --seeds-site-tone-icon-bg: #fff;
+  --seeds-site-tone-icon-ring: var(--seeds-site-accent-line);
+  --seeds-site-tone-btn-bg: var(--seeds-site-primary);
+  --seeds-site-tone-btn-color: var(--seeds-site-on-primary);
+  --seeds-site-tone-btn-bg-hover: var(--seeds-site-secondary);
+  --seeds-site-tone-btn-color-hover: var(--seeds-site-on-secondary);
+  --seeds-site-tone-outline: var(--seeds-site-primary-text);
+  --seeds-site-tone-outline-hover-bg: var(--seeds-site-primary);
+  --seeds-site-tone-outline-hover-color: var(--seeds-site-on-primary);
+  --seeds-site-focus: var(--seeds-site-primary);
+  color: var(--seeds-site-tone-text);
+  background-color: var(--seeds-site-tone-bg);
+}
+
+@mixin tone-strong($bg, $on) {
+  --seeds-site-tone-bg: #{$bg};
+  --seeds-site-tone-heading: #{$on};
+  --seeds-site-tone-text: color-mix(in srgb, #{$on} 86%, transparent);
+  --seeds-site-tone-muted: color-mix(in srgb, #{$on} 72%, transparent);
+  --seeds-site-tone-eyebrow: var(--seeds-site-accent);
+  --seeds-site-tone-rule: var(--seeds-site-accent);
+  --seeds-site-tone-link: #{$on};
+  --seeds-site-tone-card: color-mix(in srgb, #{$on} 7%, transparent);
+  --seeds-site-tone-panel: color-mix(in srgb, #{$on} 7%, transparent);
+  --seeds-site-tone-border: color-mix(in srgb, #{$on} 16%, transparent);
+  --seeds-site-tone-icon: var(--seeds-site-on-accent);
+  --seeds-site-tone-icon-bg: var(--seeds-site-accent);
+  --seeds-site-tone-icon-ring: color-mix(in srgb, var(--seeds-site-accent) 35%, transparent);
+  --seeds-site-tone-btn-bg: #fff;
+  --seeds-site-tone-btn-color: var(--seeds-site-primary-text);
+  --seeds-site-tone-btn-bg-hover: var(--seeds-site-surface);
+  --seeds-site-tone-btn-color-hover: var(--seeds-site-primary-text);
+  --seeds-site-tone-outline: #{$on};
+  --seeds-site-tone-outline-hover-bg: color-mix(in srgb, #{$on} 12%, transparent);
+  --seeds-site-tone-outline-hover-color: #{$on};
+  --seeds-site-focus: var(--seeds-site-accent);
+  color: var(--seeds-site-tone-text);
+  background-color: var(--seeds-site-tone-bg);
+}
+
+// The page itself is White.
+:root {
+  @include tone-light(#fff, var(--seeds-site-surface));
+  background-color: transparent;
+}
+
+.seeds-site-tone--white {
+  @include tone-light(#fff, var(--seeds-site-surface));
+}
+
+.seeds-site-tone--light {
+  @include tone-light(var(--seeds-site-surface));
+}
+
+.seeds-site-tone--primary-light {
+  @include tone-light(var(--seeds-site-primary-light), #fff, var(--seeds-site-primary-line));
+}
+
+.seeds-site-tone--secondary-light {
+  @include tone-light(var(--seeds-site-secondary-light), #fff, var(--seeds-site-secondary-line));
+}
+
+.seeds-site-tone--primary {
+  @include tone-strong(var(--seeds-site-primary), var(--seeds-site-on-primary));
+}
+
+.seeds-site-tone--secondary {
+  @include tone-strong(var(--seeds-site-secondary), var(--seeds-site-on-secondary));
+}
+
+.seeds-site-tone--dark {
+  @include tone-strong(var(--seeds-site-dark), #fff);
+}
+
+// The accent tone (Call to action only): the accent colour with its text colour.
+.seeds-site-tone--accent {
+  @include tone-strong(var(--seeds-site-accent), var(--seeds-site-on-accent));
+  --seeds-site-tone-eyebrow: var(--seeds-site-on-accent);
+  --seeds-site-tone-rule: var(--seeds-site-on-accent);
+  --seeds-site-focus: var(--seeds-site-on-accent);
+}

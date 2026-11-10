@@ -1,0 +1,41 @@
+{#
+/**
+ * @file
+ * Message: a message from the chair, the director or the founder.
+ */
+#}
+{% set has_image = image.src is defined and image.src %}
+{% set tone = tone ?: 'light' %}
+{%
+  set attributes = attributes.addClass(
+    'seeds-site-message',
+    'seeds-site-full',
+    'seeds-site-tone--' ~ tone,
+    has_image ? 'seeds-site-message--has-image',
+  )
+%}
+<section{{ attributes }}>
+  <div class="seeds-site-message__inner">
+    {% if has_image %}
+      <figure class="seeds-site-message__portrait">
+        {% include 'canvas:image' with { src: image.src, alt: image.alt ?? '', width: image.width ?? null, height: image.height ?? null, sizes: '(min-width: 992px) 30vw, 80vw', class: 'seeds-site-message__image' }|filter(v => v is not null) only %}
+      </figure>
+    {% endif %}
+    <div class="seeds-site-message__content">
+      {% if eyebrow %}
+        <p class="seeds-site-eyebrow">{{ eyebrow }}</p>
+      {% endif %}
+      <h2 class="seeds-site-message__heading">{{ heading }}</h2>
+      <blockquote class="seeds-site-message__text">{{ text }}</blockquote>
+      {% if name or role %}
+        <p class="seeds-site-message__signature">
+          {% if name %}<span class="seeds-site-message__name">{{ name }}</span>{% endif %}
+          {% if role %}<span class="seeds-site-message__role">{{ role }}</span>{% endif %}
+        </p>
+      {% endif %}
+      {% if link_text and link_url %}
+        <a class="button button--ghost seeds-site-message__link" href="{{ link_url }}">{{ link_text }}</a>
+      {% endif %}
+    </div>
+  </div>
+</section>

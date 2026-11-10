@@ -1,0 +1,10 @@
+{#
+/**
+ * @file
+ * Button: a single button link.
+ */
+#}
+{% set style = style ?: 'primary' %}
+<span{{ attributes.addClass('seeds-site-button-wrapper') }}>
+  <a class="button{{ style != 'primary' ? ' button--' ~ style }}{{ size == 'large' ? ' button--large' }}" href="{{ url }}">{{ text }}</a>
+</span>
