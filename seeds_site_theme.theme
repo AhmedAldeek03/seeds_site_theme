@@ -417,7 +417,10 @@ function seeds_site_theme_format_date(int $timestamp): string {
 function seeds_site_theme_node_date(object $node, bool $created_fallback = TRUE): ?int {
   foreach (['field_date', 'field_date_range'] as $field_name) {
     if ($node->hasField($field_name) && !$node->get($field_name)->isEmpty()) {
-      $date = $node->get($field_name)->first()?->get('start_date')?->getValue() ?? NULL;
+      // A date field keeps its date in "date", a date range in "start_date".
+      $item = $node->get($field_name)->first();
+      $property = $item->getFieldDefinition()->getType() === 'daterange' ? 'start_date' : 'date';
+      $date = $item->getProperties(TRUE)[$property]?->getValue() ?? NULL;
       if ($date instanceof \Drupal\Core\Datetime\DrupalDateTime) {
         return $date->getTimestamp();
       }
