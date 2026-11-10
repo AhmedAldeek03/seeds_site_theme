@@ -11,11 +11,12 @@ Seeds UI subtheme for organisation websites, in English and Arabic.
 - **Arabic and right to left:** a right-to-left build of the stylesheet (rtlcss), mirrored
   icons and layouts, and IBM Plex Sans Arabic or Cairo for Arabic text.
 - **Every Seeds feature styled:** News, Events, Team, Gallery (with a photo viewer),
-  Publications (with download cards), Partners (logo wall), FAQ (accordion), Slider and
+  Publications (with download cards), Partners (logo wall and cards), FAQ (accordion), Slider
+  (full width), News and Events card carousels (Swiper) and
   Contact us, plus search, login, "Page not found", breadcrumb, tabs, messages, pager and
   the Klaro cookie banner.
-- **Sections for Canvas:** Hero, Section, Feature, Key figure, Image and text, Testimonial,
-  Call to action and Button, in the *Seeds site* group of the Canvas library.
+- **Sections for Canvas:** Hero, Section, Feature, Key figure, Image and text, Message,
+  Milestone, Testimonial, Call to action and Button, in the *Seeds site* group of the Canvas library.
 
 ## Seeds conventions
 
@@ -43,7 +44,7 @@ libraries listed there. `hook_css_alter()` swaps it for `style-rtl` on right-to-
 | Brand | Primary colour, accent colour, font (one of five self-hosted fonts that cover Arabic and English: IBM Plex Sans + IBM Plex Sans Arabic, Cairo, Tajawal, Plus Jakarta Sans + Tajawal, Almarai; or the system font), corners (sharp, soft, round) |
 | Header | Sticky header, top bar, search button and search page, header button text and link |
 | Contact details | Phone, email, address: shown in the top bar, the footer and next to the Contact us form |
-| Footer | About text, copyright note, white logo on the dark footer |
+| Footer | About text, copyright note, registration note, background (tone), contact details on or off, white logo |
 | Social media | Facebook, X, Instagram, LinkedIn, YouTube, TikTok, WhatsApp |
 
 Brand settings are written to `public://seeds_site_theme/brand-HASH.css`, which overrides the
@@ -59,7 +60,9 @@ caches (`drush deploy` does).
 | Section | A full-width band (white, light grey, light brand colour, dark, brand colour) with an optional label, heading and introduction. Its slot takes any components or blocks, stacked or in 2, 3 or 4 columns. |
 | Feature | Icon, heading, text and link; card or plain. |
 | Key figure | A big number with a label. |
-| Image and text | Image beside a heading, formatted text and a button. |
+| Image and text | Image beside a heading, formatted text and a button; without an image, a single column of text. |
+| Message | A message from the chair, director or founder: portrait, heading, message and signature. |
+| Milestone | A year and what happened. Several in a Section make a timeline, down the page or across it. |
 | Testimonial | A quote with a name, role and photo. |
 | Call to action | A highlighted panel with up to two buttons (brand, dark, accent or light). |
 | Button | One button: filled, outline, accent or text with arrow. |
@@ -73,7 +76,7 @@ components need Canvas.
 | Template | Why |
 |---|---|
 | `layout/page.html.twig` | Top bar, header with search and button, menu drawer on small screens, page header (breadcrumb, title, tabs), optional sidebar, footer from the theme settings. Prints the main menu once (Seeds UI prints it twice). |
-| `navigation/menu.html.twig` | Parents with their own page stay links; a chevron button opens the submenu (hover, keyboard and touch). In the main menu a submenu is a full-width mega panel on large screens: the parent's title, a "View all" link, and each link's description (the menu link's *Description* field). Other menus keep a small dropdown; the mobile drawer shows plain lists. |
+| `navigation/menu.html.twig` | Parents with their own page stay links; a chevron button opens the submenu (hover, keyboard and touch). In the main menu a submenu is a full-width mega panel on large screens: the parent's title, a "View all" link, each link's description (the menu link's *Description* field) and, if set, a promo card (the menu link's image, label and link fields from Seeds template). The footer menu shows nested links as columns with headings. Other menus keep a small dropdown; the mobile drawer shows plain lists. |
 | `content/node--full.html.twig` | Full pages: detail fields (`field_date`, `field_date_range`, `field_plain_text`, `field_link`, `field_term`, `field_media_1`) move to a side card. |
 | `field/field--field-media-file.html.twig` | Files of the Seeds *file* media type become download cards (name, type, size). |
 | `block/block--system-branding-block.html.twig` | Logo keeps its proportions; the link is named after the site. |
