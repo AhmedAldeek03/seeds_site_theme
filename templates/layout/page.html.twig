@@ -158,13 +158,16 @@
         {% endif %}
 
         <div class="site-footer__main">
-          <div class="container site-footer__grid">
+          {% set show_contact = footer.show_contact and (footer.address or footer.phone or footer.email) %}
+          <div class="container site-footer__grid{{ not show_contact ? ' site-footer__grid--no-contact' }}">
             <div class="site-footer__about">
-              <a class="site-footer__brand" href="{{ site.front }}" rel="home">
+              <a class="site-footer__brand" href="{{ site.front }}" rel="home"{% if not site.show_name %} aria-label="{{ site.name }}"{% endif %}>
                 {% if site.logo %}
                   <img class="site-footer__logo{{ footer.logo_white ? ' site-footer__logo--white' }}" src="{{ site.logo }}" alt="" width="40" height="40" loading="lazy">
                 {% endif %}
-                <span>{{ site.name }}</span>
+                {% if site.show_name %}
+                  <span>{{ site.name }}</span>
+                {% endif %}
               </a>
               {% if footer.about %}
                 <p class="site-footer__text">{{ footer.about }}</p>
@@ -180,7 +183,7 @@
               </div>
             {% endif %}
 
-            {% if footer.address or footer.phone or footer.email %}
+            {% if show_contact %}
               <div class="site-footer__contact">
                 <h2 class="site-footer__heading">{{ 'Get in touch'|t }}</h2>
                 <ul class="site-footer__contact-list">

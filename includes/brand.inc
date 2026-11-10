@@ -66,6 +66,9 @@ function seeds_site_theme_font_stacks(): array {
   return [
     'plex' => '"IBM Plex Sans", "IBM Plex Sans Arabic", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif',
     'cairo' => '"Cairo", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif',
+    'tajawal' => '"Tajawal", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif',
+    'jakarta' => '"Plus Jakarta Sans", "Tajawal", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif',
+    'almarai' => '"Almarai", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif',
     'system' => 'system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", "Noto Sans Arabic", Tahoma, sans-serif',
   ];
 }

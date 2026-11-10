@@ -213,8 +213,14 @@
   }
 }
 
-// Partners (partners_recipe): logo wall.
-.view-partners > .view-content.row {
+// Partners (partners_recipe) cards block: partner cards with descriptions.
+.view-partners.view-display-id-block_cards > .view-content.row {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr));
+  gap: 1.5rem;
+}
+
+// Partners (partners_recipe): logo wall (every display but the cards block).
+.view-partners:not(.view-display-id-block_cards) > .view-content.row {
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 11rem), 1fr));
   gap: 1rem;
 

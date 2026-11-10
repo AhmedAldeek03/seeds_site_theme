@@ -142,8 +142,19 @@ function seeds_site_theme_preprocess_page(array &$variables): void {
     $variables['header_search'] = $search ? $search->toString() : '';
   }
 
+  // The footer shows the site name next to the logo only when the header's
+  // branding block does (a logo that already holds the name hides it in both).
+  $show_name = TRUE;
+  $branding = \Drupal::entityTypeManager()->getStorage('block')->load('seeds_site_theme_branding');
+  if ($branding) {
+    $show_name = !empty($branding->get('settings')['use_site_name']) || !$variables['site']['logo'];
+    $cacheability->addCacheableDependency($branding);
+  }
+  $variables['site']['show_name'] = $show_name;
+
   $variables['footer'] = [
     'about' => $footer['about'] ?? '',
+    'show_contact' => $footer['show_contact'] ?? TRUE,
     'copyright' => $footer['copyright'] ?? '',
     'logo_white' => !empty($footer['logo_white']),
     'tone' => in_array($footer['tone'] ?? '', ['dark', 'primary', 'light'], TRUE) ? $footer['tone'] : 'dark',
@@ -418,13 +429,18 @@ function seeds_site_theme_node_date(object $node, bool $created_fallback = TRUE)
 /**
  * Implements hook_preprocess_HOOK() for field.html.twig.
  *
+ * Images in field_media use a responsive image style for their view mode
+ * (see seeds_site_theme_responsive_media()).
+ *
  * Cards (the Card view mode, plain or as a Seeds UI card):
- * - Images use the "large" image style (480px) instead of a thumbnail.
  * - Articles (nodes with Tags, field_term) get a line with their first tag
  *   and their date above the title, unless the card already shows a date.
  */
 function seeds_site_theme_preprocess_field(array &$variables): void {
   $element = $variables['element'];
+  if ($variables['field_name'] === 'field_media' && ($element['#formatter'] ?? '') === 'media_thumbnail' && ($element['#entity_type'] ?? '') === 'node') {
+    seeds_site_theme_responsive_media($variables, $element['#object']->bundle(), $element['#view_mode'] ?? 'default');
+  }
   if (($element['#view_mode'] ?? '') === 'full' && $variables['field_name'] === 'field_date_range' && ($element['#entity_type'] ?? '') === 'node') {
     seeds_site_theme_card_date_range($variables, FALSE);
     return;
@@ -433,15 +449,6 @@ function seeds_site_theme_preprocess_field(array &$variables): void {
     return;
   }
   $node = $element['#object'];
-
-  if ($variables['field_name'] === 'field_media' && $node->bundle() !== 'partner' && \Drupal\image\Entity\ImageStyle::load('large')) {
-    foreach ($variables['items'] as &$item) {
-      if (isset($item['content']['#image_style'])) {
-        $item['content']['#image_style'] = 'large';
-      }
-    }
-    unset($item);
-  }
 
   if ($variables['field_name'] === 'field_date_range') {
     seeds_site_theme_card_date_range($variables);
@@ -607,4 +614,100 @@ function seeds_site_theme_card_date_range(array &$variables, bool $badge = TRUE)
       ],
     ],
   ]];
+}
+
+/**
+ * Responsive images for field_media (the image of every Seeds feature).
+ *
+ * Seeds feature recipes show field_media with a fixed thumbnail style. The
+ * Seeds template ships WebP responsive image styles; this picks one per view
+ * mode so every feature gets sharp, right-sized images without changing its
+ * display: seeds_logo for partner logos, seeds_wide on full pages and
+ * seeds_card elsewhere. SVG images keep their original file. Without the
+ * responsive styles (an older Seeds template), cards fall back to "large".
+ */
+function seeds_site_theme_responsive_media(array &$variables, string $bundle, string $view_mode): void {
+  $style_id = match (TRUE) {
+    $bundle === 'partner' => 'seeds_logo',
+    in_array($view_mode, ['default', 'full'], TRUE) => 'seeds_wide',
+    default => 'seeds_card',
+  };
+  $style = \Drupal::moduleHandler()->moduleExists('responsive_image')
+    ? \Drupal::entityTypeManager()->getStorage('responsive_image_style')->load($style_id)
+    : NULL;
+
+  foreach ($variables['items'] as &$item) {
+    $content = &$item['content'];
+    if (($content['#theme'] ?? '') !== 'image_formatter' || empty($content['#item'])) {
+      continue;
+    }
+    $file = $content['#item']->entity;
+    if ($file && $file->getMimeType() === 'image/svg+xml') {
+      $content['#image_style'] = '';
+    }
+    elseif ($style) {
+      $content['#theme'] = 'responsive_image_formatter';
+      $content['#responsive_image_style_id'] = $style_id;
+      unset($content['#image_style']);
+      $content['#cache']['tags'] = array_merge($content['#cache']['tags'] ?? [], $style->getCacheTags());
+    }
+    elseif ($style_id === 'seeds_card' && \Drupal::entityTypeManager()->getStorage('image_style')->load('large')) {
+      $content['#image_style'] = 'large';
+    }
+    unset($content);
+  }
+  unset($item);
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for menu.html.twig.
+ *
+ * Main menu promo cards: a top-level link with sub-items can have a promo
+ * card (the Promo card fields of the Seeds template: field_media,
+ * field_plain_text and field_link). It shows beside the links in the item's
+ * mega panel.
+ */
+function seeds_site_theme_preprocess_menu(array &$variables): void {
+  if (($variables['menu_name'] ?? '') !== 'main' || empty($variables['items'])) {
+    return;
+  }
+  $repository = \Drupal::service('entity.repository');
+  $responsive = \Drupal::moduleHandler()->moduleExists('responsive_image')
+    && \Drupal::entityTypeManager()->getStorage('responsive_image_style')->load('seeds_card');
+
+  foreach ($variables['items'] as &$item) {
+    $link = $item['original_link'] ?? NULL;
+    if (empty($item['below']) || !$link || $link->getProvider() !== 'menu_link_content') {
+      continue;
+    }
+    $entity = $repository->loadEntityByUuid('menu_link_content', $link->getDerivativeId());
+    if (!$entity || !$entity->hasField('field_link') || $entity->get('field_link')->isEmpty()) {
+      continue;
+    }
+    $entity = $repository->getTranslationFromContext($entity);
+    $promo_link = $entity->get('field_link')->first();
+    $promo = [
+      'url' => $promo_link->getUrl()->toString(),
+      'title' => $promo_link->title ?: $item['title'],
+      'label' => $entity->get('field_plain_text')->value ?? '',
+      'image' => NULL,
+    ];
+
+    $media = $entity->get('field_media')->entity;
+    if ($media) {
+      $media = $repository->getTranslationFromContext($media);
+      $source = $media->getSource()->getConfiguration()['source_field'] ?? 'field_image';
+      $image = $media->hasField($source) ? $media->get($source)->first() : NULL;
+      if ($image && $image->entity) {
+        $uri = $image->entity->getFileUri();
+        $attributes = ['alt' => $image->alt ?? '', 'loading' => 'lazy'];
+        $promo['image'] = $responsive && $image->entity->getMimeType() !== 'image/svg+xml'
+          ? ['#theme' => 'responsive_image', '#responsive_image_style_id' => 'seeds_card', '#uri' => $uri, '#width' => $image->width, '#height' => $image->height, '#attributes' => $attributes]
+          : ['#theme' => 'image', '#uri' => $uri, '#width' => $image->width, '#height' => $image->height, '#attributes' => $attributes];
+        $promo['image']['#cache']['tags'] = array_merge($media->getCacheTags(), $image->entity->getCacheTags());
+      }
+    }
+    $item['promo'] = $promo;
+  }
+  unset($item);
 }

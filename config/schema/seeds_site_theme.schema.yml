@@ -93,6 +93,9 @@ seeds_site_theme.settings:
         copyright:
           type: label
           label: 'Copyright note'
+        show_contact:
+          type: boolean
+          label: 'Show contact details in the footer'
         logo_white:
           type: boolean
           label: 'White logo in the footer'

@@ -33,6 +33,7 @@ contact:
 footer:
   about: ''
   copyright: ''
+  show_contact: true
   logo_white: true
   tone: dark
   registration: ''

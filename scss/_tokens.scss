@@ -46,6 +46,43 @@ $arabic: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0898-08E1, U+08E3
     unicode-range: $range;
   }
 }
+
+// Tajawal (Arabic and Latin): also the Arabic half of the Plus Jakarta Sans
+// choice. Almarai (Arabic and Latin). Plus Jakarta Sans (Latin, variable).
+@each $weight in (400, 500, 700) {
+  @each $subset, $range in (arabic: $arabic, latin: $latin) {
+    @font-face {
+      font-family: "Tajawal";
+      font-style: normal;
+      font-weight: $weight;
+      font-display: swap;
+      src: url("../../fonts/tajawal-#{$subset}-#{$weight}-normal.woff2") format("woff2");
+      unicode-range: $range;
+    }
+  }
+}
+@each $weight in (400, 700) {
+  @each $subset, $range in (arabic: $arabic, latin: $latin) {
+    @font-face {
+      font-family: "Almarai";
+      font-style: normal;
+      font-weight: $weight;
+      font-display: swap;
+      src: url("../../fonts/almarai-#{$subset}-#{$weight}-normal.woff2") format("woff2");
+      unicode-range: $range;
+    }
+  }
+}
+@each $subset, $range in (latin: $latin, latin-ext: $latin-ext) {
+  @font-face {
+    font-family: "Plus Jakarta Sans";
+    font-style: normal;
+    font-weight: 200 800;
+    font-display: swap;
+    src: url("../../fonts/plus-jakarta-sans-#{$subset}-wght-normal.woff2") format("woff2-variations");
+    unicode-range: $range;
+  }
+}
 }
 
 // The design tokens, also used inside CKEditor (ckeditor5.scss).

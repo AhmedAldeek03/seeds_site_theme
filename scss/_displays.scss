@@ -399,10 +399,12 @@
   background: var(--seeds-site-surface-2);
 
   img {
+    display: block;
     width: 100%;
+    height: auto;
     aspect-ratio: 16 / 10;
     object-fit: cover;
-    transition: transform 0.6s var(--seeds-site-ease);
+    transition: transform 0.6s var(--seeds-site-ease), filter 0.4s;
   }
 
   // An accent line grows along the bottom of the image on hover.
@@ -431,7 +433,8 @@
     @include card-hover;
 
     img {
-      transform: scale(1.04);
+      filter: saturate(1.08) brightness(1.03);
+      transform: scale(1.05);
     }
 
     .card-default-image::after,
@@ -760,6 +763,55 @@
 
 .node--type-publication.node--view-mode-card:hover .node__content > .field--name-field-media img {
   transform: translateY(-4px);
+}
+
+// Partners (the Partners cards block): the logo whole on a light panel, then
+// the name, the description and a "Visit website" link at the bottom.
+.node--type-partner.node--view-mode-card {
+  .node__content > .field--name-field-media {
+    display: grid;
+    place-items: center;
+    padding: 1.75rem 1.5rem;
+    background: var(--seeds-site-surface-2);
+
+    img {
+      width: auto;
+      max-width: 70%;
+      height: 4.5rem;
+      aspect-ratio: auto;
+      object-fit: contain;
+    }
+  }
+
+  &:hover .node__content > .field--name-field-media img {
+    transform: scale(1.06);
+  }
+
+  .node__content > .field--name-field-formatted-long {
+    order: 3;
+    color: var(--seeds-site-muted);
+    font-size: 0.95rem;
+
+    p:last-child {
+      margin-block-end: 0;
+    }
+  }
+
+  .node__content > .field--name-field-link {
+    order: 4;
+    margin-block-start: auto;
+    padding-block: 1rem 1.5rem;
+
+    a {
+      @include arrow-link;
+      position: relative;
+      z-index: 2;
+    }
+
+    a:hover::after {
+      translate: calc(4px * var(--seeds-site-flip)) 0;
+    }
+  }
 }
 
 // Gallery: a photo icon on the cover.

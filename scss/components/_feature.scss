@@ -57,6 +57,15 @@
   color: var(--seeds-site-tone-icon);
   background: var(--seeds-site-tone-icon-bg);
   box-shadow: inset 0 0 0 1.5px var(--seeds-site-tone-icon-ring), 0 0 0 6px color-mix(in srgb, var(--seeds-site-tone-icon-ring) 35%, transparent);
+  transition: background-color 0.3s var(--seeds-site-ease), color 0.3s var(--seeds-site-ease), box-shadow 0.3s var(--seeds-site-ease), transform 0.4s var(--seeds-site-ease);
+
+  // The icon fills with the accent colour when the feature is hovered.
+  .seeds-site-feature:hover & {
+    color: var(--seeds-site-on-accent);
+    background: var(--seeds-site-accent);
+    box-shadow: inset 0 0 0 1.5px var(--seeds-site-accent), 0 0 0 8px color-mix(in srgb, var(--seeds-site-accent) 25%, transparent);
+    transform: translateY(-2px) rotate(-4deg);
+  }
 
   .icon {
     width: 1.6rem;

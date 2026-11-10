@@ -116,6 +116,9 @@ function seeds_site_theme_form_system_theme_settings_alter(array &$form, FormSta
     '#options' => [
       'plex' => t('IBM Plex Sans and IBM Plex Sans Arabic (clean and professional)'),
       'cairo' => t('Cairo (rounded; designed for Arabic and English together)'),
+      'tajawal' => t('Tajawal (light and modern; Arabic and English)'),
+      'jakarta' => t('Plus Jakarta Sans with Tajawal for Arabic (geometric and contemporary)'),
+      'almarai' => t('Almarai (simple and highly readable; Arabic and English)'),
       'system' => t("System font (no download; uses each device's own font)"),
     ],
     '#default_value' => $brand['font'],
@@ -237,6 +240,12 @@ function seeds_site_theme_form_system_theme_settings_alter(array &$form, FormSta
     '#title' => t('Registration note'),
     '#description' => t('For example a registered charity or company number. Shown at the bottom of the footer.'),
     '#default_value' => $footer['registration'] ?? '',
+  ];
+  $form['footer']['show_contact'] = [
+    '#type' => 'checkbox',
+    '#title' => t('Show contact details in the footer'),
+    '#description' => t('A "Get in touch" column with the address, phone and email. Turn it off when the footer menu has several columns and the contact details are in the top bar.'),
+    '#default_value' => $footer['show_contact'] ?? TRUE,
   ];
   $form['footer']['logo_white'] = [
     '#type' => 'checkbox',

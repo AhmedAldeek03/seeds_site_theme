@@ -40,7 +40,7 @@ libraries listed there. `hook_css_alter()` swaps it for `style-rtl` on right-to-
 
 | Tab | Settings |
 |---|---|
-| Brand | Primary colour, accent colour, font (IBM Plex Sans + IBM Plex Sans Arabic, Cairo, or the system font), corners (sharp, soft, round) |
+| Brand | Primary colour, accent colour, font (one of five self-hosted fonts that cover Arabic and English: IBM Plex Sans + IBM Plex Sans Arabic, Cairo, Tajawal, Plus Jakarta Sans + Tajawal, Almarai; or the system font), corners (sharp, soft, round) |
 | Header | Sticky header, top bar, search button and search page, header button text and link |
 | Contact details | Phone, email, address: shown in the top bar, the footer and next to the Contact us form |
 | Footer | About text, copyright note, white logo on the dark footer |
@@ -97,7 +97,7 @@ npm run build   # or: npm run watch
 | `components/` | The Canvas sections (single directory components) |
 | `templates/` | Twig overrides; `templates/includes/icon.html.twig` holds the icons |
 | `includes/brand.inc` | Brand settings, colour contrast checks and the generated brand stylesheet |
-| `fonts/` | IBM Plex Sans, IBM Plex Sans Arabic and Cairo (SIL Open Font License 1.1) |
+| `fonts/` | IBM Plex Sans, IBM Plex Sans Arabic, Cairo, Tajawal, Almarai and Plus Jakarta Sans (SIL Open Font License 1.1). Each `@font-face` has a `unicode-range`, so a site only downloads the font it uses. |
 | `js/main.js` | Sticky header shadow, menu drawer position and the gallery photo viewer |
 
 Menus, the menu drawer and header search use Alpine.js, which Seeds UI loads.
@@ -110,4 +110,5 @@ Menus, the menu drawer and header search use Alpine.js, which Seeds UI loads.
 ## Credits
 
 Brand icons: [Simple Icons](https://simpleicons.org) (CC0 1.0). Fonts: IBM Plex Sans and IBM
-Plex Sans Arabic (IBM), Cairo (The Cairo Project Authors), all SIL Open Font License 1.1.
+Plex Sans Arabic (IBM), Cairo (The Cairo Project Authors), Tajawal (Boutros Fonts), Almarai
+(Boutros Fonts), Plus Jakarta Sans (Tokotype), all SIL Open Font License 1.1.

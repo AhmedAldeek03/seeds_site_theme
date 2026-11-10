@@ -37,14 +37,22 @@ button.form-submit,
   text-decoration: none;
   background: var(--seeds-site-button-bg);
   cursor: pointer;
-  transition: background-color 0.2s, border-color 0.2s, color 0.2s, box-shadow 0.2s;
+  transition: background-color 0.2s, border-color 0.2s, color 0.2s, box-shadow 0.25s var(--seeds-site-ease), transform 0.25s var(--seeds-site-ease);
   -webkit-appearance: none;
   appearance: none;
 
+  // A small lift and a soft shadow on hover; pressed, it settles back.
   &:hover {
     border-color: var(--seeds-site-button-border-hover);
     color: var(--seeds-site-button-color-hover);
     background: var(--seeds-site-button-bg-hover);
+    box-shadow: 0 10px 20px -10px rgb(7 12 20 / 45%);
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    box-shadow: none;
+    transform: translateY(0);
   }
 
   &:disabled,
